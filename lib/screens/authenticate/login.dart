@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nutribuddies/services/auth.dart';
-import 'package:nutribuddies/constant/textInputDecoration.dart';
+import 'package:nutribuddies/constant/text_input_decoration.dart';
 import 'package:nutribuddies/widgets/loading.dart';
 
 class Login extends StatefulWidget {

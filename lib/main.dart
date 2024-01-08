@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:nutribuddies/firebase_options.dart';
 import 'package:nutribuddies/models/user.dart';
-import 'package:nutribuddies/screens/wrapper.dart';
+import 'package:nutribuddies/screens/splash_screen.dart';
 import 'package:nutribuddies/services/auth.dart';
 import 'package:provider/provider.dart';
 
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         value: AuthService().user,
         initialData: null,
         child: const MaterialApp(
-          home: Wrapper(),
+          home: SplashScreen(),
         ));
   }
 }

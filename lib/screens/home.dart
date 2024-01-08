@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nutribuddies/services/auth.dart';
+import 'package:nutribuddies/screens/tracker.dart';
 
 class Home extends StatelessWidget {
   Home({super.key});
@@ -25,6 +26,20 @@ class Home extends StatelessWidget {
             label: const Text('logout'),
           )
         ],
+      ),
+      body: Container(
+        padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 100),
+        child: ElevatedButton(
+          onPressed: () async {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Tracker()),
+            );
+          },
+          style: ElevatedButton.styleFrom(
+              foregroundColor: Colors.black, backgroundColor: Colors.white),
+          child: const Text('Nutrition Tracker'),
+        ),
       ),
     );
   }

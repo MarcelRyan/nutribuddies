@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:nutribuddies/models/tracker.dart';
 import 'package:nutribuddies/models/user.dart';
 import 'package:nutribuddies/services/database.dart';
 
@@ -51,6 +52,12 @@ class AuthService {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       User user = result.user!;
+      Nutritions currentNutritions =
+          Nutritions(protein: 0, fiber: 0, carbohydrate: 0);
+      Nutritions maxNutritions =
+          Nutritions(protein: 100, fiber: 100, carbohydrate: 100);
+      await DatabaseService(uid: user.uid)
+          .updateTrackerData(currentNutritions, maxNutritions, DateTime.now());
       await DatabaseService(uid: user.uid).updateUserData('tester', email);
       return _user(user);
     } catch (e) {
