@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nutribuddies/models/user.dart';
+import 'package:nutribuddies/services/database.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -8,7 +9,7 @@ class AuthService {
   // create user object from firebase
   Users? _user(User? user) {
     if (user != null) {
-      return Users(uid: user.uid);
+      return Users(uid: user.uid, name: user.displayName, email: user.email);
     } else {
       return null;
     }
@@ -39,6 +40,7 @@ class AuthService {
       User user = result.user!;
       return _user(user);
     } catch (e) {
+      Fluttertoast.showToast(msg: "Wrong email and/or password");
       return null;
     }
   }
@@ -49,8 +51,10 @@ class AuthService {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       User user = result.user!;
+      await DatabaseService(uid: user.uid).updateUserData('tester', email);
       return _user(user);
     } catch (e) {
+      Fluttertoast.showToast(msg: "Invalid Email and/or Password");
       return null;
     }
   }
