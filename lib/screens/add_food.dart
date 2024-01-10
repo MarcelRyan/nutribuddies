@@ -13,13 +13,13 @@ class AddFood extends StatefulWidget {
 }
 
 class _AddFoodState extends State<AddFood> {
+  final FoodTrackerService _foodTracker = FoodTrackerService();
   String foodName = '';
+  int amount = 0;
   Nutritions addedNutritions =
       Nutritions(protein: 0, fiber: 0, carbohydrate: 0);
 
-  // delete later
-  Nutritions currentNutritions =
-      Nutritions(protein: 0, fiber: 0, carbohydrate: 0);
+  final now = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +55,7 @@ class _AddFoodState extends State<AddFood> {
             ),
             const SizedBox(height: 16),
             const Text(
-              'Protein',
+              'Amount',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -63,56 +63,39 @@ class _AddFoodState extends State<AddFood> {
             ),
             const SizedBox(height: 16),
             TextFormField(
-              decoration: textInputDecoration.copyWith(hintText: 'Protein'),
-              validator: (val) => val!.isEmpty ? 'Enter the protein' : null,
+              decoration: textInputDecoration.copyWith(hintText: 'Amount'),
+              validator: (val) => val!.isEmpty ? 'Enter the amount' : null,
               keyboardType:
                   const TextInputType.numberWithOptions(decimal: true),
               onChanged: (val) {
-                setState(() => addedNutritions.protein = double.parse(val));
-              },
-            ),
-            const Text(
-              'Fiber',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 16),
-            TextFormField(
-              decoration: textInputDecoration.copyWith(hintText: 'Fiber'),
-              validator: (val) => val!.isEmpty ? 'Enter the fiber' : null,
-              keyboardType:
-                  const TextInputType.numberWithOptions(decimal: true),
-              onChanged: (val) {
-                setState(() => addedNutritions.fiber = double.parse(val));
-              },
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              'Carbohydrate',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 16),
-            TextFormField(
-              decoration:
-                  textInputDecoration.copyWith(hintText: 'Carbohydrate'),
-              validator: (val) =>
-                  val!.isEmpty ? 'Enter the carbohydrate' : null,
-              keyboardType:
-                  const TextInputType.numberWithOptions(decimal: true),
-              onChanged: (val) {
-                setState(
-                    () => addedNutritions.carbohydrate = double.parse(val));
+                setState(() => amount = int.parse(val));
               },
             ),
             const SizedBox(height: 24),
             ElevatedButton(
               onPressed: () async {
-                addFood(users!.uid, currentNutritions, addedNutritions);
+                // Fetch nutritional information from tracker
+                final today = DateTime(now.year, now.month, now.day);
+                print(today);
+                print(users!.uid);
+                Nutritions currentNutritions = await _foodTracker
+                    .getCurrentNutritionInfo(users.uid, today);
+
+                // Fetch nutritional information based on the entered food name
+                Nutritions foodNutritions =
+                    await _foodTracker.getNutritionalInfo(foodName);
+
+                // Calculate the total nutritional values based on the specified amount
+                addedNutritions = Nutritions(
+                  protein: foodNutritions.protein * amount,
+                  fiber: foodNutritions.fiber * amount,
+                  carbohydrate: foodNutritions.carbohydrate * amount,
+                );
+
+                // add added nutritions
+                await _foodTracker.addFood(
+                    users!.uid, currentNutritions, addedNutritions);
+                // ignore: use_build_context_synchronously
                 Navigator.of(context).pop();
               },
               style: ElevatedButton.styleFrom(

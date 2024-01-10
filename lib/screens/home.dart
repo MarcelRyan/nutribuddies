@@ -33,7 +33,7 @@ class Home extends StatelessWidget {
           onPressed: () async {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => Tracker()),
+              MaterialPageRoute(builder: (context) => const Tracker()),
             );
           },
           style: ElevatedButton.styleFrom(

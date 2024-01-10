@@ -17,7 +17,6 @@ class Tracker extends StatelessWidget {
       value: DatabaseService(uid: users!.uid).tracker,
       initialData: null,
       catchError: (context, error) {
-        print(error.toString());
         return null;
       },
       child: Scaffold(
@@ -72,9 +71,10 @@ class _TrackerContentState extends State<TrackerContent> {
           LinearPercentIndicator(
             width: MediaQuery.of(context).size.width - 100,
             lineHeight: 14.0,
-            percent: currentNutritions.protein / maxNutritions.protein,
+            percent: (currentNutritions.protein / maxNutritions.protein)
+                .clamp(0.0, 1.0),
             center: Text(
-              '${currentNutritions.protein / maxNutritions.protein * 100} %',
+              '${((currentNutritions.protein / maxNutritions.protein) * 100).toStringAsFixed(1)} %',
               style: const TextStyle(fontSize: 12.0),
             ),
             animation: true,
@@ -93,9 +93,10 @@ class _TrackerContentState extends State<TrackerContent> {
           LinearPercentIndicator(
             width: MediaQuery.of(context).size.width - 100,
             lineHeight: 14.0,
-            percent: currentNutritions.fiber / maxNutritions.fiber,
+            percent:
+                (currentNutritions.fiber / maxNutritions.fiber).clamp(0.0, 1.0),
             center: Text(
-              '${currentNutritions.fiber / maxNutritions.fiber * 100} %',
+              '${((currentNutritions.fiber / maxNutritions.fiber) * 100).toStringAsFixed(1)} %',
               style: const TextStyle(fontSize: 12.0),
             ),
             animation: true,
@@ -115,9 +116,10 @@ class _TrackerContentState extends State<TrackerContent> {
             width: MediaQuery.of(context).size.width - 100,
             lineHeight: 14.0,
             percent:
-                currentNutritions.carbohydrate / maxNutritions.carbohydrate,
+                (currentNutritions.carbohydrate / maxNutritions.carbohydrate)
+                    .clamp(0.0, 1.0),
             center: Text(
-              '${currentNutritions.carbohydrate / maxNutritions.carbohydrate * 100} %',
+              '${((currentNutritions.carbohydrate / maxNutritions.carbohydrate) * 100).toStringAsFixed(1)} %',
               style: const TextStyle(fontSize: 12.0),
             ),
             animation: true,
