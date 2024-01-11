@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nutribuddies/services/auth.dart';
 import 'package:nutribuddies/constant/text_input_decoration.dart';
 import 'package:nutribuddies/widgets/loading.dart';
@@ -101,7 +100,8 @@ class _SignUpState extends State<SignUp> {
                                     setState(() => loading = true);
                                     dynamic result = await _auth.register(
                                         email, password, displayName);
-                                    if (result == null) {
+                                    print(result);
+                                    if (result == false) {
                                       setState(() => loading = false);
                                     } else {
                                       // ignore: use_build_context_synchronously

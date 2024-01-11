@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nutribuddies/screens/authenticate/login.dart';
-import 'package:nutribuddies/screens/authenticate/signUp.dart';
+import 'package:nutribuddies/screens/authenticate/sign_up.dart';
 
 class Authenticate extends StatefulWidget {
   const Authenticate({super.key});
