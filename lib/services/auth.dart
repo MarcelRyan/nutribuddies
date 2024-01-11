@@ -54,7 +54,7 @@ class AuthService {
   }
 
   // register with email & password
-  Future register(String email, String password) async {
+  Future register(String email, String password, String displayName) async {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
@@ -65,7 +65,7 @@ class AuthService {
           Nutritions(protein: 100, fiber: 100, carbohydrate: 100);
       await DatabaseService(uid: user.uid)
           .updateTrackerData(currentNutritions, maxNutritions, DateTime.now());
-      await DatabaseService(uid: user.uid).updateUserData('tester', email);
+      await DatabaseService(uid: user.uid).updateUserData(displayName, email);
       return _user(user);
     } catch (e) {
       Fluttertoast.showToast(msg: "Invalid Email and/or Password");

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nutribuddies/screens/authenticate/login.dart';
-import 'package:nutribuddies/screens/authenticate/register.dart';
+import 'package:nutribuddies/screens/authenticate/signUp.dart';
 
 class Authenticate extends StatefulWidget {
   const Authenticate({super.key});
@@ -21,7 +21,7 @@ class _AuthenticateState extends State<Authenticate> {
     if (isSignIn) {
       return Login(isLogin: toggleView);
     } else {
-      return Register(isRegister: toggleView);
+      return SignUp(isSignUp: toggleView);
     }
   }
 }

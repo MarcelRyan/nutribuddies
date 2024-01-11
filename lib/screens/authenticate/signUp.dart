@@ -7,19 +7,20 @@ import 'package:nutribuddies/constant/colors.dart';
 
 import '../../widgets/wrapper.dart';
 
-class Login extends StatefulWidget {
-  final Function isLogin;
-  const Login({super.key, required this.isLogin});
+class SignUp extends StatefulWidget {
+  final Function isSignUp;
+  const SignUp({super.key, required this.isSignUp});
 
   @override
-  State<Login> createState() => _LoginState();
+  State<SignUp> createState() => _SignUpState();
 }
 
-class _LoginState extends State<Login> {
+class _SignUpState extends State<SignUp> {
   final AuthService _auth = AuthService();
   final _formkey = GlobalKey<FormState>();
   bool loading = false;
 
+  String displayName = '';
   String email = '';
   String password = '';
 
@@ -41,7 +42,7 @@ class _LoginState extends State<Login> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
-                            "Login",
+                            "SignUp",
                             textAlign: TextAlign.left,
                             style: TextStyle(
                                 color: black,
@@ -52,6 +53,19 @@ class _LoginState extends State<Login> {
                           Form(
                             key: _formkey,
                             child: Column(children: [
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              TextFormField(
+                                decoration: textInputDecoration.copyWith(
+                                    hintText: 'Display Name'),
+                                validator: (val) => val!.isEmpty
+                                    ? 'Enter an display name'
+                                    : null,
+                                onChanged: (val) {
+                                  setState(() => displayName = val);
+                                },
+                              ),
                               const SizedBox(
                                 height: 20,
                               ),
@@ -79,33 +93,14 @@ class _LoginState extends State<Login> {
                                 },
                               ),
                               const SizedBox(
-                                height: 10,
-                              ),
-                              Align(
-                                alignment: Alignment.centerRight,
-                                child: GestureDetector(
-                                  onTap: () {},
-                                  child: const Text(
-                                    'Forgot Password?',
-                                    style: TextStyle(
-                                      color: primary,
-                                      fontSize: 12,
-                                      fontFamily: 'Poppins',
-                                      fontWeight: FontWeight.w500,
-                                      letterSpacing: 0.5,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
                                 height: 30,
                               ),
                               ElevatedButton(
                                 onPressed: () async {
                                   if (_formkey.currentState!.validate()) {
                                     setState(() => loading = true);
-                                    dynamic result =
-                                        await _auth.signIn(email, password);
+                                    dynamic result = await _auth.register(
+                                        email, password, displayName);
                                     if (result == null) {
                                       setState(() => loading = false);
                                     } else {
@@ -128,7 +123,7 @@ class _LoginState extends State<Login> {
                                   foregroundColor: onPrimary,
                                 ),
                                 child: const Text(
-                                  'Login',
+                                  'Sign Up',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 14,
@@ -162,7 +157,7 @@ class _LoginState extends State<Login> {
                                   width: 10,
                                 ),
                                 const Text(
-                                  'Login with Google',
+                                  'Sign Up with Google',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 14,
@@ -183,7 +178,7 @@ class _LoginState extends State<Login> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 const Text(
-                                  'Don’t have an account?',
+                                  'Already have an account?',
                                   style: TextStyle(
                                     color: neutral70,
                                     fontSize: 12,
@@ -197,10 +192,10 @@ class _LoginState extends State<Login> {
                                 ),
                                 GestureDetector(
                                   onTap: () {
-                                    widget.isLogin();
+                                    widget.isSignUp();
                                   },
                                   child: const Text(
-                                    'Sign up',
+                                    'Login',
                                     style: TextStyle(
                                       color: primary,
                                       fontSize: 12,
