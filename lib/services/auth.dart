@@ -26,10 +26,9 @@ class AuthService {
     try {
       UserCredential result = await _auth.signInAnonymously();
       User user = result.user!;
-      print(user);
       return _user(user);
     } catch (e) {
-      Fluttertoast.showToast(msg: "Error");
+      Fluttertoast.showToast(msg: "Error: ${e.toString()}");
       return null;
     }
   }
@@ -69,7 +68,7 @@ class AuthService {
       return _user(user);
     } catch (e) {
       Fluttertoast.showToast(msg: "Invalid Email and/or Password");
-      return null;
+      return false;
     }
   }
 
@@ -78,7 +77,18 @@ class AuthService {
     try {
       return await _auth.signOut();
     } catch (e) {
-      Fluttertoast.showToast(msg: "Error");
+      Fluttertoast.showToast(msg: "Error: ${e.toString()}");
+      return null;
+    }
+  }
+
+  // reset password
+  Future resetPassword(String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+      return true;
+    } catch (e) {
+      Fluttertoast.showToast(msg: "Error: ${e.toString()}");
       return null;
     }
   }
