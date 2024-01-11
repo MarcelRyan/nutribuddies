@@ -26,6 +26,7 @@ class AuthService {
     try {
       UserCredential result = await _auth.signInAnonymously();
       User user = result.user!;
+      print(user);
       return _user(user);
     } catch (e) {
       Fluttertoast.showToast(msg: "Error");

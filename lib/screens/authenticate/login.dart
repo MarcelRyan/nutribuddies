@@ -4,6 +4,8 @@ import 'package:nutribuddies/services/auth.dart';
 import 'package:nutribuddies/constant/text_input_decoration.dart';
 import 'package:nutribuddies/widgets/loading.dart';
 
+import '../../widgets/wrapper.dart';
+
 class Login extends StatefulWidget {
   final Function isLogin;
   const Login({super.key, required this.isLogin});
@@ -84,6 +86,13 @@ class _LoginState extends State<Login> {
                                 await _auth.signIn(email, password);
                             if (result == null) {
                               setState(() => loading = false);
+                            } else {
+                              // ignore: use_build_context_synchronously
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const Wrapper()),
+                              );
                             }
                           }
                         },
@@ -103,6 +112,12 @@ class _LoginState extends State<Login> {
                         Fluttertoast.showToast(msg: 'Error');
                       } else {
                         Fluttertoast.showToast(msg: 'Signed in');
+                        // ignore: use_build_context_synchronously
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const Wrapper()),
+                        );
                       }
                     },
                     style: ElevatedButton.styleFrom(
