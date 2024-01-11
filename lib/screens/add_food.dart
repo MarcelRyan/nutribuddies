@@ -93,7 +93,7 @@ class _AddFoodState extends State<AddFood> {
                     calories: 0);
 
                 // add added nutritions
-                await _foodTracker.addFood(
+                await _foodTracker.addMeal(
                     users.uid, currentNutritions, addedNutritions);
                 // ignore: use_build_context_synchronously
                 Navigator.of(context).pop();

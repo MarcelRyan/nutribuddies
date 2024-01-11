@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nutribuddies/constant/colors.dart';
 import 'package:nutribuddies/screens/intro.dart';
+import 'package:nutribuddies/screens/add_meal.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -10,7 +11,7 @@ class SplashScreen extends StatelessWidget {
     Future.delayed(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const Intro1()),
+        MaterialPageRoute(builder: (context) => const AddMeal()),
       );
     });
 

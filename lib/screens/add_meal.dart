@@ -9,6 +9,7 @@ import 'package:nutribuddies/services/food_tracker.dart';
 import 'package:nutribuddies/models/user.dart';
 import 'package:provider/provider.dart';
 import '../constant/colors.dart';
+import '../models/nutritions.dart';
 
 class AddMeal extends StatefulWidget {
   const AddMeal({super.key});
@@ -29,8 +30,8 @@ class _AddMealState extends State<AddMeal> {
   final FoodTrackerService _foodTracker = FoodTrackerService();
   String foodName = '';
   int amount = 0;
-  Nutritions addedNutritions =
-      Nutritions(protein: 0, fiber: 0, carbohydrate: 0);
+  Nutritions currentNutritions = Nutritions(
+      calories: 0, proteins: 0, fiber: 0, fats: 0, carbs: 0, sugar: 0);
 
   final now = DateTime.now();
 
