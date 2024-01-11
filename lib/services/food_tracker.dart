@@ -1,5 +1,6 @@
 import 'package:nutribuddies/models/tracker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:nutribuddies/screens/add_meal.dart';
 import 'package:nutribuddies/services/database.dart';
 
 class FoodTrackerService {
@@ -11,7 +12,7 @@ class FoodTrackerService {
     return DatabaseService(uid: '').getNutritionalInfo(foodName);
   }
 
-  Future<void> addFood(String uid, Nutritions currentNutritions,
+  Future<void> addMeal(String uid, Nutritions currentNutritions,
       Nutritions addedNutritions) async {
     try {
       currentNutritions.protein += addedNutritions.protein;

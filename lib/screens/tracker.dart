@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nutribuddies/screens/add_food.dart';
+import 'package:nutribuddies/screens/add_meal.dart';
 import 'package:nutribuddies/models/tracker.dart';
 import 'package:nutribuddies/models/user.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
@@ -131,7 +131,7 @@ class _TrackerContentState extends State<TrackerContent> {
             onPressed: () async {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const AddFood()),
+                MaterialPageRoute(builder: (context) => const AddMeal()),
               );
             },
             style: ElevatedButton.styleFrom(
