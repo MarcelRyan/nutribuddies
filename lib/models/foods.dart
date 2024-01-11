@@ -1,4 +1,4 @@
-import 'package:nutribuddies/models/tracker.dart';
+import 'package:nutribuddies/models/nutritions.dart';
 
 class Foods {
   final String foodName;

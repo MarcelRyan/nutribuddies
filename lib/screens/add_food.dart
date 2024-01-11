@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nutribuddies/models/tracker.dart';
+import 'package:nutribuddies/models/nutritions.dart';
 import '../constant/text_input_decoration.dart';
 import 'package:nutribuddies/services/food_tracker.dart';
 import 'package:nutribuddies/models/user.dart';
@@ -16,8 +16,8 @@ class _AddFoodState extends State<AddFood> {
   final FoodTrackerService _foodTracker = FoodTrackerService();
   String foodName = '';
   int amount = 0;
-  Nutritions addedNutritions =
-      Nutritions(protein: 0, fiber: 0, carbohydrate: 0);
+  Nutritions addedNutritions = Nutritions(
+      calories: 0, proteins: 0, fiber: 0, fats: 0, carbs: 0, sugar: 0);
 
   final now = DateTime.now();
 
@@ -76,10 +76,8 @@ class _AddFoodState extends State<AddFood> {
               onPressed: () async {
                 // Fetch nutritional information from tracker
                 final today = DateTime(now.year, now.month, now.day);
-                print(today);
-                print(users!.uid);
                 Nutritions currentNutritions = await _foodTracker
-                    .getCurrentNutritionInfo(users.uid, today);
+                    .getCurrentNutritionInfo(users!.uid, today);
 
                 // Fetch nutritional information based on the entered food name
                 Nutritions foodNutritions =
@@ -87,14 +85,16 @@ class _AddFoodState extends State<AddFood> {
 
                 // Calculate the total nutritional values based on the specified amount
                 addedNutritions = Nutritions(
-                  protein: foodNutritions.protein * amount,
-                  fiber: foodNutritions.fiber * amount,
-                  carbohydrate: foodNutritions.carbohydrate * amount,
-                );
+                    proteins: foodNutritions.proteins * amount,
+                    fiber: foodNutritions.fiber * amount,
+                    carbs: foodNutritions.carbs * amount,
+                    fats: 0,
+                    sugar: 0,
+                    calories: 0);
 
                 // add added nutritions
                 await _foodTracker.addFood(
-                    users!.uid, currentNutritions, addedNutritions);
+                    users.uid, currentNutritions, addedNutritions);
                 // ignore: use_build_context_synchronously
                 Navigator.of(context).pop();
               },

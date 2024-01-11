@@ -120,8 +120,10 @@ class _LoginState extends State<Login> {
                                       Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) =>
-                                                const Wrapper()),
+                                            builder: (context) => const Wrapper(
+                                                  result: true,
+                                                  goToHome: true,
+                                                )),
                                       );
                                     }
                                   }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:nutribuddies/widgets/wrapper.dart';
 import 'package:nutribuddies/constant/colors.dart';
 import 'package:nutribuddies/screens/intro.dart';
 
@@ -11,7 +10,7 @@ class SplashScreen extends StatelessWidget {
     Future.delayed(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => Intro1()),
+        MaterialPageRoute(builder: (context) => const Intro1()),
       );
     });
 

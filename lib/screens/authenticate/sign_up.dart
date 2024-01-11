@@ -100,7 +100,6 @@ class _SignUpState extends State<SignUp> {
                                     setState(() => loading = true);
                                     dynamic result = await _auth.register(
                                         email, password, displayName);
-                                    print(result);
                                     if (result == false) {
                                       setState(() => loading = false);
                                     } else {
@@ -108,8 +107,9 @@ class _SignUpState extends State<SignUp> {
                                       Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) =>
-                                                const Wrapper()),
+                                            builder: (context) => const Wrapper(
+                                                  result: true,
+                                                )),
                                       );
                                     }
                                   }

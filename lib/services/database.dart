@@ -1,79 +1,108 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:nutribuddies/models/meals.dart';
 import 'package:nutribuddies/models/tracker.dart';
-import 'package:nutribuddies/models/food.dart';
+import 'package:nutribuddies/models/nutritions.dart';
 
 class DatabaseService {
   final String uid;
   DatabaseService({required this.uid});
 
-  final CollectionReference userCollection =
+  final CollectionReference usersCollection =
       FirebaseFirestore.instance.collection('users');
 
-  final CollectionReference foodCollection =
-      FirebaseFirestore.instance.collection('food');
+  final CollectionReference kidsCollection =
+      FirebaseFirestore.instance.collection('kids');
 
-  final CollectionReference trackerCollection =
-      FirebaseFirestore.instance.collection('tracker');
+  final CollectionReference foodsCollection =
+      FirebaseFirestore.instance.collection('foods');
 
-  Future updateUserData(String name, String email) async {
-    return await userCollection.doc(uid).set({
+  final CollectionReference trackersCollection =
+      FirebaseFirestore.instance.collection('trackers');
+
+  // users
+  Future updateUserData(
+      String displayName, String email, String? profilePictureUrl) async {
+    return await usersCollection.doc(uid).set({
       'uid': uid,
-      'name': name,
+      'displayName': displayName,
       'email': email,
+      'profilePictureUrl': profilePictureUrl,
     });
   }
 
-  Future updateTrackerData(Nutritions currentNutritions,
-      Nutritions maxNutritions, DateTime date) async {
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
-    final querySnapshot = await trackerCollection
-        .where('uid', isEqualTo: uid)
-        .where('date', isEqualTo: today)
-        .get();
-    if (querySnapshot.docs.isEmpty) {
-      return await trackerCollection.doc(uid).set({
-        'uid': uid,
-        'date': DateTime(date.year, date.month, date.day),
-        'currentNutritions': currentNutritions.toJson(),
-        'maxNutritions': maxNutritions.toJson(),
-      });
+  Future<String> getPhotoUrl(String path) async {
+    try {
+      final ref = FirebaseStorage.instance.ref().child(path);
+      final photoUrl = await ref.getDownloadURL();
+      return photoUrl;
+    } catch (e) {
+      return ''; // Return an empty string or null, depending on your requirements
     }
   }
 
+  // kids
+  Future updateKidData(
+      String kidsUid,
+      String displayName,
+      DateTime dateOfBirth,
+      String gender,
+      double currentHeight,
+      double currentWeight,
+      double bornWeight,
+      String? profilePictureUrl) async {
+    return await kidsCollection.doc(uid).set({
+      'uid': kidsUid,
+      'parentUid': uid,
+      'displayName': displayName,
+      'dateOfBirth': dateOfBirth,
+      'gender': gender,
+      'currentHeight': currentHeight,
+      'currentWeight': currentWeight,
+      'bornWeight': bornWeight,
+      'profilePictureUrl': profilePictureUrl,
+    });
+  }
+
+  Future<bool> isKidsUidUnique(String kidsUid) async {
+    final docSnapshot = await kidsCollection.doc(kidsUid).get();
+    return !docSnapshot.exists;
+  }
+
+  // nutritions
   Future<void> seedInitialFoodData() async {
-    Nutritions tahuNutritions =
-        Nutritions(protein: 1.0, fiber: 2.0, carbohydrate: 15.0);
-    Nutritions tempeNutritions =
-        Nutritions(protein: 1.0, fiber: 3.0, carbohydrate: 27.0);
+    Nutritions tahuNutritions = Nutritions(
+        calories: 10, proteins: 10, fiber: 10, fats: 10, carbs: 10, sugar: 10);
+    Nutritions tempeNutritions = Nutritions(
+        calories: 20, proteins: 20, fiber: 20, fats: 20, carbs: 20, sugar: 20);
 
     List<Map<String, dynamic>> initialFoodData = [
       {'foodName': 'Tahu', 'nutritions': tahuNutritions.toJson()},
-      {'foodName': 'Tempe', 'nutritions': tempeNutritions},
+      {'foodName': 'Tempe', 'nutritions': tempeNutritions.toJson()},
     ];
 
     // Loop through the initial food data and add each item to the foodCollection
     for (var foodData in initialFoodData) {
       // Check if the foodName already exists in the collection
-      QuerySnapshot querySnapshot = await foodCollection
+      QuerySnapshot querySnapshot = await foodsCollection
           .where('foodName', isEqualTo: foodData['foodName'])
           .get();
 
       if (querySnapshot.docs.isEmpty) {
         // If the foodName doesn't exist, add it to the collection
-        await foodCollection.add(foodData);
+        await foodsCollection.add(foodData);
       }
     }
   }
 
   Future updateCurrentNutritionTrackerData(Nutritions currentNutritions) async {
-    return await trackerCollection.doc(uid).update({
+    return await trackersCollection.doc(uid).update({
       'currentNutritions': currentNutritions.toJson(),
     });
   }
 
   Future<Nutritions> getNutritionalInfo(String foodName) async {
-    QuerySnapshot querySnapshot = await foodCollection
+    QuerySnapshot querySnapshot = await foodsCollection
         .where('foodName', isEqualTo: foodName)
         .limit(1)
         .get();
@@ -82,13 +111,36 @@ class DatabaseService {
       Map<String, dynamic> data =
           querySnapshot.docs.first.data() as Map<String, dynamic>;
       return Nutritions(
-        protein: data['nutritions']['protein'],
+        proteins: data['nutritions']['proteins'],
         fiber: data['nutritions']['fiber'],
-        carbohydrate: data['nutritions']['carbohydrate'],
+        carbs: data['nutritions']['carbs'],
+        calories: data['nutritions']['calories'],
+        fats: data['nutritions']['fats'],
+        sugar: data['nutritions']['sugar'],
       );
     } else {
       // Handle the case when the food information is not found
-      return Nutritions(protein: 0, fiber: 0, carbohydrate: 0);
+      return Nutritions(
+          calories: 0, proteins: 0, fiber: 0, fats: 0, carbs: 0, sugar: 0);
+    }
+  }
+
+  // trackers
+  Future updateTrackerData(Nutritions currentNutritions,
+      Nutritions maxNutritions, DateTime date) async {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final querySnapshot = await trackersCollection
+        .where('uid', isEqualTo: uid)
+        .where('date', isEqualTo: today)
+        .get();
+    if (querySnapshot.docs.isEmpty) {
+      return await trackersCollection.doc(uid).set({
+        'uid': uid,
+        'date': DateTime(date.year, date.month, date.day),
+        'currentNutritions': currentNutritions.toJson(),
+        'maxNutritions': maxNutritions.toJson(),
+      });
     }
   }
 
@@ -97,7 +149,7 @@ class DatabaseService {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
 
-    QuerySnapshot querySnapshot = await trackerCollection
+    QuerySnapshot querySnapshot = await trackersCollection
         .where('uid', isEqualTo: uid)
         .where('date', isEqualTo: today)
         .limit(1)
@@ -106,13 +158,17 @@ class DatabaseService {
       Map<String, dynamic> data =
           querySnapshot.docs.first.data() as Map<String, dynamic>;
       return Nutritions(
-        protein: data['currentNutritions']['protein'],
+        proteins: data['currentNutritions']['proteins'],
         fiber: data['currentNutritions']['fiber'],
-        carbohydrate: data['currentNutritions']['carbohydrate'],
+        carbs: data['currentNutritions']['carbs'],
+        calories: data['currentNutritions']['calories'],
+        fats: data['currentNutritions']['fats'],
+        sugar: data['currentNutritions']['sugar'],
       );
     } else {
       // Handle the case when the tracker information is not found
-      return Nutritions(protein: 0, fiber: 0, carbohydrate: 0);
+      return Nutritions(
+          calories: 0, proteins: 0, fiber: 0, fats: 0, carbs: 0, sugar: 0);
     }
   }
 
@@ -133,27 +189,44 @@ class DatabaseService {
     // ignore: unnecessary_null_comparison
     if (matchingDoc != null) {
       Map<String, dynamic> data = matchingDoc.data() as Map<String, dynamic>;
+      List<Meals> mealsList = [];
+      if (data['meals'] != null) {
+        for (var mealData in data['meals']) {
+          Meals meal = Meals(
+            food: mealData['food'],
+            amount: mealData['amount'],
+          );
+          mealsList.add(meal);
+        }
+      }
       return Trackers(
-        uid: data['uid'] ?? '',
-        date: data['date'].toDate() ?? '',
-        currentNutritions: Nutritions(
-          protein: (data['currentNutritions']['protein'] as double),
-          fiber: (data['currentNutritions']['fiber'] as double),
-          carbohydrate: (data['currentNutritions']['carbohydrate'] as double),
-        ),
-        maxNutritions: Nutritions(
-          protein: (data['maxNutritions']['protein'] as double),
-          fiber: (data['maxNutritions']['fiber'] as double),
-          carbohydrate: (data['maxNutritions']['carbohydrate'] as double),
-        ),
-      );
+          kidUid: '', // ntr ganti
+          uid: data['uid'] ?? '',
+          date: data['date'].toDate() ?? '',
+          currentNutritions: Nutritions(
+            proteins: data['currentNutritions']['proteins'],
+            fiber: data['currentNutritions']['fiber'],
+            carbs: data['currentNutritions']['carbs'],
+            calories: data['currentNutritions']['calories'],
+            fats: data['currentNutritions']['fats'],
+            sugar: data['currentNutritions']['sugar'],
+          ),
+          maxNutritions: Nutritions(
+            proteins: data['maxNutritions']['proteins'],
+            fiber: data['maxNutritions']['fiber'],
+            carbs: data['maxNutritions']['carbs'],
+            calories: data['maxNutritions']['calories'],
+            fats: data['maxNutritions']['fats'],
+            sugar: data['maxNutritions']['sugar'],
+          ),
+          meals: mealsList);
     } else {
       return null;
     }
   }
 
   Stream<Trackers?> get tracker {
-    return trackerCollection
+    return trackersCollection
         .where('uid', isEqualTo: uid)
         .snapshots()
         .map(_getTrackerForToday);

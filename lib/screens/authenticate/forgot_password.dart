@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:nutribuddies/screens/authenticate/login.dart';
-
 import 'package:nutribuddies/services/auth.dart';
 import 'package:nutribuddies/constant/text_input_decoration.dart';
 import 'package:nutribuddies/widgets/loading.dart';
@@ -88,7 +86,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                     setState(() => loading = true);
                                     dynamic result =
                                         await _auth.resetPassword(email);
-                                    print(result);
                                     if (result == null) {
                                       setState(() => loading = false);
                                     } else {
@@ -136,8 +133,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                     Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) =>
-                                              const Wrapper()),
+                                          builder: (context) => const Wrapper(
+                                                result: false,
+                                              )),
                                     );
                                   },
                                   child: const Text(
@@ -227,7 +225,9 @@ class _CheckEmailState extends State<CheckEmail> {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const Wrapper()),
+                              builder: (context) => const Wrapper(
+                                    result: false,
+                                  )),
                         );
                       },
                       style: ElevatedButton.styleFrom(

@@ -391,7 +391,9 @@ class _Intro5State extends State<Intro5> {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const Wrapper()),
+                            builder: (context) => const Wrapper(
+                                  result: false,
+                                )),
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -429,7 +431,10 @@ class _Intro5State extends State<Intro5> {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const Wrapper()),
+                              builder: (context) => const Wrapper(
+                                    goToHome: true,
+                                    result: true,
+                                  )),
                         );
                       }
                     },
