@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:nutribuddies/constant/colors.dart';
 
 class Loading extends StatelessWidget {
   const Loading({super.key});
@@ -7,10 +8,10 @@ class Loading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.blue,
+      color: background,
       child: const Center(
         child: SpinKitCircle(
-          color: Colors.white,
+          color: outline,
           size: 50,
         ),
       ),
