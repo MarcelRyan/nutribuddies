@@ -302,6 +302,30 @@ class DatabaseService {
     return foodsList;
   }
 
+  Future<List<Foods>> getListOfFoodsDatas(String searchQuery) async {
+    List<Foods> foodsList = [];
+
+    QuerySnapshot querySnapshot = await foodsCollection.get();
+
+    for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
+      Map<String, dynamic> data =
+          documentSnapshot.data() as Map<String, dynamic>;
+      Foods food = Foods(
+        foodName: data['foodName'] ?? '',
+        nutritions: Nutritions.fromJson(data['nutritions'] ?? {}),
+        portion: data['portion'] ?? '',
+        thumbnailUrl: data['thumbnailUrl'],
+      );
+
+      // Check if the food name contains the search query
+      if (food.foodName.toLowerCase().contains(searchQuery.toLowerCase())) {
+        foodsList.add(food);
+      }
+    }
+
+    return foodsList;
+  }
+
   // trackers
   Future<void> updateTrackerData({
     required String trackerUid,

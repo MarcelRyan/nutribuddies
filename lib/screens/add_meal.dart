@@ -33,10 +33,43 @@ class _AddMealState extends State<AddMeal> {
   final now = DateTime.now();
 
   TextEditingController searchController = TextEditingController();
+  List<Foods> filteredFoodRecords = [];
 
   @override
   Widget build(BuildContext context) {
     final Users? users = Provider.of<Users?>(context);
+
+    Future<List<Foods>> getListOfFoodsData(String searchQuery) async {
+      List<Foods> foodsList = [];
+
+      QuerySnapshot querySnapshot =
+          await DatabaseService(uid: '').foodsCollection.get();
+
+      for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
+        Map<String, dynamic> data =
+            documentSnapshot.data() as Map<String, dynamic>;
+        Foods food = Foods(
+          foodName: data['foodName'] ?? '',
+          nutritions: Nutritions.fromJson(data['nutritions'] ?? {}),
+          portion: data['portion'] ?? '',
+          thumbnailUrl: data['thumbnailUrl'],
+        );
+
+        // Check if the food name contains the search query
+        if (food.foodName.toLowerCase().contains(searchQuery.toLowerCase())) {
+          foodsList.add(food);
+        }
+      }
+
+      return foodsList;
+    }
+
+    Future<void> loadData(String searchQuery) async {
+      List<Foods> data = await getListOfFoodsData(searchQuery);
+      setState(() {
+        filteredFoodRecords = data;
+      });
+    }
 
     return Scaffold(
       backgroundColor: background,
@@ -58,43 +91,42 @@ class _AddMealState extends State<AddMeal> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Container(
-              padding: EdgeInsets.fromLTRB(16.0, 0, 0, 0),
-              margin: EdgeInsets.fromLTRB(40.0, 14.0, 40.0, 20.0),
-              decoration: BoxDecoration(
-                color: surfaceContainerHighest,
-                borderRadius: BorderRadius.circular(65.0),
-              ),
-              height: 56,
-              width: 332,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Icon(Icons.search),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(
-                          15, 0, 0, 3), // Add horizontal padding
-                      child: TextField(
-                        controller: searchController,
-                        onChanged: (value) {
-                          _debouncer.run(() {
-                            setState(() {
-                              searchController.text = value;
-                            });
-                          });
-                        },
-                        decoration: const InputDecoration(
-                          hintText: "Search meals...",
-                          border: InputBorder.none,
-                        ),
+            padding: EdgeInsets.fromLTRB(16.0, 0, 0, 0),
+            margin: EdgeInsets.fromLTRB(40.0, 14.0, 40.0, 20.0),
+            decoration: BoxDecoration(
+              color: surfaceContainerHighest,
+              borderRadius: BorderRadius.circular(65.0),
+            ),
+            height: 56,
+            width: 332,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(Icons.search),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(
+                        15, 0, 0, 3), // Add horizontal padding
+                    child: TextField(
+                      controller: searchController,
+                      onChanged: (value) {
+                        _debouncer.run(() {
+                          loadData(value);
+                        });
+                      },
+                      decoration: const InputDecoration(
+                        hintText: "Search meals...",
+                        border: InputBorder.none,
                       ),
                     ),
                   ),
-                ],
-              )),
+                ),
+              ],
+            ),
+          ),
           Expanded(
             child: FutureBuilder<List<Foods>>(
-              future: DatabaseService(uid: users!.uid).getListOfFoodsData(),
+              future: getListOfFoodsData(searchController.text),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const CircularProgressIndicator();
