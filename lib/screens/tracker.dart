@@ -958,7 +958,7 @@ class _TrackerContentState extends State<TrackerContent> {
                             ]),
                         padding: const EdgeInsets.fromLTRB(20, 15, 10, 10),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Image.network(
                               meal.food.thumbnailUrl ?? '',
@@ -1004,9 +1004,7 @@ class _TrackerContentState extends State<TrackerContent> {
                                 ),
                               ],
                             ),
-                            const SizedBox(
-                              width: 40,
-                            ),
+                            const Spacer(),
                             IconButton(
                               icon: const Icon(
                                 Icons.edit,
