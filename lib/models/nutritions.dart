@@ -3,7 +3,7 @@ class Nutritions {
   double fiber;
   double proteins;
   double fats;
-  double sugar;
+  double iron;
   double carbs;
 
   Nutritions(
@@ -12,13 +12,13 @@ class Nutritions {
       required this.fiber,
       required this.fats,
       required this.carbs,
-      required this.sugar});
+      required this.iron});
 
   Map<String, dynamic> toJson() {
     return {
       'calories': calories,
       'fats': fats,
-      'sugar': sugar,
+      'iron': iron,
       'proteins': proteins,
       'fiber': fiber,
       'carbs': carbs,
@@ -32,7 +32,7 @@ class Nutritions {
       fiber: json['fiber'] ?? 0.0,
       fats: json['fats'] ?? 0.0,
       carbs: json['carbs'] ?? 0.0,
-      sugar: json['sugar'] ?? 0.0,
+      iron: json['iron'] ?? 0.0,
     );
   }
 }

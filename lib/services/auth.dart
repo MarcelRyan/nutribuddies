@@ -107,7 +107,7 @@ class AuthService {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       User user = result.user!;
-      String defaultPhotoPath = 'default_user.jpg';
+      String defaultPhotoPath = 'default_profile.png';
       String defaultPhotoUrl =
           await DatabaseService(uid: user.uid).getPhotoUrl(defaultPhotoPath);
       await DatabaseService(uid: user.uid).updateUserData(
@@ -171,9 +171,9 @@ class AuthService {
 
       String profilePictureUrl = '';
       if (gender == 'Boy') {
-        profilePictureUrl = 'default_user.jpg'; //ntr ganti
+        profilePictureUrl = 'boy.png';
       } else {
-        profilePictureUrl = 'default_user.jpg'; //ntr ganti
+        profilePictureUrl = 'girl.png';
       }
 
       // generate tracker uid
@@ -188,14 +188,14 @@ class AuthService {
       }
 
       Nutritions currentNutritions = Nutritions(
-          calories: 0, proteins: 0, fiber: 0, fats: 0, carbs: 0, sugar: 0);
+          calories: 0, proteins: 0, fiber: 0, fats: 0, carbs: 0, iron: 0);
       Nutritions maxNutritions = Nutritions(
           calories: 100,
           proteins: 100,
           fiber: 100,
           fats: 100,
           carbs: 100,
-          sugar: 100);
+          iron: 100);
       List<Meals> meals = [];
 
       await DatabaseService(uid: parentUid).updateKidData(

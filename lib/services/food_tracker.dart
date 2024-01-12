@@ -30,13 +30,12 @@ class FoodTrackerService {
     Nutritions currentNutritions = tracker.currentNutritions;
     Nutritions addedNutritions = food.nutritions;
     try {
-      print("Masuk");
       currentNutritions.proteins += addedNutritions.proteins * amount;
       currentNutritions.fiber += addedNutritions.fiber * amount;
       currentNutritions.carbs += addedNutritions.carbs * amount;
       currentNutritions.calories += addedNutritions.calories * amount;
       currentNutritions.fats += addedNutritions.fats * amount;
-      currentNutritions.sugar += addedNutritions.sugar * amount;
+      currentNutritions.iron += addedNutritions.iron * amount;
 
       Meals meal = Meals(food: food, amount: amount);
 
@@ -67,7 +66,7 @@ class FoodTrackerService {
     String kidUid,
   ) async {
     Nutritions currentNutritions = Nutritions(
-        calories: 0, proteins: 0, fiber: 0, fats: 0, carbs: 0, sugar: 0);
+        calories: 0, proteins: 0, fiber: 0, fats: 0, carbs: 0, iron: 0);
 
     Nutritions maxNutritions = Nutritions(
         calories: 100,
@@ -75,7 +74,7 @@ class FoodTrackerService {
         fiber: 100,
         fats: 100,
         carbs: 100,
-        sugar: 100);
+        iron: 100);
     List<Meals> meals = [];
 
     final DateTime? picked = await showDatePicker(

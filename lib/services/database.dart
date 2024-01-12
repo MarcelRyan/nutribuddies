@@ -258,7 +258,7 @@ class DatabaseService {
   // get foods
   Future<Foods> getFoodsData(String foodName) async {
     Nutritions defaultNutritions = Nutritions(
-        calories: 0, proteins: 0, fiber: 0, fats: 0, carbs: 0, sugar: 0);
+        calories: 0, proteins: 0, fiber: 0, fats: 0, carbs: 0, iron: 0);
 
     QuerySnapshot querySnapshot = await foodsCollection
         .where('foodName', isEqualTo: foodName)
@@ -394,6 +394,107 @@ class DatabaseService {
     }
   }
 
+  Future<void> deleteMealFromTracker(String trackerUid, int mealIndex) async {
+    try {
+      final trackerDoc = await trackersCollection.doc(trackerUid).get();
+      if (trackerDoc.exists) {
+        final trackerData = trackerDoc.data() as Map<String, dynamic>;
+        List<dynamic> mealsList = trackerData['meals'] ?? [];
+        Nutritions currentNutritions =
+            Nutritions.fromJson(trackerData['currentNutritions']);
+
+        if (mealIndex >= 0 && mealIndex < mealsList.length) {
+          Meals mealToRemove = Meals.fromJson(mealsList[mealIndex]);
+
+          // subtract nutrition
+          currentNutritions.calories -=
+              mealToRemove.food.nutritions.calories * mealToRemove.amount;
+          currentNutritions.proteins -=
+              mealToRemove.food.nutritions.proteins * mealToRemove.amount;
+          currentNutritions.fiber -=
+              mealToRemove.food.nutritions.fiber * mealToRemove.amount;
+          currentNutritions.fats -=
+              mealToRemove.food.nutritions.fats * mealToRemove.amount;
+          currentNutritions.carbs -=
+              mealToRemove.food.nutritions.carbs * mealToRemove.amount;
+          currentNutritions.iron -=
+              mealToRemove.food.nutritions.iron * mealToRemove.amount;
+
+          // remove meal
+          mealsList.removeAt(mealIndex);
+
+          // update tracker
+          await trackersCollection.doc(trackerUid).update({
+            'meals': mealsList,
+            'currentNutritions': currentNutritions.toJson(),
+          });
+        }
+      }
+    } catch (e) {
+      print('Error deleting meal: ${e.toString()}');
+    }
+  }
+
+  Future<void> editMealInTracker(
+      String trackerUid, int mealIndex, Foods food, int counter) async {
+    try {
+      final trackerDoc = await trackersCollection.doc(trackerUid).get();
+      print('MASUKKKKKKKKKKKKK');
+      if (trackerDoc.exists) {
+        final trackerData = trackerDoc.data() as Map<String, dynamic>;
+        List<dynamic> mealsList = trackerData['meals'] ?? [];
+        Nutritions currentNutritions =
+            Nutritions.fromJson(trackerData['currentNutritions']);
+
+        if (mealIndex >= 0 && mealIndex < mealsList.length) {
+          Meals originalMeal = Meals.fromJson(mealsList[mealIndex]);
+
+          print(originalMeal.amount);
+          // subtract nutrition
+          currentNutritions.calories -=
+              originalMeal.food.nutritions.calories * originalMeal.amount;
+          currentNutritions.proteins -=
+              originalMeal.food.nutritions.proteins * originalMeal.amount;
+          currentNutritions.fiber -=
+              originalMeal.food.nutritions.fiber * originalMeal.amount;
+          currentNutritions.fats -=
+              originalMeal.food.nutritions.fats * originalMeal.amount;
+          currentNutritions.carbs -=
+              originalMeal.food.nutritions.carbs * originalMeal.amount;
+          currentNutritions.iron -=
+              originalMeal.food.nutritions.iron * originalMeal.amount;
+
+          print(counter);
+          print(originalMeal.food);
+          // Add nutrition
+          currentNutritions.calories += food.nutritions.calories * counter;
+          currentNutritions.proteins += food.nutritions.proteins * counter;
+          currentNutritions.fiber += food.nutritions.fiber * counter;
+          currentNutritions.fats += food.nutritions.fats * counter;
+          currentNutritions.carbs += food.nutritions.carbs * counter;
+          currentNutritions.iron += food.nutritions.iron * counter;
+
+          Meals updatedMeal = Meals(food: food, amount: counter);
+
+          // update meal
+          mealsList[mealIndex] = updatedMeal.toJson();
+
+          // Update the tracker document with the updated meals and currentNutritions
+          await trackersCollection.doc(trackerUid).update({
+            'meals': mealsList,
+            'currentNutritions': currentNutritions.toJson(),
+          });
+        } else {
+          print('Invalid meal index: $mealIndex');
+        }
+      } else {
+        print('Tracker document not found for UID: $trackerUid');
+      }
+    } catch (e) {
+      print('Error editing meal: $e');
+    }
+  }
+
   // check if kidsUid unique
   Future<bool> isTrackerUidUnique(String trackerUid) async {
     final docSnapshot = await trackersCollection.doc(trackerUid).get();
@@ -454,7 +555,7 @@ class DatabaseService {
   //           carbs: data['currentNutritions']['carbs'],
   //           calories: data['currentNutritions']['calories'],
   //           fats: data['currentNutritions']['fats'],
-  //           sugar: data['currentNutritions']['sugar'],
+  //           iron: data['currentNutritions']['iron'],
   //         ),
   //         maxNutritions: Nutritions(
   //           proteins: data['maxNutritions']['proteins'],
@@ -462,7 +563,7 @@ class DatabaseService {
   //           carbs: data['maxNutritions']['carbs'],
   //           calories: data['maxNutritions']['calories'],
   //           fats: data['maxNutritions']['fats'],
-  //           sugar: data['maxNutritions']['sugar'],
+  //           iron: data['maxNutritions']['iron'],
   //         ),
   //         meals: mealsList);
   //   } else {
