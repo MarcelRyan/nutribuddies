@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:nutribuddies/models/foods.dart';
 import 'package:nutribuddies/models/tracker.dart';
 import 'package:nutribuddies/services/database.dart';
+import 'package:nutribuddies/services/debouncer.dart';
 import '../constant/text_input_decoration.dart';
 import 'package:nutribuddies/services/food_tracker.dart';
 import 'package:nutribuddies/models/user.dart';
@@ -23,10 +24,11 @@ class AddMeal extends StatefulWidget {
 
 class _AddMealState extends State<AddMeal> {
   final FoodTrackerService _foodTracker = FoodTrackerService();
+  final Debouncer _debouncer = Debouncer(milliseconds: 500);
   String foodName = '';
   int amount = 0;
   Nutritions currentNutritions = Nutritions(
-      calories: 0, proteins: 0, fiber: 0, fats: 0, carbs: 0, sugar: 0);
+      calories: 0, proteins: 0, fiber: 0, fats: 0, carbs: 0, iron: 0);
 
   final now = DateTime.now();
 
@@ -73,6 +75,14 @@ class _AddMealState extends State<AddMeal> {
                       padding: const EdgeInsets.fromLTRB(
                           15, 0, 0, 3), // Add horizontal padding
                       child: TextField(
+                        controller: searchController,
+                        onChanged: (value) {
+                          _debouncer.run(() {
+                            setState(() {
+                              searchController.text = value;
+                            });
+                          });
+                        },
                         decoration: const InputDecoration(
                           hintText: "Search meals...",
                           border: InputBorder.none,
@@ -87,7 +97,7 @@ class _AddMealState extends State<AddMeal> {
               future: DatabaseService(uid: users!.uid).getListOfFoodsData(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator();
+                  return const CircularProgressIndicator();
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else {
@@ -174,22 +184,17 @@ class _AddMealState extends State<AddMeal> {
                                   ],
                                 ),
                               ),
-                              Container(
-                                height: 30,
-                                width: 30,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: primary,
-                                ),
-                                child: IconButton(
-                                  onPressed: () {
-                                    _addMealModal(
-                                        context, record, widget.tracker);
-                                  },
-                                  icon: Icon(Icons.add),
-                                  color: white,
-                                  iconSize: 30.0,
-                                ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  _addMealModal(
+                                      context, record, widget.tracker);
+                                },
+                                icon: Icon(Icons.add_circle_rounded),
+                                color: primary,
+                                iconSize: 30.0,
                               )
                             ],
                           ),
@@ -666,8 +671,10 @@ class _editMealModalState extends State<editMealModal> {
                       Container(
                         width: 52,
                         height: 52,
-                        child: Image.asset('assets/Login/Group1(1).png',
-                            fit: BoxFit.cover),
+                        child: Image.network(
+                          widget.record.thumbnailUrl ?? '',
+                          fit: BoxFit.cover,
+                        ),
                       )
                     ],
                   ),
@@ -862,8 +869,8 @@ class _editMealModalState extends State<editMealModal> {
                             color: primary,
                           ),
                           child: IconButton(
-                            icon: Icon(Icons.remove),
-                            color: white,
+                            icon: Icon(Icons.remove_circle_rounded),
+                            color: primary,
                             onPressed: () {
                               _decrementCounter();
                             },
@@ -873,7 +880,7 @@ class _editMealModalState extends State<editMealModal> {
                           width: 15,
                         ),
                         Container(
-                          width: 163,
+                          width: 130,
                           child: Text(
                             "${counter}",
                             style: TextStyle(
@@ -889,22 +896,12 @@ class _editMealModalState extends State<editMealModal> {
                         SizedBox(
                           width: 15,
                         ),
-                        Container(
-                          height: 24,
-                          width: 24,
-                          margin: EdgeInsets.only(right: 10),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.rectangle,
-                            borderRadius: BorderRadius.circular(30),
-                            color: primary,
-                          ),
-                          child: IconButton(
-                            icon: Icon(Icons.add),
-                            color: white,
-                            onPressed: () {
-                              _incrementCounter();
-                            },
-                          ),
+                        IconButton(
+                          icon: Icon(Icons.add_circle_outline_rounded),
+                          color: primary,
+                          onPressed: () {
+                            _incrementCounter();
+                          },
                         ),
                       ],
                     ),
@@ -1064,7 +1061,7 @@ class _addMealModalState extends State<addMealModal> {
                             width: 150,
                             height: 24,
                             child: Text(
-                              'Edit Meal',
+                              'Add Meal',
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 16,
@@ -1096,8 +1093,10 @@ class _addMealModalState extends State<addMealModal> {
                       Container(
                         width: 52,
                         height: 52,
-                        child: Image.asset('assets/Login/Group1(1).png',
-                            fit: BoxFit.cover),
+                        child: Image.network(
+                          widget.record.thumbnailUrl ?? '',
+                          fit: BoxFit.cover,
+                        ),
                       )
                     ],
                   ),
@@ -1282,28 +1281,18 @@ class _addMealModalState extends State<addMealModal> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Container(
-                          height: 24,
-                          width: 24,
-                          margin: EdgeInsets.only(left: 10),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.rectangle,
-                            borderRadius: BorderRadius.circular(30),
-                            color: primary,
-                          ),
-                          child: IconButton(
-                            icon: Icon(Icons.remove),
-                            color: white,
-                            onPressed: () {
-                              _decrementCounter();
-                            },
-                          ),
+                        IconButton(
+                          icon: Icon(Icons.remove_circle_rounded),
+                          color: primary,
+                          onPressed: () {
+                            _decrementCounter();
+                          },
                         ),
                         SizedBox(
                           width: 15,
                         ),
                         Container(
-                          width: 163,
+                          width: 120,
                           child: Text(
                             "${counter}",
                             style: TextStyle(
@@ -1319,22 +1308,12 @@ class _addMealModalState extends State<addMealModal> {
                         SizedBox(
                           width: 15,
                         ),
-                        Container(
-                          height: 24,
-                          width: 24,
-                          margin: EdgeInsets.only(right: 10),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.rectangle,
-                            borderRadius: BorderRadius.circular(30),
-                            color: primary,
-                          ),
-                          child: IconButton(
-                            icon: Icon(Icons.add),
-                            color: white,
-                            onPressed: () {
-                              _incrementCounter();
-                            },
-                          ),
+                        IconButton(
+                          icon: Icon(Icons.add_circle_rounded),
+                          color: primary,
+                          onPressed: () {
+                            _incrementCounter();
+                          },
                         ),
                       ],
                     ),
@@ -1352,7 +1331,7 @@ class _addMealModalState extends State<addMealModal> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   SizedBox(
-                    width: 86,
+                    width: 66,
                   ),
                   Container(
                     width: 95,
@@ -1382,10 +1361,18 @@ class _addMealModalState extends State<addMealModal> {
                       onPressed: () {
                         Navigator.pop(context);
                       },
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(100.0),
+                        ),
+                        backgroundColor: background,
+                        foregroundColor: primary,
+                        side: const BorderSide(color: outline, width: 1),
+                      ),
                       child: Text(
                         "Cancel",
                         style: TextStyle(
-                          color: Color(0xFF5674A7),
+                          color: primary,
                           fontSize: 11,
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w500,
@@ -1411,13 +1398,18 @@ class _addMealModalState extends State<addMealModal> {
                         _foodTracker.saveMeal(
                             users!.uid, widget.tracker, widget.record, counter);
                         Navigator.pop(context);
+                        Navigator.pop(context);
                       },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            primary), // Set the background color
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(100.0),
+                        ),
+                        backgroundColor: primary,
+                        foregroundColor: onPrimary,
                       ),
                       child: Text(
                         "Save",
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                           color: white,
                           fontSize: 11,
