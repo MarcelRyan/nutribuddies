@@ -765,6 +765,15 @@ class _TrackerContentState extends State<TrackerContent> {
                         spreadRadius: 1,
                       ),
                     ]),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AddMeal()));
+                  },
+                  child: const Text("Add Meal"),
+                ),
               ),
             ],
           ),
