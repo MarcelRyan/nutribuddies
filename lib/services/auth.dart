@@ -1,10 +1,14 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:nutribuddies/models/nutritions.dart';
 import 'package:nutribuddies/models/user.dart';
 import 'package:nutribuddies/services/database.dart';
 import 'package:uuid/uuid.dart';
-
+import 'package:flutter/foundation.dart' show kIsWeb;
 import '../models/meals.dart';
 
 class AuthService {
@@ -53,6 +57,50 @@ class AuthService {
     }
   }
 
+  // sign in with google
+  static Future<User?> signInWithGoogle() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? user;
+
+    final GoogleSignIn googleSignIn = GoogleSignIn();
+
+    final GoogleSignInAccount? googleSignInAccount =
+        await googleSignIn.signIn();
+
+    if (googleSignInAccount != null) {
+      final GoogleSignInAuthentication googleSignInAuthentication =
+          await googleSignInAccount.authentication;
+
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleSignInAuthentication.accessToken,
+        idToken: googleSignInAuthentication.idToken,
+      );
+
+      try {
+        final UserCredential userCredential =
+            await auth.signInWithCredential(credential);
+
+        user = userCredential.user;
+      } on FirebaseAuthException {
+        // Error
+      } catch (e) {
+        // Error
+      }
+    }
+
+    return user;
+  }
+
+  static SnackBar customSnackBar({required String content}) {
+    return SnackBar(
+      backgroundColor: Colors.black,
+      content: Text(
+        content,
+        style: const TextStyle(color: Colors.redAccent, letterSpacing: 0.5),
+      ),
+    );
+  }
+
   // register with email & password
   Future register(String email, String password, String displayName) async {
     try {
@@ -77,7 +125,11 @@ class AuthService {
 
   // sign out
   Future signOut() async {
+    final GoogleSignIn googleSignIn = GoogleSignIn();
     try {
+      if (!kIsWeb) {
+        await googleSignIn.signOut();
+      }
       return await _auth.signOut();
     } catch (e) {
       Fluttertoast.showToast(msg: "Error: ${e.toString()}");
