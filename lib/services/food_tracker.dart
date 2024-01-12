@@ -103,7 +103,6 @@ class FoodTrackerService {
         kidUid: kidUid,
         date: picked,
         currentNutritions: currentNutritions,
-        maxNutritions: maxNutritions,
         meals: meals,
       );
     }

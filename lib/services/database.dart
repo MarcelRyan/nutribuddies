@@ -332,11 +332,13 @@ class DatabaseService {
     required String kidUid,
     required DateTime date,
     required Nutritions currentNutritions,
-    required Nutritions maxNutritions,
+    // required Nutritions maxNutritions,
     required List<Meals> meals,
   }) async {
     assert(trackerUid.isNotEmpty, 'Tracker UID must not be empty');
     assert(kidUid.isNotEmpty, 'Kid UID must not be empty');
+
+    Nutritions maxNutritions = await getMaxNutritions(kidUid);
 
     final querySnapshot = await trackersCollection
         .where('kidUid', isEqualTo: kidUid)
@@ -616,7 +618,6 @@ class DatabaseService {
         meals: meals,
       );
     } else {
-      // Handle the case when the tracker information is not found
       return null;
     }
   }
@@ -628,5 +629,161 @@ class DatabaseService {
         .where('date', isEqualTo: date)
         .snapshots()
         .map((querySnapshot) => _getTrackerForToday(querySnapshot));
+  }
+
+  Future<Nutritions> getMaxNutritions(String kidUid) async {
+    try {
+      QuerySnapshot querySnapshot =
+          await kidsCollection.where('uid', isEqualTo: kidUid).limit(1).get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        Map<String, dynamic> data =
+            querySnapshot.docs.first.data() as Map<String, dynamic>;
+        int age = DateTime.now()
+                .difference((data['dateOfBirth'] as Timestamp).toDate())
+                .inDays ~/
+            365;
+        String gender = data['gender'];
+
+        double calories = 0.0;
+        double protein = 0.0;
+        double fiber = 0.0;
+        double fat = 0.0;
+        double carbs = 0.0;
+        double iron = 0.0;
+
+        if (age >= 0 && age <= 3) {
+          calories = 1000;
+          protein = 13;
+          fiber = 14.0;
+          fat = 35;
+          carbs = 130;
+          iron = 7;
+        } else if (age >= 4 && age <= 8) {
+          if (gender.toLowerCase() == 'female') {
+            calories = 1200;
+            protein = 19;
+            fiber = 16.8;
+            fat = 30;
+            carbs = 130;
+            iron = 10;
+          } else if (gender.toLowerCase() == 'male') {
+            calories = 1500;
+            protein = 19;
+            fiber = 19.6;
+            fat = 30;
+            carbs = 130;
+            iron = 10;
+          }
+        } else if (age >= 9 && age <= 13) {
+          if (gender.toLowerCase() == 'female') {
+            calories = 1600;
+            protein = 34;
+            fiber = 22.4;
+            fat = 30;
+            carbs = 130;
+            iron = 8;
+          } else if (gender.toLowerCase() == 'male') {
+            calories = 1800;
+            protein = 34;
+            fiber = 25.2;
+            fat = 30;
+            carbs = 130;
+            iron = 8;
+          }
+        } else if (age >= 14 && age <= 18) {
+          if (gender.toLowerCase() == 'female') {
+            calories = 1800;
+            protein = 46;
+            fiber = 25.2;
+            fat = 30;
+            carbs = 130;
+            iron = 15;
+          } else if (gender.toLowerCase() == 'male') {
+            calories = 2700;
+            protein = 52;
+            fiber = 30.8;
+            fat = 30;
+            carbs = 130;
+            iron = 11;
+          }
+        } else if (age >= 19 && age <= 30) {
+          if (gender.toLowerCase() == 'female') {
+            calories = 1800;
+            protein = 46;
+            fiber = 28.0;
+            fat = 27.5;
+            carbs = 130;
+            iron = 18;
+          } else if (gender.toLowerCase() == 'male') {
+            calories = 2700;
+            protein = 56;
+            fiber = 33.6;
+            fat = 27.5;
+            carbs = 130;
+            iron = 8;
+          }
+        } else if (age >= 31 && age <= 50) {
+          if (gender.toLowerCase() == 'female') {
+            calories = 1800;
+            protein = 46;
+            fiber = 25.2;
+            fat = 27.5;
+            carbs = 130;
+            iron = 18;
+          } else if (gender.toLowerCase() == 'male') {
+            calories = 2200;
+            protein = 56;
+            fiber = 30.8;
+            fat = 27.5;
+            carbs = 130;
+            iron = 8;
+          }
+        } else if (age >= 51) {
+          if (gender.toLowerCase() == 'female') {
+            calories = 1600;
+            protein = 46;
+            fiber = 22.4;
+            fat = 27.5;
+            carbs = 130;
+            iron = 8;
+          } else if (gender.toLowerCase() == 'male') {
+            calories = 2000;
+            protein = 56;
+            fiber = 28.0;
+            fat = 27.5;
+            carbs = 130;
+            iron = 8;
+          }
+        }
+
+        return Nutritions(
+          calories: calories,
+          proteins: protein,
+          fiber: fiber,
+          fats: fat,
+          carbs: carbs,
+          iron: iron,
+        );
+      } else {
+        return Nutritions(
+          calories: 0,
+          proteins: 0,
+          fiber: 0,
+          fats: 0,
+          carbs: 0,
+          iron: 0,
+        );
+      }
+    } catch (e) {
+      return Nutritions(
+        calories: 0,
+        proteins: 0,
+        fiber: 0,
+        fats: 0,
+        carbs: 0,
+        iron: 0,
+      );
+    }
   }
 }

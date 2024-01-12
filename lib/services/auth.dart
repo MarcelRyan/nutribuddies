@@ -212,7 +212,6 @@ class AuthService {
           kidUid: kidsUid,
           date: DateTime.now(),
           currentNutritions: currentNutritions,
-          maxNutritions: maxNutritions,
           meals: meals);
       return true;
     } catch (e) {

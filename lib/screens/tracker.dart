@@ -74,7 +74,6 @@ class _TrackerState extends State<Tracker> {
       kidUid: kidUid,
       date: DateTime(today.year, today.month, today.day),
       currentNutritions: currentNutritions,
-      maxNutritions: maxNutritions,
       meals: meals,
     );
   }
@@ -857,7 +856,7 @@ class _TrackerContentState extends State<TrackerContent> {
                                           ),
                                         ),
                                         Text(
-                                          '/ ${(maxNutritions.iron).toStringAsFixed(0)} gr',
+                                          '/ ${(maxNutritions.iron).toStringAsFixed(0)} mg',
                                           textAlign: TextAlign.center,
                                           style: const TextStyle(
                                             color: ontertiaryContainer,
