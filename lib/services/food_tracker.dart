@@ -30,6 +30,7 @@ class FoodTrackerService {
     Nutritions currentNutritions = tracker.currentNutritions;
     Nutritions addedNutritions = food.nutritions;
     try {
+      print("Masuk");
       currentNutritions.proteins += addedNutritions.proteins * amount;
       currentNutritions.fiber += addedNutritions.fiber * amount;
       currentNutritions.carbs += addedNutritions.carbs * amount;
