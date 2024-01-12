@@ -153,7 +153,24 @@ class _LoginState extends State<Login> {
                             height: 20,
                           ),
                           ElevatedButton(
-                            onPressed: () async {},
+                            onPressed: () async {
+                              setState(() => loading = true);
+                              dynamic result =
+                                  await AuthService.signInWithGoogle();
+                              if (result == null) {
+                                setState(() => loading = false);
+                              } else {
+                                // ignore: use_build_context_synchronously
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Wrapper(
+                                            result: true,
+                                            goToHome: true,
+                                          )),
+                                );
+                              }
+                            },
                             style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(100.0),
