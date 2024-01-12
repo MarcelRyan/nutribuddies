@@ -224,9 +224,18 @@ class _addMealModalState extends State<addMealModal> {
     });
   }
 
+  void _decrementCounter() {
+    setState(() {
+      if (counter != 0) {
+        counter--;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: white,
       content: Container(
         height: 348,
         width: 369,
@@ -235,7 +244,7 @@ class _addMealModalState extends State<addMealModal> {
             Container(
               padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -268,11 +277,12 @@ class _addMealModalState extends State<addMealModal> {
                                 widget.record.name,
                                 style: TextStyle(
                                   color: Colors.black,
-                                  fontSize: 28,
+                                  fontSize: 22,
                                   fontFamily: 'Poppins',
                                   fontWeight: FontWeight.w400,
                                   height: 0.05,
                                 ),
+                                overflow: TextOverflow.visible,
                               )),
                         ],
                       ),
@@ -284,8 +294,10 @@ class _addMealModalState extends State<addMealModal> {
                       )
                     ],
                   ),
+                  SizedBox(
+                    height: 25,
+                  ),
                   Container(
-                    padding: EdgeInsets.only(top: 30),
                     alignment: Alignment.centerLeft,
                     child: Text(
                       "Portion: ${widget.record.portion}",
@@ -300,8 +312,10 @@ class _addMealModalState extends State<addMealModal> {
                       ),
                     ),
                   ),
+                  SizedBox(
+                    height: 20,
+                  ),
                   Container(
-                    padding: EdgeInsets.only(top: 25),
                     child: Row(
                       children: [
                         Column(
@@ -447,19 +461,168 @@ class _addMealModalState extends State<addMealModal> {
                       ],
                     ),
                   ),
+                  SizedBox(
+                    height: 20,
+                  ),
                   Container(
                     height: 40,
                     width: 299,
-                    padding: EdgeInsets.only(top: 100),
                     decoration: BoxDecoration(
                         shape: BoxShape.rectangle,
                         borderRadius: BorderRadius.circular(40),
                         color: Color(0xFAFAFA),
                         border: Border.all(color: primary, width: 1)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          height: 24,
+                          width: 24,
+                          margin: EdgeInsets.only(left: 10),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.rectangle,
+                            borderRadius: BorderRadius.circular(30),
+                            color: primary,
+                          ),
+                          child: IconButton(
+                            icon: Icon(Icons.remove),
+                            color: white,
+                            onPressed: () {
+                              _decrementCounter();
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          width: 15,
+                        ),
+                        Container(
+                          width: 163,
+                          child: Text(
+                            "${counter}",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 22,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w400,
+                              height: 0.06,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 15,
+                        ),
+                        Container(
+                          height: 24,
+                          width: 24,
+                          margin: EdgeInsets.only(right: 10),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.rectangle,
+                            borderRadius: BorderRadius.circular(30),
+                            color: primary,
+                          ),
+                          child: IconButton(
+                            icon: Icon(Icons.add),
+                            color: white,
+                            onPressed: () {
+                              _incrementCounter();
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
                   )
                 ],
               ),
             ),
+            SizedBox(
+              height: 30,
+            ),
+            Container(
+              alignment: Alignment.centerRight,
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: 91,
+                  ),
+                  Container(
+                    width: 95,
+                    height: 32,
+                    decoration: ShapeDecoration(
+                      color: Color(0xFFF9F9F9),
+                      shape: RoundedRectangleBorder(
+                        side: BorderSide(width: 1, color: Color(0xFF74747E)),
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                      shadows: [
+                        BoxShadow(
+                          color: Color(0x19000000),
+                          blurRadius: 3,
+                          offset: Offset(0, 1),
+                          spreadRadius: 0,
+                        ),
+                        BoxShadow(
+                          color: Color(0x33000000),
+                          blurRadius: 2,
+                          offset: Offset(0, 1),
+                          spreadRadius: 0,
+                        )
+                      ],
+                    ),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        "Cancel",
+                        style: TextStyle(
+                          color: Color(0xFF5674A7),
+                          fontSize: 11,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w500,
+                          height: 0.13,
+                          letterSpacing: 0.50,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 7,
+                  ),
+                  Container(
+                    width: 70,
+                    height: 32,
+                    decoration: BoxDecoration(
+                        color: black,
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(20.0)),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            primary), // Set the background color
+                      ),
+                      child: Text(
+                        "Add",
+                        style: TextStyle(
+                          color: white,
+                          fontSize: 11,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w500,
+                          height: 0.13,
+                          letterSpacing: 0.50,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            )
           ],
         ),
       ),
