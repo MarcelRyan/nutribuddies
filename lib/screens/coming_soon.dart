@@ -28,7 +28,7 @@ class ComingSoon extends StatelessWidget {
                 color: Colors.black,
                 fontSize: 22,
                 fontFamily: 'Poppins',
-                fontWeight: FontWeight.w400,
+                fontWeight: FontWeight.w500,
                 height: 0.06,
               ),
             ),
