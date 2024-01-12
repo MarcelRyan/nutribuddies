@@ -62,8 +62,11 @@ class AuthService {
       String defaultPhotoPath = 'default_user.jpg';
       String defaultPhotoUrl =
           await DatabaseService(uid: user.uid).getPhotoUrl(defaultPhotoPath);
-      await DatabaseService(uid: user.uid)
-          .updateUserData(displayName, email, defaultPhotoUrl);
+      await DatabaseService(uid: user.uid).updateUserData(
+          uid: user.uid,
+          displayName: displayName,
+          email: email,
+          profilePicutreUrl: defaultPhotoUrl);
       return _user(user);
     } catch (e) {
       Fluttertoast.showToast(
@@ -144,16 +147,21 @@ class AuthService {
       List<Meals> meals = [];
 
       await DatabaseService(uid: parentUid).updateKidData(
-          kidsUid,
-          displayName,
-          dateOfBirth,
-          gender,
-          currentHeight,
-          currentWeight,
-          bornWeight,
-          profilePictureUrl);
-      await DatabaseService(uid: parentUid).updateTrackerData(trackerUid,
-          kidsUid, DateTime.now(), currentNutritions, maxNutritions, meals);
+          kidsUid: kidsUid,
+          displayName: displayName,
+          dateOfBirth: dateOfBirth,
+          gender: gender,
+          currentHeight: currentHeight,
+          currentWeight: currentWeight,
+          bornWeight: bornWeight,
+          profilePictureUrl: profilePictureUrl);
+      await DatabaseService(uid: parentUid).updateTrackerData(
+          trackerUid: trackerUid,
+          kidUid: kidsUid,
+          date: DateTime.now(),
+          currentNutritions: currentNutritions,
+          maxNutritions: maxNutritions,
+          meals: meals);
       return true;
     } catch (e) {
       Fluttertoast.showToast(msg: "Error: ${e.toString()}");

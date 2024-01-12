@@ -6,6 +6,7 @@ import 'package:nutribuddies/models/tracker.dart';
 import 'package:nutribuddies/models/user.dart';
 import 'package:nutribuddies/services/database.dart';
 import 'package:nutribuddies/services/food_tracker.dart';
+import 'package:nutribuddies/widgets/loading.dart';
 import 'package:provider/provider.dart';
 import 'package:nutribuddies/models/nutritions.dart';
 import 'package:uuid/uuid.dart';
@@ -23,6 +24,7 @@ class Tracker extends StatefulWidget {
 class _TrackerState extends State<Tracker> {
   DateTime date = DateTime.now();
   late String kidUid;
+  bool loading = false;
 
   @override
   void initState() {
@@ -33,10 +35,16 @@ class _TrackerState extends State<Tracker> {
   Future<void> _initializeKidUid() async {
     final Users? users = Provider.of<Users?>(context, listen: false);
     final FoodTrackerService foodTracker = FoodTrackerService();
+    setState(() => loading = true);
     final firstKid = await foodTracker.getFirstKid(users!.uid);
-    setState(() {
-      kidUid = firstKid?.uid ?? '';
-    });
+    if (firstKid == null) {
+      setState(() => loading = false);
+    } else {
+      setState(() => loading = false);
+      setState(() {
+        kidUid = firstKid.uid;
+      });
+    }
     // generate tracker uid
     final String trackerUid = const Uuid().v4();
 
@@ -62,33 +70,35 @@ class _TrackerState extends State<Tracker> {
     List<Meals> meals = [];
 
     await DatabaseService(uid: '').updateTrackerData(
-      trackerUid,
-      kidUid,
-      DateTime(today.year, today.month, today.day),
-      currentNutritions,
-      maxNutritions,
-      meals,
+      trackerUid: trackerUid,
+      kidUid: kidUid,
+      date: DateTime(today.year, today.month, today.day),
+      currentNutritions: currentNutritions,
+      maxNutritions: maxNutritions,
+      meals: meals,
     );
   }
 
   @override
   Widget build(BuildContext context) {
     final Users? users = Provider.of<Users?>(context);
-    return Scaffold(
-      backgroundColor: Colors.blue[50],
-      body: StreamProvider<Trackers?>.value(
-        value: DatabaseService(uid: users!.uid).tracker(kidUid, date),
-        initialData: null,
-        catchError: (context, error) {
-          return null;
-        },
-        child: TrackerContent(
-          updateDate: updateDate,
-          updateKidUid: updateKidUid,
-          kidUid: kidUid,
-        ),
-      ),
-    );
+    return loading
+        ? const Loading()
+        : Scaffold(
+            backgroundColor: Colors.blue[50],
+            body: StreamProvider<Trackers?>.value(
+              value: DatabaseService(uid: users!.uid).tracker(kidUid, date),
+              initialData: null,
+              catchError: (context, error) {
+                return null;
+              },
+              child: TrackerContent(
+                updateDate: updateDate,
+                updateKidUid: updateKidUid,
+                kidUid: kidUid,
+              ),
+            ),
+          );
   }
 
   void updateDate(DateTime newDate) {
@@ -144,99 +154,100 @@ class _TrackerContentState extends State<TrackerContent> {
 
     return Scaffold(
       backgroundColor: background,
-      body: Column(children: [
-        Stack(
-          children: [
-            Image.asset('assets/Tracker/Rectangle_12308.png'),
-            Positioned(
-              top: 45,
-              left: 125,
-              height: 40,
-              width: 150,
-              child: FutureBuilder<List<Kids>>(
-                future: DatabaseService(uid: '').getKidsList(users!.uid),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
-                  } else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return const Text('No kids available');
-                  } else {
-                    List<Kids> kidsList = snapshot.data!;
-                    Future<Kids?> firstKidFuture =
-                        foodTracker.getFirstKid(users.uid);
-                    String? selectedValue;
-
-                    return FutureBuilder<Kids?>(
-                        future: firstKidFuture,
-                        builder: (context, kidSnapshot) {
-                          if (kidSnapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const CircularProgressIndicator();
-                          } else if (kidSnapshot.hasError) {
-                            return Text('Error: ${kidSnapshot.error}');
-                          } else {
-                            Kids? firstKid = kidSnapshot.data;
-                            selectedValue = firstKid?.uid;
-                            return DropdownButtonFormField<String>(
-                              value: selectedValue,
-                              onChanged: (String? newValue) {
-                                widget.updateKidUid(newValue ?? '');
-                                setState(() {
-                                  selectedValue = newValue;
-                                });
-                              },
-                              items: kidsList.map<DropdownMenuItem<String>>(
-                                (Kids kid) {
-                                  return DropdownMenuItem<String>(
-                                    value: kid.uid,
-                                    child: Text(kid.displayName as String),
-                                  );
-                                },
-                              ).toList(),
-                              decoration: const InputDecoration(
-                                filled: true,
-                                fillColor: primaryContainer,
-                                contentPadding:
-                                    EdgeInsets.fromLTRB(20, 0, 15, 0),
-                                border: InputBorder.none,
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(16)),
-                                  borderSide:
-                                      BorderSide(width: 1, color: outline),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(16)),
-                                  borderSide:
-                                      BorderSide(width: 1, color: outline),
-                                ),
-                              ),
-                              style: const TextStyle(
-                                color: onPrimaryContainer,
-                              ),
-                              icon: const Icon(Icons.arrow_drop_down,
-                                  color: Colors.black),
-                              elevation: 16,
-                              dropdownColor: primaryContainer,
-                              borderRadius: BorderRadius.circular(16),
-                            );
-                          }
-                        });
-                  }
-                },
-              ),
-            ),
-          ],
-        ),
-        Container(
-          alignment: AlignmentDirectional.centerStart,
-          padding: const EdgeInsets.fromLTRB(40, 20, 40, 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+      body: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+          Stack(
             children: [
+              Image.asset('assets/Tracker/Rectangle_12308.png'),
+              Positioned(
+                top: 45,
+                left: 110,
+                height: 40,
+                width: 150,
+                child: FutureBuilder<List<Kids>>(
+                  future: DatabaseService(uid: '').getKidsList(users!.uid),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return const Text('No kids available');
+                    } else {
+                      List<Kids> kidsList = snapshot.data!;
+                      Future<Kids?> firstKidFuture =
+                          foodTracker.getFirstKid(users.uid);
+                      String? selectedValue;
+
+                      return FutureBuilder<Kids?>(
+                          future: firstKidFuture,
+                          builder: (context, kidSnapshot) {
+                            if (kidSnapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const CircularProgressIndicator();
+                            } else if (kidSnapshot.hasError) {
+                              return Text('Error: ${kidSnapshot.error}');
+                            } else {
+                              Kids? firstKid = kidSnapshot.data;
+                              selectedValue = firstKid?.uid;
+                              return DropdownButtonFormField<String>(
+                                value: selectedValue,
+                                onChanged: (String? newValue) {
+                                  widget.updateKidUid(newValue ?? '');
+                                  setState(() {
+                                    selectedValue = newValue;
+                                  });
+                                },
+                                items: kidsList.map<DropdownMenuItem<String>>(
+                                  (Kids kid) {
+                                    return DropdownMenuItem<String>(
+                                      value: kid.uid,
+                                      child: Text(kid.displayName as String),
+                                    );
+                                  },
+                                ).toList(),
+                                decoration: const InputDecoration(
+                                  filled: true,
+                                  fillColor: primaryContainer,
+                                  contentPadding:
+                                      EdgeInsets.fromLTRB(20, 0, 15, 0),
+                                  border: InputBorder.none,
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(16)),
+                                    borderSide:
+                                        BorderSide(width: 1, color: outline),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(16)),
+                                    borderSide:
+                                        BorderSide(width: 1, color: outline),
+                                  ),
+                                ),
+                                style: const TextStyle(
+                                  color: onPrimaryContainer,
+                                ),
+                                icon: const Icon(Icons.arrow_drop_down,
+                                    color: Colors.black),
+                                elevation: 16,
+                                dropdownColor: primaryContainer,
+                                borderRadius: BorderRadius.circular(16),
+                              );
+                            }
+                          });
+                    }
+                  },
+                ),
+              ),
+            ],
+          ),
+          Container(
+            alignment: AlignmentDirectional.centerStart,
+            padding: const EdgeInsets.fromLTRB(30, 20, 30, 10),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               SizedBox(
                 width: 150,
                 child: ElevatedButton(
@@ -348,7 +359,7 @@ class _TrackerContentState extends State<TrackerContent> {
                                             textAlign: TextAlign.center,
                                             style: const TextStyle(
                                               color: black,
-                                              fontSize: 22,
+                                              fontSize: 18,
                                               fontFamily: 'Poppins',
                                               fontWeight: FontWeight.w500,
                                             ),
@@ -448,7 +459,7 @@ class _TrackerContentState extends State<TrackerContent> {
                                     textAlign: TextAlign.center,
                                     style: const TextStyle(
                                       color: black,
-                                      fontSize: 14,
+                                      fontSize: 12,
                                       fontFamily: 'Poppins',
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -542,7 +553,7 @@ class _TrackerContentState extends State<TrackerContent> {
                                     textAlign: TextAlign.center,
                                     style: const TextStyle(
                                       color: black,
-                                      fontSize: 14,
+                                      fontSize: 12,
                                       fontFamily: 'Poppins',
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -631,7 +642,7 @@ class _TrackerContentState extends State<TrackerContent> {
                                     textAlign: TextAlign.center,
                                     style: const TextStyle(
                                       color: black,
-                                      fontSize: 14,
+                                      fontSize: 12,
                                       fontFamily: 'Poppins',
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -720,7 +731,7 @@ class _TrackerContentState extends State<TrackerContent> {
                                     textAlign: TextAlign.center,
                                     style: const TextStyle(
                                       color: black,
-                                      fontSize: 14,
+                                      fontSize: 12,
                                       fontFamily: 'Poppins',
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -809,7 +820,7 @@ class _TrackerContentState extends State<TrackerContent> {
                                     textAlign: TextAlign.center,
                                     style: const TextStyle(
                                       color: black,
-                                      fontSize: 14,
+                                      fontSize: 12,
                                       fontFamily: 'Poppins',
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -872,44 +883,144 @@ class _TrackerContentState extends State<TrackerContent> {
               const SizedBox(
                 height: 25,
               ),
-              const Text(
-                "Kid's Meals",
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                    color: black,
-                    fontSize: 16,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 0.15),
+              Row(
+                children: [
+                  const Text(
+                    "Kid's Meals",
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                        color: black,
+                        fontSize: 16,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: 0.15),
+                  ),
+                  const SizedBox(
+                    width: 115,
+                  ),
+                  ElevatedButton(
+                    onPressed: () async {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AddMeal(
+                                    tracker: tracker,
+                                  )));
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(100.0),
+                      ),
+                      backgroundColor: primary,
+                      foregroundColor: white,
+                    ),
+                    child: const Row(
+                      children: [
+                        Icon(Icons.add),
+                        SizedBox(
+                          width: 3,
+                        ),
+                        Text(
+                          'Add Meal',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w500,
+                            letterSpacing: 0.1,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              // Container(
-              //   height: 100,
-              //   width: 310,
-              //   decoration: BoxDecoration(
-              //       color: tertiary99,
-              //       borderRadius: const BorderRadius.all(Radius.circular(10)),
-              //       boxShadow: [
-              //         BoxShadow(
-              //           color: Colors.grey.withOpacity(0.4),
-              //           offset: const Offset(2, 4),
-              //           blurRadius: 5,
-              //           spreadRadius: 1,
-              //         ),
-              //       ]),
-                child: ElevatedButton(
-                  onPressed: () async {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const AddMeal()));
-                  },
-                  child: const Text("Add Meal"),
-                ),
-              // ),
-            ],
+              const SizedBox(height: 10),
+              Column(
+                children: List.generate(tracker!.meals.length, (index) {
+                  Meals meal = tracker.meals[index];
+                  return Column(
+                    children: [
+                      Container(
+                        height: 70,
+                        width: 310,
+                        decoration: BoxDecoration(
+                            color: primaryContainer,
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10)),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.4),
+                                offset: const Offset(2, 4),
+                                blurRadius: 5,
+                                spreadRadius: 1,
+                              ),
+                            ]),
+                        padding: const EdgeInsets.fromLTRB(20, 15, 20, 10),
+                        child: Row(
+                          children: [
+                            Image.network(
+                              meal.food.thumbnailUrl ?? '',
+                            ),
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    meal.food.foodName,
+                                    style: const TextStyle(
+                                      color: black,
+                                      fontFamily: 'Poppins',
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                      letterSpacing: 0.1,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  '${(meal.food.nutritions.calories * meal.amount).toStringAsFixed(0)} kcal ',
+                                  style: const TextStyle(
+                                    color: primary40,
+                                    fontFamily: 'Poppins',
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w500,
+                                    letterSpacing: 0.5,
+                                  ),
+                                ),
+                                Text(
+                                  '${meal.amount} x (${meal.food.portion})',
+                                  style: const TextStyle(
+                                    color: outline,
+                                    fontFamily: 'Poppins',
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w500,
+                                    letterSpacing: 0.5,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              width: 60,
+                            ),
+                            const Icon(Icons.edit, color: Colors.black)
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      )
+                    ],
+                  );
+                }),
+              ),
+            ]),
           ),
-        ),
-      ]),
+        ]),
+      ),
     );
   }
 }

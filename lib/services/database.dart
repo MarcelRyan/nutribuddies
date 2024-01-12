@@ -25,14 +25,28 @@ class DatabaseService {
       FirebaseFirestore.instance.collection('trackers');
 
   // users
-  Future updateUserData(
-      String displayName, String email, String? profilePictureUrl) async {
-    return await usersCollection.doc(uid).set({
+  Future<void> updateUserData({
+    required String uid,
+    required String displayName,
+    required String email,
+    String? profilePictureUrl,
+    required String profilePicutreUrl,
+  }) async {
+    assert(uid.isNotEmpty, 'UID must not be empty');
+    assert(displayName.isNotEmpty, 'Display Name must not be empty');
+    assert(email.isNotEmpty, 'Email must not be empty');
+
+    Map<String, dynamic> data = {
       'uid': uid,
       'displayName': displayName,
       'email': email,
-      'profilePictureUrl': profilePictureUrl,
-    });
+    };
+
+    if (profilePictureUrl != null) {
+      data['profilePictureUrl'] = profilePictureUrl;
+    }
+
+    await usersCollection.doc(uid).set(data);
   }
 
   // get photo url
@@ -71,16 +85,24 @@ class DatabaseService {
   }
 
   // kids
-  Future updateKidData(
-      String kidsUid,
-      String displayName,
-      DateTime dateOfBirth,
-      String gender,
-      double currentHeight,
-      double currentWeight,
-      double bornWeight,
-      String? profilePictureUrl) async {
-    return await kidsCollection.doc(kidsUid).set({
+  Future<void> updateKidData({
+    required String kidsUid,
+    required String displayName,
+    required DateTime dateOfBirth,
+    required String gender,
+    required double currentHeight,
+    required double currentWeight,
+    required double bornWeight,
+    String? profilePictureUrl,
+  }) async {
+    assert(kidsUid.isNotEmpty, 'Kids UID must not be empty');
+    assert(displayName.isNotEmpty, 'Display Name must not be empty');
+    assert(gender.isNotEmpty, 'Gender must not be empty');
+    assert(currentHeight >= 0, 'Current Height must not be negative');
+    assert(currentWeight >= 0, 'Current Weight must not be negative');
+    assert(bornWeight >= 0, 'Born Weight must not be negative');
+
+    Map<String, dynamic> data = {
       'uid': kidsUid,
       'parentUid': uid,
       'displayName': displayName,
@@ -89,8 +111,13 @@ class DatabaseService {
       'currentHeight': currentHeight,
       'currentWeight': currentWeight,
       'bornWeight': bornWeight,
-      'profilePictureUrl': profilePictureUrl,
-    });
+    };
+
+    if (profilePictureUrl != null) {
+      data['profilePictureUrl'] = profilePictureUrl;
+    }
+
+    await kidsCollection.doc(kidsUid).set(data);
   }
 
   // check if kidsUid unique
@@ -213,38 +240,17 @@ class DatabaseService {
     }
   }
 
-  // nutritions
-  Future<void> seedInitialFoodData(String path, String path2) async {
+  // foods
+  Future<void> seedInitialFoodData(List<Foods> foods) async {
     // Seed data
-    Nutritions tahuNutritions = Nutritions(
-        calories: 10, proteins: 10, fiber: 10, fats: 10, carbs: 10, sugar: 10);
-    Nutritions tempeNutritions = Nutritions(
-        calories: 20, proteins: 20, fiber: 20, fats: 20, carbs: 20, sugar: 20);
 
-    List<Map<String, dynamic>> initialFoodData = [
-      {
-        'foodName': 'Tahu',
-        'portion': '1 pc (30 gr)',
-        'nutritions': tahuNutritions.toJson(),
-        'thumbnail': path,
-      },
-      {
-        'foodName': 'Tempe',
-        'portion': '1 pc (30 gr)',
-        'nutritions': tempeNutritions.toJson(),
-        'thumbnail': path2,
-      },
-    ];
-
-    // add each item to the foodCollection
-    for (var foodData in initialFoodData) {
-      // check if the foodName already exists
+    for (var foodData in foods) {
       QuerySnapshot querySnapshot = await foodsCollection
-          .where('foodName', isEqualTo: foodData['foodName'])
+          .where('foodName', isEqualTo: foodData.foodName)
           .get();
 
       if (querySnapshot.docs.isEmpty) {
-        await foodsCollection.add(foodData);
+        await foodsCollection.add(foodData.toJson());
       }
     }
   }
@@ -276,28 +282,55 @@ class DatabaseService {
     }
   }
 
+  Future<List<Foods>> getListOfFoodsData() async {
+    List<Foods> foodsList = [];
+
+    QuerySnapshot querySnapshot = await foodsCollection.get();
+
+    for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
+      Map<String, dynamic> data =
+          documentSnapshot.data() as Map<String, dynamic>;
+      Foods food = Foods(
+        foodName: data['foodName'] ?? '',
+        nutritions: Nutritions.fromJson(data['nutritions'] ?? {}),
+        portion: data['portion'] ?? '',
+        thumbnailUrl: data['thumbnailUrl'],
+      );
+      foodsList.add(food);
+    }
+
+    return foodsList;
+  }
+
   // trackers
-  Future updateTrackerData(
-      String trackerUid,
-      String kidUid,
-      DateTime date,
-      Nutritions currentNutritions,
-      Nutritions maxNutritions,
-      List<Meals> meals) async {
+  Future<void> updateTrackerData({
+    required String trackerUid,
+    required String kidUid,
+    required DateTime date,
+    required Nutritions currentNutritions,
+    required Nutritions maxNutritions,
+    required List<Meals> meals,
+  }) async {
+    assert(trackerUid.isNotEmpty, 'Tracker UID must not be empty');
+    assert(kidUid.isNotEmpty, 'Kid UID must not be empty');
+
     final querySnapshot = await trackersCollection
         .where('kidUid', isEqualTo: kidUid)
         .where('date', isEqualTo: DateTime(date.year, date.month, date.day))
         .limit(1)
         .get();
+
     if (querySnapshot.docs.isEmpty) {
-      return await trackersCollection.doc(trackerUid).set({
+      Map<String, dynamic> data = {
         'uid': trackerUid,
         'kidUid': kidUid,
         'date': DateTime(date.year, date.month, date.day),
         'currentNutritions': currentNutritions.toJson(),
         'maxNutritions': maxNutritions.toJson(),
-        'meals': meals,
-      });
+        'meals': meals.map((meal) => meal.toJson()).toList(),
+      };
+
+      await trackersCollection.doc(trackerUid).set(data);
     }
   }
 
@@ -317,10 +350,9 @@ class DatabaseService {
     if (querySnapshot.docs.isNotEmpty) {
       Map<String, dynamic> data =
           querySnapshot.docs.first.data() as Map<String, dynamic>;
+      List<dynamic> existingMeals = data['meals'] ?? [];
 
-      List<Meals> existingMeals = data['meals'] ?? [];
-
-      existingMeals.add(meals.toJson() as Meals);
+      existingMeals.add(meals.toJson());
 
       return await trackersCollection.doc(trackerUid).update({
         'meals': existingMeals,

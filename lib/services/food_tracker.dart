@@ -24,19 +24,27 @@ class FoodTrackerService {
     return getCurrentTracker(kidUid, date);
   }
 
-  Future<void> saveMeal(String uid, String trackerUid,
-      Nutritions currentNutritions, Nutritions addedNutritions) async {
+  Future<void> saveMeal(
+      String uid, Trackers? tracker, Foods food, int amount) async {
+    String trackerUid = tracker!.uid;
+    Nutritions currentNutritions = tracker.currentNutritions;
+    Nutritions addedNutritions = food.nutritions;
     try {
-      currentNutritions.proteins += addedNutritions.proteins;
-      currentNutritions.fiber += addedNutritions.fiber;
-      currentNutritions.carbs += addedNutritions.carbs;
-      currentNutritions.calories += addedNutritions.calories;
-      currentNutritions.fats += addedNutritions.fats;
-      currentNutritions.sugar += addedNutritions.sugar;
+      currentNutritions.proteins += addedNutritions.proteins * amount;
+      currentNutritions.fiber += addedNutritions.fiber * amount;
+      currentNutritions.carbs += addedNutritions.carbs * amount;
+      currentNutritions.calories += addedNutritions.calories * amount;
+      currentNutritions.fats += addedNutritions.fats * amount;
+      currentNutritions.sugar += addedNutritions.sugar * amount;
+
+      Meals meal = Meals(food: food, amount: amount);
+
+      await DatabaseService(uid: uid).addMealTrackerData(trackerUid, meal);
 
       await DatabaseService(uid: uid)
           .updateCurrentNutritionTrackerData(trackerUid, currentNutritions);
     } catch (e) {
+      print(e.toString());
       Fluttertoast.showToast(msg: e.toString());
     }
   }
@@ -91,12 +99,12 @@ class FoodTrackerService {
       }
 
       await DatabaseService(uid: '').updateTrackerData(
-        trackerUid,
-        kidUid,
-        picked,
-        currentNutritions,
-        maxNutritions,
-        meals,
+        trackerUid: trackerUid,
+        kidUid: kidUid,
+        date: picked,
+        currentNutritions: currentNutritions,
+        maxNutritions: maxNutritions,
+        meals: meals,
       );
     }
   }

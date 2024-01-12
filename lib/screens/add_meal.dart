@@ -3,7 +3,9 @@ import 'dart:ffi';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:nutribuddies/models/foods.dart';
 import 'package:nutribuddies/models/tracker.dart';
+import 'package:nutribuddies/services/database.dart';
 import '../constant/text_input_decoration.dart';
 import 'package:nutribuddies/services/food_tracker.dart';
 import 'package:nutribuddies/models/user.dart';
@@ -12,18 +14,11 @@ import '../constant/colors.dart';
 import '../models/nutritions.dart';
 
 class AddMeal extends StatefulWidget {
-  const AddMeal({super.key});
+  final Trackers? tracker;
+  const AddMeal({super.key, required this.tracker});
 
   @override
   State<AddMeal> createState() => _AddMealState();
-}
-
-class DummyRecord {
-  String name;
-  double kcal;
-  String portion;
-
-  DummyRecord({required this.name, required this.kcal, required this.portion});
 }
 
 class _AddMealState extends State<AddMeal> {
@@ -35,99 +30,104 @@ class _AddMealState extends State<AddMeal> {
 
   final now = DateTime.now();
 
-  // fetchRecords() async {
-  //   var records = await FirebaseFirestore.instance.collection()
-  // }
-
-  DummyRecord? selectedRecord;
-
   @override
   Widget build(BuildContext context) {
     final Users? users = Provider.of<Users?>(context);
 
-    List<DummyRecord> dummyRecords = [
-      DummyRecord(name: "Fried rice", kcal: 333, portion: "1 cup (140 gr)"),
-      DummyRecord(
-          name: "Chocolate cookies", kcal: 147, portion: "1 pcs (30 gr)"),
-      DummyRecord(name: "Milk", kcal: 128, portion: "1 cup (250 ml)"),
-      DummyRecord(name: "Boiled egg", kcal: 77, portion: "1 pcs (50 gr)"),
-      DummyRecord(name: "Banana", kcal: 100, portion: "1 pcs (120 gr)"),
-      DummyRecord(
-          name: "Vanilla Ice Cream", kcal: 81, portion: "1 scoop (43 gr)"),
-      DummyRecord(name: "Apple", kcal: 72, portion: "1 pcs (182 gr)")
-    ];
-
     return Scaffold(
-        backgroundColor: Colors.blue[50],
-        appBar: AppBar(
-          title: const Text('Add Meal'),
-          elevation: 0.0,
-          backgroundColor: background,
+      backgroundColor: background,
+      appBar: AppBar(
+        title: const Text(
+          'Add Meal',
+          style: TextStyle(
+            color: black,
+            fontSize: 24,
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w400,
+          ),
         ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Container(
-                padding: EdgeInsets.fromLTRB(16.0, 0, 0, 0),
-                margin: EdgeInsets.fromLTRB(40.0, 14.0, 40.0, 20.0),
-                decoration: BoxDecoration(
-                  color: surfaceContainerHighest,
-                  borderRadius: BorderRadius.circular(65.0),
-                ),
-                height: 56,
-                width: 332,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Icon(Icons.search),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(
-                            15, 0, 0, 3), // Add horizontal padding
-                        child: TextField(
-                          decoration: const InputDecoration(
-                            hintText: "Search meals...",
-                            border: InputBorder.none,
-                          ),
+        elevation: 0.0,
+        backgroundColor: background,
+        foregroundColor: black,
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Container(
+              padding: EdgeInsets.fromLTRB(16.0, 0, 0, 0),
+              margin: EdgeInsets.fromLTRB(40.0, 14.0, 40.0, 20.0),
+              decoration: BoxDecoration(
+                color: surfaceContainerHighest,
+                borderRadius: BorderRadius.circular(65.0),
+              ),
+              height: 56,
+              width: 332,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Icon(Icons.search),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(
+                          15, 0, 0, 3), // Add horizontal padding
+                      child: TextField(
+                        decoration: const InputDecoration(
+                          hintText: "Search meals...",
+                          border: InputBorder.none,
                         ),
                       ),
                     ),
-                  ],
-                )),
-            Expanded(
-              child: Column(
-                  children: dummyRecords.map(
-                (record) {
-                  return Container(
-                      width: 332,
-                      height: 80,
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      margin: EdgeInsets.fromLTRB(40, 0, 40, 13),
-                      decoration: BoxDecoration(
-                          color: white,
-                          borderRadius: BorderRadius.circular(20.0)),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 52,
-                            height: 52,
-                            padding: EdgeInsets.symmetric(vertical: 14),
-                            child: Image.asset('assets/Login/Group1(1).png',
-                                fit: BoxFit.cover),
+                  ),
+                ],
+              )),
+          Expanded(
+            child: FutureBuilder<List<Foods>>(
+              future: DatabaseService(uid: users!.uid).getListOfFoodsData(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  List<Foods> foodRecords = snapshot.data!;
+                  return ListView(
+                    children: foodRecords.map(
+                      (record) {
+                        return Container(
+                          width: 332,
+                          height: 80,
+                          padding: EdgeInsets.symmetric(horizontal: 20),
+                          margin: EdgeInsets.fromLTRB(25, 0, 25, 13),
+                          decoration: BoxDecoration(
+                            color: white,
+                            borderRadius: BorderRadius.circular(20.0),
                           ),
-                          Container(
-                              width: 184,
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 12, horizontal: 13),
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 52,
+                                height: 52,
+                                padding: EdgeInsets.symmetric(vertical: 14),
+                                child: Image.network(
+                                  record.thumbnailUrl ?? '',
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              Container(
+                                width: 184,
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 12,
+                                  horizontal: 13,
+                                ),
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
                                       padding: EdgeInsets.only(bottom: 6),
                                       child: Text(
-                                        record.name,
+                                        record.foodName,
                                         style: TextStyle(
                                           color: Colors.black,
                                           fontSize: 16,
@@ -138,13 +138,28 @@ class _AddMealState extends State<AddMeal> {
                                         ),
                                         textAlign: TextAlign.start,
                                         textDirection: TextDirection.ltr,
-                                      )),
-                                  Container(
-                                    padding: EdgeInsets.only(bottom: 4),
-                                    child: Text(
-                                      "${record.kcal} kcal",
+                                      ),
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.only(bottom: 4),
+                                      child: Text(
+                                        "${record.nutritions.calories} kcal",
+                                        style: TextStyle(
+                                          color: Color(0xFF5674A7),
+                                          fontSize: 11,
+                                          fontFamily: 'Poppins',
+                                          fontWeight: FontWeight.w500,
+                                          height: 0.13,
+                                          letterSpacing: 0.50,
+                                        ),
+                                        textAlign: TextAlign.start,
+                                        textDirection: TextDirection.ltr,
+                                      ),
+                                    ),
+                                    Text(
+                                      "Portion: ${record.portion}",
                                       style: TextStyle(
-                                        color: Color(0xFF5674A7),
+                                        color: Color(0xFF74747E),
                                         fontSize: 11,
                                         fontFamily: 'Poppins',
                                         fontWeight: FontWeight.w500,
@@ -153,69 +168,65 @@ class _AddMealState extends State<AddMeal> {
                                       ),
                                       textAlign: TextAlign.start,
                                       textDirection: TextDirection.ltr,
-                                    ),
-                                  ),
-                                  Text(
-                                    "Portion: ${record.portion}",
-                                    style: TextStyle(
-                                      color: Color(0xFF74747E),
-                                      fontSize: 11,
-                                      fontFamily: 'Poppins',
-                                      fontWeight: FontWeight.w500,
-                                      height: 0.13,
-                                      letterSpacing: 0.50,
-                                    ),
-                                    textAlign: TextAlign.start,
-                                    textDirection: TextDirection.ltr,
-                                  )
-                                ],
-                              )),
-                          Container(
-                            height: 30,
-                            width: 30,
-                            child: IconButton(
-                              onPressed: () {
-                                _addMealModal(context, record);
-                              },
-                              icon: Icon(Icons.add),
-                              color: white,
-                              iconSize: 30.0,
-                            ),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: primary,
-                            ),
-                          )
-                        ],
-                      ));
-                },
-              ).toList()),
-            )
-          ],
-        ));
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                height: 30,
+                                width: 30,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: primary,
+                                ),
+                                child: IconButton(
+                                  onPressed: () {
+                                    _addMealModal(
+                                        context, record, widget.tracker);
+                                  },
+                                  icon: Icon(Icons.add),
+                                  color: white,
+                                  iconSize: 30.0,
+                                ),
+                              )
+                            ],
+                          ),
+                        );
+                      },
+                    ).toList(),
+                  );
+                }
+              },
+            ),
+          )
+        ],
+      ),
+    );
   }
 
-  void _addMealModal(BuildContext context, DummyRecord record) {
+  void _addMealModal(BuildContext context, Foods record, Trackers? tracker) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
           return Center(
-            child: addMealModal(record: record),
+            child: addMealModal(record: record, tracker: tracker),
           );
         });
   }
 }
 
 class addMealModal extends StatefulWidget {
-  final DummyRecord record;
+  final Foods record;
+  final Trackers? tracker;
 
-  addMealModal({required this.record});
+  addMealModal({required this.record, required this.tracker});
 
   @override
   _addMealModalState createState() => _addMealModalState();
 }
 
 class _addMealModalState extends State<addMealModal> {
+  final FoodTrackerService _foodTracker = FoodTrackerService();
   int counter = 1;
 
   void _incrementCounter() {
@@ -234,6 +245,7 @@ class _addMealModalState extends State<addMealModal> {
 
   @override
   Widget build(BuildContext context) {
+    final Users? users = Provider.of<Users?>(context);
     return AlertDialog(
       backgroundColor: white,
       content: Container(
@@ -274,7 +286,7 @@ class _addMealModalState extends State<addMealModal> {
                           Container(
                               width: 200,
                               child: Text(
-                                widget.record.name,
+                                widget.record.foodName,
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 22,
@@ -339,7 +351,7 @@ class _addMealModalState extends State<addMealModal> {
                               padding: EdgeInsets.only(top: 15),
                               width: 65,
                               child: Text(
-                                "333 kcal",
+                                "${widget.record.nutritions.calories} kcal",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: Color(0xFF5674A7),
@@ -374,7 +386,7 @@ class _addMealModalState extends State<addMealModal> {
                               padding: EdgeInsets.only(top: 15),
                               width: 65,
                               child: Text(
-                                "41.7 gr",
+                                "${widget.record.nutritions.carbs} gr",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: Color(0xFF5674A7),
@@ -409,7 +421,7 @@ class _addMealModalState extends State<addMealModal> {
                               padding: EdgeInsets.only(top: 15),
                               width: 65,
                               child: Text(
-                                "12.47 gr",
+                                "${widget.record.nutritions.proteins} gr",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: Color(0xFF5674A7),
@@ -444,7 +456,7 @@ class _addMealModalState extends State<addMealModal> {
                               padding: EdgeInsets.only(top: 15),
                               width: 65,
                               child: Text(
-                                "12.34 gr",
+                                "${widget.record.nutritions.fats} gr",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: Color(0xFF5674A7),
@@ -600,7 +612,9 @@ class _addMealModalState extends State<addMealModal> {
                         shape: BoxShape.rectangle,
                         borderRadius: BorderRadius.circular(20.0)),
                     child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
+                        await _foodTracker.saveMeal(
+                            users!.uid, widget.tracker, widget.record, counter);
                         Navigator.pop(context);
                       },
                       style: ButtonStyle(
