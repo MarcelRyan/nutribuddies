@@ -1,13 +1,8 @@
-import 'dart:ffi';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:nutribuddies/models/foods.dart';
 import 'package:nutribuddies/models/tracker.dart';
 import 'package:nutribuddies/services/database.dart';
 import 'package:nutribuddies/services/debouncer.dart';
-import '../constant/text_input_decoration.dart';
 import 'package:nutribuddies/services/food_tracker.dart';
 import 'package:nutribuddies/models/user.dart';
 import 'package:provider/provider.dart';

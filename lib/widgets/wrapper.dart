@@ -5,6 +5,7 @@ import 'package:nutribuddies/screens/home.dart';
 import 'package:provider/provider.dart';
 import 'package:nutribuddies/screens/authenticate/add_kids.dart';
 
+// ignore: must_be_immutable
 class Wrapper extends StatelessWidget {
   bool goToHome;
   bool goToAddKids;

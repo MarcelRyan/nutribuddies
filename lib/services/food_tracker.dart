@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:nutribuddies/models/kids.dart';
 import 'package:nutribuddies/models/nutritions.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:nutribuddies/screens/add_meal.dart';
 import 'package:nutribuddies/services/database.dart';
 import 'package:uuid/uuid.dart';
 

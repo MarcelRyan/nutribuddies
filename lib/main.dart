@@ -4,7 +4,6 @@ import 'package:nutribuddies/firebase_options.dart';
 import 'package:nutribuddies/models/user.dart';
 import 'package:nutribuddies/screens/splash_screen.dart';
 import 'package:nutribuddies/services/auth.dart';
-import 'package:nutribuddies/services/database.dart';
 import 'package:nutribuddies/services/seeding.dart';
 import 'package:provider/provider.dart';
 

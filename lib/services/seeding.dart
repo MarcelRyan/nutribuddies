@@ -1,6 +1,3 @@
-import 'dart:math';
-
-import 'package:flutter/material.dart';
 import 'package:nutribuddies/models/foods.dart';
 import 'package:nutribuddies/models/nutritions.dart';
 import 'package:nutribuddies/services/database.dart';

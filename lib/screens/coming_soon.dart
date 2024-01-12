@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nutribuddies/constant/colors.dart';
-import 'package:nutribuddies/widgets/wrapper.dart';
-
-import '../services/auth.dart';
-import '../widgets/loading.dart';
 
 class ComingSoon extends StatelessWidget {
   const ComingSoon({super.key});
@@ -12,6 +7,9 @@ class ComingSoon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Coming Soon'),
+      ),
       backgroundColor: background,
       body: Container(
         padding: const EdgeInsets.fromLTRB(40, 250, 40, 65),

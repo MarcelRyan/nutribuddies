@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nutribuddies/constant/colors.dart';
 import 'package:nutribuddies/screens/intro.dart';
-import 'package:nutribuddies/screens/add_meal.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);
