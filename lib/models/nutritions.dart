@@ -24,4 +24,15 @@ class Nutritions {
       'carbs': carbs,
     };
   }
+
+  factory Nutritions.fromJson(Map<String, dynamic> json) {
+    return Nutritions(
+      calories: json['calories'] ?? 0.0,
+      proteins: json['proteins'] ?? 0.0,
+      fiber: json['fiber'] ?? 0.0,
+      fats: json['fats'] ?? 0.0,
+      carbs: json['carbs'] ?? 0.0,
+      sugar: json['sugar'] ?? 0.0,
+    );
+  }
 }

@@ -5,6 +5,8 @@ import 'package:nutribuddies/models/user.dart';
 import 'package:nutribuddies/services/database.dart';
 import 'package:uuid/uuid.dart';
 
+import '../models/meals.dart';
+
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -44,17 +46,6 @@ class AuthService {
       UserCredential result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
       User user = result.user!;
-      Nutritions currentNutritions = Nutritions(
-          calories: 0, proteins: 0, fiber: 0, fats: 0, carbs: 0, sugar: 0);
-      Nutritions maxNutritions = Nutritions(
-          calories: 100,
-          proteins: 100,
-          fiber: 100,
-          fats: 100,
-          carbs: 100,
-          sugar: 100);
-      await DatabaseService(uid: user.uid)
-          .updateTrackerData(currentNutritions, maxNutritions, DateTime.now());
       return _user(user);
     } catch (e) {
       Fluttertoast.showToast(msg: "Wrong email and/or password");
@@ -68,20 +59,9 @@ class AuthService {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       User user = result.user!;
-      Nutritions currentNutritions = Nutritions(
-          calories: 0, proteins: 0, fiber: 0, fats: 0, carbs: 0, sugar: 0);
-      Nutritions maxNutritions = Nutritions(
-          calories: 100,
-          proteins: 100,
-          fiber: 100,
-          fats: 100,
-          carbs: 100,
-          sugar: 100);
       String defaultPhotoPath = 'default_user.jpg';
       String defaultPhotoUrl =
           await DatabaseService(uid: user.uid).getPhotoUrl(defaultPhotoPath);
-      await DatabaseService(uid: user.uid)
-          .updateTrackerData(currentNutritions, maxNutritions, DateTime.now());
       await DatabaseService(uid: user.uid)
           .updateUserData(displayName, email, defaultPhotoUrl);
       return _user(user);
@@ -123,14 +103,15 @@ class AuthService {
       double currentWeight,
       double bornWeight) async {
     try {
-      // generate uid
+      // generate kid uid
       final String kidsUid = const Uuid().v4();
 
-      // check if uid unique
-      bool flag =
+      // check if kid uid unique
+      bool flagKid =
           await DatabaseService(uid: parentUid).isKidsUidUnique(kidsUid);
-      while (!flag) {
-        flag = await DatabaseService(uid: parentUid).isKidsUidUnique(kidsUid);
+      while (!flagKid) {
+        flagKid =
+            await DatabaseService(uid: parentUid).isKidsUidUnique(kidsUid);
       }
 
       String profilePictureUrl = '';
@@ -139,6 +120,29 @@ class AuthService {
       } else {
         profilePictureUrl = 'default_user.jpg'; //ntr ganti
       }
+
+      // generate tracker uid
+      final String trackerUid = const Uuid().v4();
+
+      // check if uid unique
+      bool flagTracker =
+          await DatabaseService(uid: parentUid).isTrackerUidUnique(trackerUid);
+      while (!flagTracker) {
+        flagTracker = await DatabaseService(uid: parentUid)
+            .isTrackerUidUnique(trackerUid);
+      }
+
+      Nutritions currentNutritions = Nutritions(
+          calories: 0, proteins: 0, fiber: 0, fats: 0, carbs: 0, sugar: 0);
+      Nutritions maxNutritions = Nutritions(
+          calories: 100,
+          proteins: 100,
+          fiber: 100,
+          fats: 100,
+          carbs: 100,
+          sugar: 100);
+      List<Meals> meals = [];
+
       await DatabaseService(uid: parentUid).updateKidData(
           kidsUid,
           displayName,
@@ -148,6 +152,8 @@ class AuthService {
           currentWeight,
           bornWeight,
           profilePictureUrl);
+      await DatabaseService(uid: parentUid).updateTrackerData(trackerUid,
+          kidsUid, DateTime.now(), currentNutritions, maxNutritions, meals);
       return true;
     } catch (e) {
       Fluttertoast.showToast(msg: "Error: ${e.toString()}");

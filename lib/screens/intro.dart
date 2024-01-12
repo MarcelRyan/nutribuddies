@@ -391,7 +391,7 @@ class _Intro5State extends State<Intro5> {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const Wrapper(
+                            builder: (context) => Wrapper(
                                   result: false,
                                 )),
                       );
@@ -431,7 +431,7 @@ class _Intro5State extends State<Intro5> {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const Wrapper(
+                              builder: (context) => Wrapper(
                                     goToHome: true,
                                     result: true,
                                   )),

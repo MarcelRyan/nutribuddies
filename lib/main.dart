@@ -5,6 +5,7 @@ import 'package:nutribuddies/models/user.dart';
 import 'package:nutribuddies/screens/splash_screen.dart';
 import 'package:nutribuddies/services/auth.dart';
 import 'package:nutribuddies/services/database.dart';
+import 'package:nutribuddies/services/seeding.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -16,8 +17,8 @@ void main() async {
   );
 
   // Seed initial food data
-  DatabaseService databaseService = DatabaseService(uid: 'your_user_id');
-  await databaseService.seedInitialFoodData();
+  final SeedingData seed = SeedingData();
+  await seed.seedingData();
   runApp(const MyApp());
 }
 

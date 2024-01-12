@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:nutribuddies/services/auth.dart';
 import 'package:nutribuddies/constant/text_input_decoration.dart';
 import 'package:nutribuddies/widgets/loading.dart';
@@ -72,6 +73,9 @@ class _AddKidsState extends State<AddKids> {
                                     height: 20,
                                   ),
                                   TextFormField(
+                                    maxLength: 15,
+                                    maxLengthEnforcement:
+                                        MaxLengthEnforcement.enforced,
                                     decoration: textInputDecoration.copyWith(
                                         hintText: "Kid's Name"),
                                     validator: (val) => val!.isEmpty
@@ -467,8 +471,7 @@ class _AddKidsState extends State<AddKids> {
                                           Navigator.pushReplacement(
                                             context,
                                             MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const Wrapper(
+                                                builder: (context) => Wrapper(
                                                       result: true,
                                                       goToHome: true,
                                                     )),

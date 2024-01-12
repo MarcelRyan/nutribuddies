@@ -133,7 +133,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                     Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => const Wrapper(
+                                          builder: (context) => Wrapper(
                                                 result: false,
                                               )),
                                     );
@@ -225,7 +225,7 @@ class _CheckEmailState extends State<CheckEmail> {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const Wrapper(
+                              builder: (context) => Wrapper(
                                     result: false,
                                   )),
                         );

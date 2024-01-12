@@ -107,8 +107,9 @@ class _SignUpState extends State<SignUp> {
                                       Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => const Wrapper(
+                                            builder: (context) => Wrapper(
                                                   result: true,
+                                                  goToAddKids: true,
                                                 )),
                                       );
                                     }
