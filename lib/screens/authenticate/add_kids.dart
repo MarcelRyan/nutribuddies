@@ -488,7 +488,7 @@ class _AddKidsState extends State<AddKids> {
                                   ),
                                   SizedBox(
                                     height: MediaQuery.of(context).size.height *
-                                        0.04,
+                                        0.03,
                                   ),
                                   ElevatedButton(
                                     onPressed: () async {

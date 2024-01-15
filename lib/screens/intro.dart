@@ -54,9 +54,7 @@ class Intro1 extends StatelessWidget {
                 letterSpacing: 0.25,
               ),
             ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.15,
-            ),
+            const Spacer(),
             ElevatedButton(
               onPressed: () {
                 Navigator.pushReplacement(
@@ -140,9 +138,7 @@ class Intro2 extends StatelessWidget {
                 letterSpacing: 0.25,
               ),
             ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.13,
-            ),
+            const Spacer(),
             ElevatedButton(
               onPressed: () {
                 Navigator.pushReplacement(
@@ -225,9 +221,7 @@ class Intro3 extends StatelessWidget {
                 letterSpacing: 0.25,
               ),
             ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.15,
-            ),
+            const Spacer(),
             ElevatedButton(
               onPressed: () {
                 Navigator.pushReplacement(
@@ -311,9 +305,7 @@ class Intro4 extends StatelessWidget {
                 letterSpacing: 0.25,
               ),
             ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.15,
-            ),
+            const Spacer(),
             ElevatedButton(
               onPressed: () {
                 Navigator.pushReplacement(
@@ -407,9 +399,7 @@ class _Intro5State extends State<Intro5> {
                       letterSpacing: 0.25,
                     ),
                   ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.08,
-                  ),
+                  const Spacer(),
                   ElevatedButton(
                     onPressed: () {
                       Navigator.pushReplacement(
