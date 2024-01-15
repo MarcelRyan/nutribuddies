@@ -71,7 +71,7 @@ class _AddKidsState extends State<AddKids> {
                           Form(
                             key: _formkey,
                             child: SizedBox(
-                              height: 530,
+                              height: MediaQuery.of(context).size.height * 0.68,
                               child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
