@@ -163,7 +163,7 @@ class _TrackerContentState extends State<TrackerContent> {
                 top: MediaQuery.of(context).size.height * 0.04,
                 left: MediaQuery.of(context).size.width * 0.32,
                 height: MediaQuery.of(context).size.height * 0.05,
-                width: MediaQuery.of(context).size.width * 0.35,
+                width: MediaQuery.of(context).size.width * 0.38,
                 child: FutureBuilder<List<Kids>>(
                   future: DatabaseService(uid: '').getKidsList(users!.uid),
                   builder: (context, snapshot) {
@@ -255,7 +255,7 @@ class _TrackerContentState extends State<TrackerContent> {
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               SizedBox(
-                width: MediaQuery.of(context).size.width * 0.385,
+                width: MediaQuery.of(context).size.width * 0.4,
                 child: ElevatedButton(
                   onPressed: () {
                     foodTracker.selectDateTracker(context, date, (picked) {
@@ -286,7 +286,7 @@ class _TrackerContentState extends State<TrackerContent> {
                         general.formatDate(date),
                         textAlign: TextAlign.center,
                         style: const TextStyle(
-                          fontSize: 14,
+                          fontSize: 12,
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w500,
                           letterSpacing: 0.1,
@@ -373,7 +373,7 @@ class _TrackerContentState extends State<TrackerContent> {
                                             textAlign: TextAlign.center,
                                             style: const TextStyle(
                                               color: black,
-                                              fontSize: 16,
+                                              fontSize: 14,
                                               fontFamily: 'Poppins',
                                               fontWeight: FontWeight.w500,
                                             ),
@@ -420,7 +420,7 @@ class _TrackerContentState extends State<TrackerContent> {
                                           style: const TextStyle(
                                             color: ontertiaryContainer,
                                             fontFamily: 'Poppins',
-                                            fontSize: 20,
+                                            fontSize: 18,
                                             fontWeight: FontWeight.w600,
                                           ),
                                         ),
@@ -1017,8 +1017,20 @@ class _TrackerContentState extends State<TrackerContent> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Image.network(
-                              meal.food.thumbnailUrl ?? '',
+                            // Image.network(
+                            //   meal.food.thumbnailUrl ?? '',
+                            // ),
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.15,
+                              height:
+                                  MediaQuery.of(context).size.height * 0.075,
+                              padding: EdgeInsets.symmetric(
+                                  vertical: MediaQuery.of(context).size.height *
+                                      0.02),
+                              child: Image.network(
+                                meal.food.thumbnailUrl ?? '',
+                                fit: BoxFit.cover,
+                              ),
                             ),
                             SizedBox(
                               width: MediaQuery.of(context).size.width * 0.025,
