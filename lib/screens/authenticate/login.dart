@@ -36,7 +36,11 @@ class _LoginState extends State<Login> {
                   child: Transform.translate(
                     offset: const Offset(0, -0),
                     child: Container(
-                      padding: const EdgeInsets.fromLTRB(40, 0, 40, 52),
+                      padding: EdgeInsets.fromLTRB(
+                          MediaQuery.of(context).size.width * 0.08,
+                          MediaQuery.of(context).size.height * 0,
+                          MediaQuery.of(context).size.width * 0.08,
+                          MediaQuery.of(context).size.height * 0.07),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -52,8 +56,9 @@ class _LoginState extends State<Login> {
                           Form(
                             key: _formkey,
                             child: Column(children: [
-                              const SizedBox(
-                                height: 20,
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.03,
                               ),
                               TextFormField(
                                 decoration: textInputDecoration.copyWith(
@@ -64,8 +69,9 @@ class _LoginState extends State<Login> {
                                   setState(() => email = val);
                                 },
                               ),
-                              const SizedBox(
-                                height: 20,
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.02,
                               ),
                               TextFormField(
                                 decoration: textInputDecoration.copyWith(
@@ -78,8 +84,9 @@ class _LoginState extends State<Login> {
                                   setState(() => password = val);
                                 },
                               ),
-                              const SizedBox(
-                                height: 10,
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.01,
                               ),
                               Align(
                                 alignment: Alignment.centerRight,
@@ -104,8 +111,9 @@ class _LoginState extends State<Login> {
                                   ),
                                 ),
                               ),
-                              const SizedBox(
-                                height: 30,
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.04,
                               ),
                               ElevatedButton(
                                 onPressed: () async {
@@ -132,7 +140,10 @@ class _LoginState extends State<Login> {
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(100.0),
                                   ),
-                                  minimumSize: const Size(double.infinity, 48),
+                                  minimumSize: Size(
+                                      double.infinity,
+                                      MediaQuery.of(context).size.height *
+                                          0.06),
                                   backgroundColor: primary,
                                   foregroundColor: onPrimary,
                                 ),
@@ -140,7 +151,7 @@ class _LoginState extends State<Login> {
                                   'Login',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                    fontSize: 14,
+                                    fontSize: 16,
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w500,
                                     letterSpacing: 0.1,
@@ -149,8 +160,8 @@ class _LoginState extends State<Login> {
                               ),
                             ]),
                           ),
-                          const SizedBox(
-                            height: 20,
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.02,
                           ),
                           ElevatedButton(
                             onPressed: () async {
@@ -175,7 +186,8 @@ class _LoginState extends State<Login> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(100.0),
                               ),
-                              minimumSize: const Size(double.infinity, 48),
+                              minimumSize: Size(double.infinity,
+                                  MediaQuery.of(context).size.height * 0.06),
                               backgroundColor: background,
                               foregroundColor: primary,
                               side: const BorderSide(color: outline, width: 1),
@@ -184,14 +196,15 @@ class _LoginState extends State<Login> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Image.asset('assets/Login/icon.png'),
-                                const SizedBox(
-                                  width: 10,
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.02,
                                 ),
                                 const Text(
                                   'Login with Google',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                    fontSize: 14,
+                                    fontSize: 16,
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w500,
                                     letterSpacing: 0.1,
@@ -200,8 +213,8 @@ class _LoginState extends State<Login> {
                               ],
                             ),
                           ),
-                          const SizedBox(
-                            height: 20,
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.03,
                           ),
                           Align(
                             alignment: Alignment.center,
@@ -218,8 +231,9 @@ class _LoginState extends State<Login> {
                                     letterSpacing: 0.5,
                                   ),
                                 ),
-                                const SizedBox(
-                                  width: 5,
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.01,
                                 ),
                                 GestureDetector(
                                   onTap: () {

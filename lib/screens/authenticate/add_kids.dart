@@ -51,7 +51,11 @@ class _AddKidsState extends State<AddKids> {
                   child: Transform.translate(
                     offset: const Offset(0, -0),
                     child: Container(
-                      padding: const EdgeInsets.fromLTRB(40, 0, 40, 52),
+                      padding: EdgeInsets.fromLTRB(
+                          MediaQuery.of(context).size.width * 0.08,
+                          MediaQuery.of(context).size.height * 0,
+                          MediaQuery.of(context).size.width * 0.08,
+                          MediaQuery.of(context).size.height * 0.07),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -69,8 +73,9 @@ class _AddKidsState extends State<AddKids> {
                             child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const SizedBox(
-                                    height: 20,
+                                  SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.03,
                                   ),
                                   TextFormField(
                                     maxLength: 15,
@@ -85,8 +90,9 @@ class _AddKidsState extends State<AddKids> {
                                       setState(() => kidName = val);
                                     },
                                   ),
-                                  const SizedBox(
-                                    height: 20,
+                                  SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.02,
                                   ),
                                   TextFormField(
                                     readOnly: true,
@@ -108,28 +114,32 @@ class _AddKidsState extends State<AddKids> {
                                         ? 'Select Date of Birth'
                                         : null,
                                   ),
-                                  const SizedBox(
-                                    height: 20,
+                                  SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.03,
                                   ),
                                   const Text(
                                     'Gender',
                                     textAlign: TextAlign.left,
                                     style: TextStyle(
                                       color: black,
-                                      fontSize: 16,
+                                      fontSize: 18,
                                       fontFamily: 'Poppins',
                                       fontWeight: FontWeight.w400,
                                       letterSpacing: 0.5,
                                     ),
                                   ),
-                                  const SizedBox(
-                                    height: 10,
+                                  SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.01,
                                   ),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      const SizedBox(
-                                        width: 20,
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.1,
                                       ),
                                       Radio(
                                         value: 'Boy',
@@ -150,8 +160,10 @@ class _AddKidsState extends State<AddKids> {
                                           letterSpacing: 0.5,
                                         ),
                                       ),
-                                      const SizedBox(
-                                        width: 80,
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.2,
                                       ),
                                       Radio(
                                         value: 'Girl',
@@ -174,6 +186,10 @@ class _AddKidsState extends State<AddKids> {
                                       ),
                                     ],
                                   ),
+                                  SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.02,
+                                  ),
                                   Row(
                                     children: [
                                       const Text(
@@ -186,7 +202,11 @@ class _AddKidsState extends State<AddKids> {
                                           letterSpacing: 0.5,
                                         ),
                                       ),
-                                      const SizedBox(width: 13),
+                                      SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.03),
                                       Expanded(
                                         child: TextFormField(
                                           keyboardType: const TextInputType
@@ -206,6 +226,13 @@ class _AddKidsState extends State<AddKids> {
                                           decoration:
                                               textInputDecoration.copyWith(
                                             hintText: 'Height',
+                                            contentPadding:
+                                                EdgeInsets.symmetric(
+                                                    vertical:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            0.01),
                                             prefixIcon: IconButton(
                                               icon: Transform.rotate(
                                                 angle: 3.1416,
@@ -230,8 +257,10 @@ class _AddKidsState extends State<AddKids> {
                                           ),
                                         ),
                                       ),
-                                      const SizedBox(
-                                        width: 8,
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.02,
                                       ),
                                       DropdownButton<String>(
                                         value: currentHeightUnit,
@@ -257,8 +286,9 @@ class _AddKidsState extends State<AddKids> {
                                       ),
                                     ],
                                   ),
-                                  const SizedBox(
-                                    height: 15,
+                                  SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.02,
                                   ),
                                   Row(
                                     children: [
@@ -272,9 +302,11 @@ class _AddKidsState extends State<AddKids> {
                                           letterSpacing: 0.5,
                                         ),
                                       ),
-                                      const SizedBox(
-                                          width:
-                                              10), // Add spacing between the text and the TextFormField
+                                      SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.02),
                                       Expanded(
                                         child: TextFormField(
                                           keyboardType: const TextInputType
@@ -294,6 +326,13 @@ class _AddKidsState extends State<AddKids> {
                                           decoration:
                                               textInputDecoration.copyWith(
                                             hintText: 'Weight',
+                                            contentPadding:
+                                                EdgeInsets.symmetric(
+                                                    vertical:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            0.01),
                                             prefixIcon: IconButton(
                                               icon: Transform.rotate(
                                                 angle: 3.1416,
@@ -318,8 +357,10 @@ class _AddKidsState extends State<AddKids> {
                                           ),
                                         ),
                                       ),
-                                      const SizedBox(
-                                        width: 12,
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.03,
                                       ),
                                       DropdownButton<String>(
                                         value: currentWeightUnit,
@@ -345,8 +386,9 @@ class _AddKidsState extends State<AddKids> {
                                       ),
                                     ],
                                   ),
-                                  const SizedBox(
-                                    height: 15,
+                                  SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.02,
                                   ),
                                   Row(
                                     children: [
@@ -360,9 +402,11 @@ class _AddKidsState extends State<AddKids> {
                                           letterSpacing: 0.5,
                                         ),
                                       ),
-                                      const SizedBox(
-                                          width:
-                                              30), // Add spacing between the text and the TextFormField
+                                      SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.07),
                                       Expanded(
                                         child: TextFormField(
                                           keyboardType: const TextInputType
@@ -382,6 +426,13 @@ class _AddKidsState extends State<AddKids> {
                                           decoration:
                                               textInputDecoration.copyWith(
                                             hintText: 'Weight',
+                                            contentPadding:
+                                                EdgeInsets.symmetric(
+                                                    vertical:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            0.01),
                                             prefixIcon: IconButton(
                                               icon: Transform.rotate(
                                                 angle: 3.1416,
@@ -406,8 +457,10 @@ class _AddKidsState extends State<AddKids> {
                                           ),
                                         ),
                                       ),
-                                      const SizedBox(
-                                        width: 12,
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.03,
                                       ),
                                       DropdownButton<String>(
                                         value: bornWeightUnit,
@@ -433,8 +486,9 @@ class _AddKidsState extends State<AddKids> {
                                       ),
                                     ],
                                   ),
-                                  const SizedBox(
-                                    height: 30,
+                                  SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.05,
                                   ),
                                   ElevatedButton(
                                     onPressed: () async {
@@ -484,8 +538,10 @@ class _AddKidsState extends State<AddKids> {
                                         borderRadius:
                                             BorderRadius.circular(100.0),
                                       ),
-                                      minimumSize:
-                                          const Size(double.infinity, 48),
+                                      minimumSize: Size(
+                                          double.infinity,
+                                          MediaQuery.of(context).size.height *
+                                              0.06),
                                       backgroundColor: primary,
                                       foregroundColor: onPrimary,
                                     ),
@@ -493,7 +549,7 @@ class _AddKidsState extends State<AddKids> {
                                       'Save',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
-                                        fontSize: 14,
+                                        fontSize: 16,
                                         fontFamily: 'Poppins',
                                         fontWeight: FontWeight.w500,
                                         letterSpacing: 0.1,
