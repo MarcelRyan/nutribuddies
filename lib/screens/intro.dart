@@ -15,9 +15,9 @@ class Intro1 extends StatelessWidget {
       backgroundColor: background,
       body: Container(
         padding: EdgeInsets.fromLTRB(
-            MediaQuery.of(context).size.height * 0.04,
+            MediaQuery.of(context).size.width * 0.08,
             MediaQuery.of(context).size.height * 0.2,
-            MediaQuery.of(context).size.height * 0.04,
+            MediaQuery.of(context).size.width * 0.08,
             MediaQuery.of(context).size.height * 0.07),
         child: Column(
           children: [
@@ -55,7 +55,7 @@ class Intro1 extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.2,
+              height: MediaQuery.of(context).size.height * 0.15,
             ),
             ElevatedButton(
               onPressed: () {
@@ -68,7 +68,8 @@ class Intro1 extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(100.0),
                 ),
-                minimumSize: const Size(double.infinity, 48),
+                minimumSize: Size(
+                    double.infinity, MediaQuery.of(context).size.height * 0.06),
                 backgroundColor: primary,
                 foregroundColor: onPrimary,
               ),
@@ -99,9 +100,9 @@ class Intro2 extends StatelessWidget {
       backgroundColor: background,
       body: Container(
         padding: EdgeInsets.fromLTRB(
-            MediaQuery.of(context).size.height * 0.05,
+            MediaQuery.of(context).size.width * 0.08,
             MediaQuery.of(context).size.height * 0.2,
-            MediaQuery.of(context).size.height * 0.05,
+            MediaQuery.of(context).size.width * 0.08,
             MediaQuery.of(context).size.height * 0.07),
         child: Column(
           children: [
@@ -140,7 +141,7 @@ class Intro2 extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.18,
+              height: MediaQuery.of(context).size.height * 0.13,
             ),
             ElevatedButton(
               onPressed: () {
@@ -153,7 +154,8 @@ class Intro2 extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(100.0),
                 ),
-                minimumSize: const Size(double.infinity, 48),
+                minimumSize: Size(
+                    double.infinity, MediaQuery.of(context).size.height * 0.06),
                 backgroundColor: primary,
                 foregroundColor: onPrimary,
               ),
@@ -184,9 +186,9 @@ class Intro3 extends StatelessWidget {
       backgroundColor: background,
       body: Container(
         padding: EdgeInsets.fromLTRB(
-            MediaQuery.of(context).size.height * 0.05,
+            MediaQuery.of(context).size.width * 0.08,
             MediaQuery.of(context).size.height * 0.2,
-            MediaQuery.of(context).size.height * 0.05,
+            MediaQuery.of(context).size.width * 0.08,
             MediaQuery.of(context).size.height * 0.07),
         child: Column(
           children: [
@@ -224,7 +226,7 @@ class Intro3 extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.2,
+              height: MediaQuery.of(context).size.height * 0.15,
             ),
             ElevatedButton(
               onPressed: () {
@@ -237,7 +239,8 @@ class Intro3 extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(100.0),
                 ),
-                minimumSize: const Size(double.infinity, 48),
+                minimumSize: Size(
+                    double.infinity, MediaQuery.of(context).size.height * 0.06),
                 backgroundColor: primary,
                 foregroundColor: onPrimary,
               ),
@@ -268,9 +271,9 @@ class Intro4 extends StatelessWidget {
       backgroundColor: background,
       body: Container(
         padding: EdgeInsets.fromLTRB(
-            MediaQuery.of(context).size.height * 0.05,
+            MediaQuery.of(context).size.width * 0.08,
             MediaQuery.of(context).size.height * 0.2,
-            MediaQuery.of(context).size.height * 0.05,
+            MediaQuery.of(context).size.width * 0.08,
             MediaQuery.of(context).size.height * 0.07),
         child: Column(
           children: [
@@ -309,7 +312,7 @@ class Intro4 extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.2,
+              height: MediaQuery.of(context).size.height * 0.15,
             ),
             ElevatedButton(
               onPressed: () {
@@ -322,7 +325,8 @@ class Intro4 extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(100.0),
                 ),
-                minimumSize: const Size(double.infinity, 48),
+                minimumSize: Size(
+                    double.infinity, MediaQuery.of(context).size.height * 0.06),
                 backgroundColor: primary,
                 foregroundColor: onPrimary,
               ),
@@ -363,9 +367,9 @@ class _Intro5State extends State<Intro5> {
             backgroundColor: background,
             body: Container(
               padding: EdgeInsets.fromLTRB(
-                  MediaQuery.of(context).size.height * 0.05,
+                  MediaQuery.of(context).size.width * 0.08,
                   MediaQuery.of(context).size.height * 0.2,
-                  MediaQuery.of(context).size.height * 0.05,
+                  MediaQuery.of(context).size.width * 0.08,
                   MediaQuery.of(context).size.height * 0.07),
               child: Column(
                 children: [
@@ -404,7 +408,7 @@ class _Intro5State extends State<Intro5> {
                     ),
                   ),
                   SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.13,
+                    height: MediaQuery.of(context).size.height * 0.08,
                   ),
                   ElevatedButton(
                     onPressed: () {
@@ -420,7 +424,8 @@ class _Intro5State extends State<Intro5> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(100.0),
                       ),
-                      minimumSize: const Size(double.infinity, 48),
+                      minimumSize: Size(double.infinity,
+                          MediaQuery.of(context).size.height * 0.06),
                       backgroundColor: primary,
                       foregroundColor: onPrimary,
                     ),
@@ -462,7 +467,8 @@ class _Intro5State extends State<Intro5> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(100.0),
                       ),
-                      minimumSize: const Size(double.infinity, 48),
+                      minimumSize: Size(double.infinity,
+                          MediaQuery.of(context).size.height * 0.06),
                       backgroundColor: background,
                       foregroundColor: primary,
                       side: const BorderSide(color: outline, width: 1),

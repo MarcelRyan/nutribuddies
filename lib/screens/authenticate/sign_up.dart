@@ -72,7 +72,7 @@ class _SignUpState extends State<SignUp> {
                               ),
                               SizedBox(
                                 height:
-                                    MediaQuery.of(context).size.height * 0.03,
+                                    MediaQuery.of(context).size.height * 0.02,
                               ),
                               TextFormField(
                                 decoration: textInputDecoration.copyWith(
@@ -85,7 +85,7 @@ class _SignUpState extends State<SignUp> {
                               ),
                               SizedBox(
                                 height:
-                                    MediaQuery.of(context).size.height * 0.03,
+                                    MediaQuery.of(context).size.height * 0.02,
                               ),
                               TextFormField(
                                 decoration: textInputDecoration.copyWith(
@@ -100,7 +100,7 @@ class _SignUpState extends State<SignUp> {
                               ),
                               SizedBox(
                                 height:
-                                    MediaQuery.of(context).size.height * 0.04,
+                                    MediaQuery.of(context).size.height * 0.03,
                               ),
                               ElevatedButton(
                                 onPressed: () async {
@@ -184,7 +184,7 @@ class _SignUpState extends State<SignUp> {
                             ),
                           ),
                           SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.03,
+                            height: MediaQuery.of(context).size.height * 0.02,
                           ),
                           Align(
                             alignment: Alignment.center,

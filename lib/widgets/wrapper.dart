@@ -22,7 +22,7 @@ class Wrapper extends StatelessWidget {
 
     if (user != null && result && goToHome) {
       goToHome = false;
-      return Home();
+      return const Home();
     } else if (user != null && result && goToAddKids) {
       goToAddKids = false;
       return const AddKids();

@@ -75,7 +75,7 @@ class _AddKidsState extends State<AddKids> {
                                 children: [
                                   SizedBox(
                                     height: MediaQuery.of(context).size.height *
-                                        0.03,
+                                        0.02,
                                   ),
                                   TextFormField(
                                     maxLength: 15,
@@ -92,7 +92,7 @@ class _AddKidsState extends State<AddKids> {
                                   ),
                                   SizedBox(
                                     height: MediaQuery.of(context).size.height *
-                                        0.02,
+                                        0.01,
                                   ),
                                   TextFormField(
                                     readOnly: true,
@@ -116,7 +116,7 @@ class _AddKidsState extends State<AddKids> {
                                   ),
                                   SizedBox(
                                     height: MediaQuery.of(context).size.height *
-                                        0.03,
+                                        0.02,
                                   ),
                                   const Text(
                                     'Gender',
@@ -288,7 +288,7 @@ class _AddKidsState extends State<AddKids> {
                                   ),
                                   SizedBox(
                                     height: MediaQuery.of(context).size.height *
-                                        0.02,
+                                        0.01,
                                   ),
                                   Row(
                                     children: [
@@ -388,7 +388,7 @@ class _AddKidsState extends State<AddKids> {
                                   ),
                                   SizedBox(
                                     height: MediaQuery.of(context).size.height *
-                                        0.02,
+                                        0.01,
                                   ),
                                   Row(
                                     children: [
@@ -488,7 +488,7 @@ class _AddKidsState extends State<AddKids> {
                                   ),
                                   SizedBox(
                                     height: MediaQuery.of(context).size.height *
-                                        0.05,
+                                        0.04,
                                   ),
                                   ElevatedButton(
                                     onPressed: () async {
