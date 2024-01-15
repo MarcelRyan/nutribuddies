@@ -160,10 +160,10 @@ class _TrackerContentState extends State<TrackerContent> {
             children: [
               Image.asset('assets/Tracker/Rectangle_12308.png'),
               Positioned(
-                top: 45,
-                left: 110,
-                height: 40,
-                width: 150,
+                top: MediaQuery.of(context).size.height * 0.04,
+                left: MediaQuery.of(context).size.width * 0.32,
+                height: MediaQuery.of(context).size.height * 0.05,
+                width: MediaQuery.of(context).size.width * 0.35,
                 child: FutureBuilder<List<Kids>>(
                   future: DatabaseService(uid: '').getKidsList(users!.uid),
                   builder: (context, snapshot) {
@@ -206,19 +206,22 @@ class _TrackerContentState extends State<TrackerContent> {
                                     );
                                   },
                                 ).toList(),
-                                decoration: const InputDecoration(
+                                decoration: InputDecoration(
                                   filled: true,
                                   fillColor: primaryContainer,
-                                  contentPadding:
-                                      EdgeInsets.fromLTRB(20, 0, 15, 0),
+                                  contentPadding: EdgeInsets.fromLTRB(
+                                      MediaQuery.of(context).size.width * 0.04,
+                                      0,
+                                      MediaQuery.of(context).size.width * 0.03,
+                                      0),
                                   border: InputBorder.none,
-                                  focusedBorder: OutlineInputBorder(
+                                  focusedBorder: const OutlineInputBorder(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(16)),
                                     borderSide:
                                         BorderSide(width: 1, color: outline),
                                   ),
-                                  enabledBorder: OutlineInputBorder(
+                                  enabledBorder: const OutlineInputBorder(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(16)),
                                     borderSide:
@@ -244,11 +247,15 @@ class _TrackerContentState extends State<TrackerContent> {
           ),
           Container(
             alignment: AlignmentDirectional.centerStart,
-            padding: const EdgeInsets.fromLTRB(30, 20, 30, 10),
+            padding: EdgeInsets.fromLTRB(
+                MediaQuery.of(context).size.width * 0.11,
+                MediaQuery.of(context).size.height * 0.02,
+                MediaQuery.of(context).size.width * 0.11,
+                MediaQuery.of(context).size.height * 0.01),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               SizedBox(
-                width: 150,
+                width: MediaQuery.of(context).size.width * 0.385,
                 child: ElevatedButton(
                   onPressed: () {
                     foodTracker.selectDateTracker(context, date, (picked) {
@@ -262,7 +269,8 @@ class _TrackerContentState extends State<TrackerContent> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(100.0),
                     ),
-                    minimumSize: const Size(double.infinity, 48),
+                    minimumSize: Size(double.infinity,
+                        MediaQuery.of(context).size.height * 0.06),
                     backgroundColor: primary,
                     foregroundColor: onPrimary,
                     side: const BorderSide(color: outline, width: 1),
@@ -271,8 +279,8 @@ class _TrackerContentState extends State<TrackerContent> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Icon(Icons.calendar_today),
-                      const SizedBox(
-                        width: 10,
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.02,
                       ),
                       Text(
                         general.formatDate(date),
@@ -288,8 +296,8 @@ class _TrackerContentState extends State<TrackerContent> {
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 25,
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.03,
               ),
               const Text(
                 "Nutritions",
@@ -301,19 +309,19 @@ class _TrackerContentState extends State<TrackerContent> {
                     fontWeight: FontWeight.w500,
                     letterSpacing: 0.15),
               ),
-              const SizedBox(
-                height: 20,
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.02,
               ),
               SizedBox(
-                height: 250,
-                width: 310,
+                height: MediaQuery.of(context).size.height * 0.3,
+                width: MediaQuery.of(context).size.width * 0.8,
                 child: Row(
                   children: [
                     Column(
                       children: [
                         Container(
-                          height: 185,
-                          width: 150,
+                          height: MediaQuery.of(context).size.height * 0.21,
+                          width: MediaQuery.of(context).size.width * 0.36,
                           decoration: BoxDecoration(
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(10)),
@@ -332,7 +340,11 @@ class _TrackerContentState extends State<TrackerContent> {
                                   spreadRadius: 1,
                                 ),
                               ]),
-                          padding: const EdgeInsets.fromLTRB(14, 10, 14, 10),
+                          padding: EdgeInsets.fromLTRB(
+                              MediaQuery.of(context).size.width * 0.035,
+                              MediaQuery.of(context).size.height * 0.015,
+                              MediaQuery.of(context).size.width * 0.035,
+                              MediaQuery.of(context).size.height * 0.015),
                           child: Stack(
                             children: [
                               Positioned(
@@ -345,12 +357,15 @@ class _TrackerContentState extends State<TrackerContent> {
                                   Row(
                                     children: [
                                       Container(
-                                        width: 50,
-                                        height: 50,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.11,
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.055,
                                         decoration: const BoxDecoration(
                                           shape: BoxShape.circle,
-                                          color:
-                                              secondary40, // Change color as needed
+                                          color: secondary40,
                                         ),
                                         child: Center(
                                           child: Text(
@@ -358,14 +373,14 @@ class _TrackerContentState extends State<TrackerContent> {
                                             textAlign: TextAlign.center,
                                             style: const TextStyle(
                                               color: black,
-                                              fontSize: 18,
+                                              fontSize: 16,
                                               fontFamily: 'Poppins',
                                               fontWeight: FontWeight.w500,
                                             ),
                                           ),
                                         ),
                                       ),
-                                      const SizedBox(width: 12),
+                                      const Spacer(),
                                       const Text(
                                         'Calories',
                                         style: TextStyle(
@@ -378,7 +393,10 @@ class _TrackerContentState extends State<TrackerContent> {
                                       ),
                                     ],
                                   ),
-                                  const SizedBox(height: 55),
+                                  SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.045),
                                   Container(
                                     alignment: Alignment.centerLeft,
                                     child: const Text(
@@ -392,7 +410,7 @@ class _TrackerContentState extends State<TrackerContent> {
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(height: 10),
+                                  const Spacer(),
                                   Container(
                                     alignment: Alignment.centerLeft,
                                     child: Row(
@@ -402,7 +420,7 @@ class _TrackerContentState extends State<TrackerContent> {
                                           style: const TextStyle(
                                             color: ontertiaryContainer,
                                             fontFamily: 'Poppins',
-                                            fontSize: 24,
+                                            fontSize: 20,
                                             fontWeight: FontWeight.w600,
                                           ),
                                         ),
@@ -424,16 +442,16 @@ class _TrackerContentState extends State<TrackerContent> {
                             ],
                           ),
                         ),
-                        const SizedBox(
-                          height: 10,
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.015,
                         ),
                         Container(
-                          height: 55,
-                          width: 150,
+                          height: MediaQuery.of(context).size.height * 0.06,
+                          width: MediaQuery.of(context).size.width * 0.36,
                           decoration: BoxDecoration(
                               color: tertiary70,
                               borderRadius:
-                                  const BorderRadius.all(Radius.circular(8)),
+                                  const BorderRadius.all(Radius.circular(10)),
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.grey.withOpacity(0.4),
@@ -442,12 +460,17 @@ class _TrackerContentState extends State<TrackerContent> {
                                   spreadRadius: 1,
                                 ),
                               ]),
-                          padding: const EdgeInsets.all(10),
+                          padding: EdgeInsets.fromLTRB(
+                              MediaQuery.of(context).size.width * 0.03,
+                              MediaQuery.of(context).size.height * 0.008,
+                              MediaQuery.of(context).size.width * 0.03,
+                              MediaQuery.of(context).size.height * 0.003),
                           child: Row(
                             children: [
                               Container(
-                                width: 50,
-                                height: 50,
+                                width: MediaQuery.of(context).size.width * 0.11,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.055,
                                 decoration: const BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: secondary40,
@@ -464,6 +487,9 @@ class _TrackerContentState extends State<TrackerContent> {
                                     ),
                                   ),
                                 ),
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.01,
                               ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -490,7 +516,7 @@ class _TrackerContentState extends State<TrackerContent> {
                                           style: const TextStyle(
                                             color: ontertiaryContainer,
                                             fontFamily: 'Poppins',
-                                            fontSize: 18,
+                                            fontSize: 14,
                                             fontWeight: FontWeight.w600,
                                           ),
                                         ),
@@ -515,14 +541,12 @@ class _TrackerContentState extends State<TrackerContent> {
                         )
                       ],
                     ),
-                    const SizedBox(
-                      width: 10,
-                    ),
+                    const Spacer(),
                     Column(
                       children: [
                         Container(
-                          height: 55,
-                          width: 150,
+                          height: MediaQuery.of(context).size.height * 0.06,
+                          width: MediaQuery.of(context).size.width * 0.36,
                           decoration: BoxDecoration(
                             color: const Color(0xFFFFFAE4),
                             borderRadius:
@@ -536,12 +560,17 @@ class _TrackerContentState extends State<TrackerContent> {
                               ),
                             ],
                           ),
-                          padding: const EdgeInsets.all(10),
+                          padding: EdgeInsets.fromLTRB(
+                              MediaQuery.of(context).size.width * 0.03,
+                              MediaQuery.of(context).size.height * 0.008,
+                              MediaQuery.of(context).size.width * 0.03,
+                              MediaQuery.of(context).size.height * 0.003),
                           child: Row(
                             children: [
                               Container(
-                                width: 50,
-                                height: 50,
+                                width: MediaQuery.of(context).size.width * 0.11,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.055,
                                 decoration: const BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: secondary40,
@@ -558,6 +587,9 @@ class _TrackerContentState extends State<TrackerContent> {
                                     ),
                                   ),
                                 ),
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.01,
                               ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -584,7 +616,7 @@ class _TrackerContentState extends State<TrackerContent> {
                                           style: const TextStyle(
                                             color: ontertiaryContainer,
                                             fontFamily: 'Poppins',
-                                            fontSize: 18,
+                                            fontSize: 14,
                                             fontWeight: FontWeight.w600,
                                           ),
                                         ),
@@ -607,12 +639,12 @@ class _TrackerContentState extends State<TrackerContent> {
                             ],
                           ),
                         ),
-                        const SizedBox(
-                          height: 10,
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.015,
                         ),
                         Container(
-                          height: 55,
-                          width: 150,
+                          height: MediaQuery.of(context).size.height * 0.06,
+                          width: MediaQuery.of(context).size.width * 0.36,
                           decoration: BoxDecoration(
                               color: const Color(0xFFFCF3C7),
                               borderRadius:
@@ -625,12 +657,17 @@ class _TrackerContentState extends State<TrackerContent> {
                                   spreadRadius: 1,
                                 ),
                               ]),
-                          padding: const EdgeInsets.all(10),
+                          padding: EdgeInsets.fromLTRB(
+                              MediaQuery.of(context).size.width * 0.03,
+                              MediaQuery.of(context).size.height * 0.008,
+                              MediaQuery.of(context).size.width * 0.03,
+                              MediaQuery.of(context).size.height * 0.003),
                           child: Row(
                             children: [
                               Container(
-                                width: 50,
-                                height: 50,
+                                width: MediaQuery.of(context).size.width * 0.11,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.055,
                                 decoration: const BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: secondary40,
@@ -647,6 +684,9 @@ class _TrackerContentState extends State<TrackerContent> {
                                     ),
                                   ),
                                 ),
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.01,
                               ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -673,7 +713,7 @@ class _TrackerContentState extends State<TrackerContent> {
                                           style: const TextStyle(
                                             color: ontertiaryContainer,
                                             fontFamily: 'Poppins',
-                                            fontSize: 18,
+                                            fontSize: 14,
                                             fontWeight: FontWeight.w600,
                                           ),
                                         ),
@@ -696,12 +736,12 @@ class _TrackerContentState extends State<TrackerContent> {
                             ],
                           ),
                         ),
-                        const SizedBox(
-                          height: 10,
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.015,
                         ),
                         Container(
-                          height: 55,
-                          width: 150,
+                          height: MediaQuery.of(context).size.height * 0.06,
+                          width: MediaQuery.of(context).size.width * 0.36,
                           decoration: BoxDecoration(
                               color: tertiary80,
                               borderRadius:
@@ -714,12 +754,17 @@ class _TrackerContentState extends State<TrackerContent> {
                                   spreadRadius: 1,
                                 ),
                               ]),
-                          padding: const EdgeInsets.all(10),
+                          padding: EdgeInsets.fromLTRB(
+                              MediaQuery.of(context).size.width * 0.03,
+                              MediaQuery.of(context).size.height * 0.008,
+                              MediaQuery.of(context).size.width * 0.03,
+                              MediaQuery.of(context).size.height * 0.003),
                           child: Row(
                             children: [
                               Container(
-                                width: 50,
-                                height: 50,
+                                width: MediaQuery.of(context).size.width * 0.11,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.055,
                                 decoration: const BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: secondary40,
@@ -736,6 +781,9 @@ class _TrackerContentState extends State<TrackerContent> {
                                     ),
                                   ),
                                 ),
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.01,
                               ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -762,7 +810,7 @@ class _TrackerContentState extends State<TrackerContent> {
                                           style: const TextStyle(
                                             color: ontertiaryContainer,
                                             fontFamily: 'Poppins',
-                                            fontSize: 18,
+                                            fontSize: 14,
                                             fontWeight: FontWeight.w600,
                                           ),
                                         ),
@@ -785,12 +833,12 @@ class _TrackerContentState extends State<TrackerContent> {
                             ],
                           ),
                         ),
-                        const SizedBox(
-                          height: 10,
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.015,
                         ),
                         Container(
-                          height: 55,
-                          width: 150,
+                          height: MediaQuery.of(context).size.height * 0.06,
+                          width: MediaQuery.of(context).size.width * 0.36,
                           decoration: BoxDecoration(
                               color: tertiary70,
                               borderRadius:
@@ -803,12 +851,17 @@ class _TrackerContentState extends State<TrackerContent> {
                                   spreadRadius: 1,
                                 ),
                               ]),
-                          padding: const EdgeInsets.all(10),
+                          padding: EdgeInsets.fromLTRB(
+                              MediaQuery.of(context).size.width * 0.03,
+                              MediaQuery.of(context).size.height * 0.008,
+                              MediaQuery.of(context).size.width * 0.03,
+                              MediaQuery.of(context).size.height * 0.003),
                           child: Row(
                             children: [
                               Container(
-                                width: 50,
-                                height: 50,
+                                width: MediaQuery.of(context).size.width * 0.11,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.055,
                                 decoration: const BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: secondary40,
@@ -825,6 +878,9 @@ class _TrackerContentState extends State<TrackerContent> {
                                     ),
                                   ),
                                 ),
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.01,
                               ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -851,7 +907,7 @@ class _TrackerContentState extends State<TrackerContent> {
                                           style: const TextStyle(
                                             color: ontertiaryContainer,
                                             fontFamily: 'Poppins',
-                                            fontSize: 18,
+                                            fontSize: 14,
                                             fontWeight: FontWeight.w600,
                                           ),
                                         ),
@@ -879,8 +935,8 @@ class _TrackerContentState extends State<TrackerContent> {
                   ],
                 ),
               ),
-              const SizedBox(
-                height: 25,
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.02,
               ),
               Row(
                 children: [
@@ -894,9 +950,7 @@ class _TrackerContentState extends State<TrackerContent> {
                         fontWeight: FontWeight.w500,
                         letterSpacing: 0.15),
                   ),
-                  const SizedBox(
-                    width: 115,
-                  ),
+                  const Spacer(),
                   ElevatedButton(
                     onPressed: () async {
                       Navigator.push(
@@ -913,13 +967,13 @@ class _TrackerContentState extends State<TrackerContent> {
                       backgroundColor: primary,
                       foregroundColor: white,
                     ),
-                    child: const Row(
+                    child: Row(
                       children: [
-                        Icon(Icons.add),
+                        const Icon(Icons.add),
                         SizedBox(
-                          width: 3,
+                          width: MediaQuery.of(context).size.width * 0.015,
                         ),
-                        Text(
+                        const Text(
                           'Add Meal',
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -934,15 +988,15 @@ class _TrackerContentState extends State<TrackerContent> {
                   ),
                 ],
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
               Column(
                 children: List.generate(tracker!.meals.length, (index) {
                   Meals meal = tracker.meals[index];
                   return Column(
                     children: [
                       Container(
-                        height: 70,
-                        width: 310,
+                        height: MediaQuery.of(context).size.height * 0.09,
+                        width: MediaQuery.of(context).size.width * 0.77,
                         decoration: BoxDecoration(
                             color: primaryContainer,
                             borderRadius:
@@ -955,15 +1009,19 @@ class _TrackerContentState extends State<TrackerContent> {
                                 spreadRadius: 1,
                               ),
                             ]),
-                        padding: const EdgeInsets.fromLTRB(20, 15, 10, 10),
+                        padding: EdgeInsets.fromLTRB(
+                            MediaQuery.of(context).size.width * 0.05,
+                            MediaQuery.of(context).size.height * 0.01,
+                            MediaQuery.of(context).size.width * 0.02,
+                            MediaQuery.of(context).size.height * 0.01),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Image.network(
                               meal.food.thumbnailUrl ?? '',
                             ),
-                            const SizedBox(
-                              width: 20,
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.025,
                             ),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -996,7 +1054,7 @@ class _TrackerContentState extends State<TrackerContent> {
                                   style: const TextStyle(
                                     color: outline,
                                     fontFamily: 'Poppins',
-                                    fontSize: 11,
+                                    fontSize: 10,
                                     fontWeight: FontWeight.w500,
                                     letterSpacing: 0.5,
                                   ),
@@ -1017,8 +1075,8 @@ class _TrackerContentState extends State<TrackerContent> {
                           ],
                         ),
                       ),
-                      const SizedBox(
-                        height: 20,
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.025,
                       )
                     ],
                   );

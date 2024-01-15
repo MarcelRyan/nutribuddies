@@ -27,6 +27,7 @@ class Wrapper extends StatelessWidget {
       goToAddKids = false;
       return const AddKids();
     } else {
+      return const AddKids();
       return const Authenticate();
     }
   }
