@@ -4,6 +4,7 @@ import 'package:nutribuddies/models/kids.dart';
 import 'package:nutribuddies/screens/add_meal.dart';
 import 'package:nutribuddies/models/tracker.dart';
 import 'package:nutribuddies/models/user.dart';
+import 'package:nutribuddies/screens/error_screen.dart';
 import 'package:nutribuddies/services/database.dart';
 import 'package:nutribuddies/services/food_tracker.dart';
 import 'package:nutribuddies/widgets/loading.dart';
@@ -24,7 +25,8 @@ class Tracker extends StatefulWidget {
 class _TrackerState extends State<Tracker> {
   DateTime date = DateTime.now();
   late String kidUid;
-  bool loading = false;
+  bool loading = true;
+  bool isError = false;
 
   @override
   void initState() {
@@ -38,9 +40,10 @@ class _TrackerState extends State<Tracker> {
     setState(() => loading = true);
     final firstKid = await foodTracker.getFirstKid(users!.uid);
     if (firstKid == null) {
+      setState(() => isError = true);
       setState(() => loading = false);
+      return;
     } else {
-      setState(() => loading = false);
       setState(() {
         kidUid = firstKid.uid;
       });
@@ -60,22 +63,18 @@ class _TrackerState extends State<Tracker> {
     Nutritions currentNutritions = Nutritions(
         calories: 0, proteins: 0, fiber: 0, fats: 0, carbs: 0, iron: 0);
 
-    Nutritions maxNutritions = Nutritions(
-        calories: 100,
-        proteins: 100,
-        fiber: 100,
-        fats: 100,
-        carbs: 100,
-        iron: 100);
     List<Meals> meals = [];
 
     await DatabaseService(uid: '').updateTrackerData(
       trackerUid: trackerUid,
-      kidUid: kidUid,
+      kidUid: firstKid.uid,
       date: DateTime(today.year, today.month, today.day),
       currentNutritions: currentNutritions,
       meals: meals,
     );
+
+    setState(() => loading = false);
+    setState(() => isError = false);
   }
 
   @override
@@ -83,21 +82,28 @@ class _TrackerState extends State<Tracker> {
     final Users? users = Provider.of<Users?>(context);
     return loading
         ? const Loading()
-        : Scaffold(
-            backgroundColor: Colors.blue[50],
-            body: StreamProvider<Trackers?>.value(
-              value: DatabaseService(uid: users!.uid).tracker(kidUid, date),
-              initialData: null,
-              catchError: (context, error) {
-                return null;
-              },
-              child: TrackerContent(
-                updateDate: updateDate,
-                updateKidUid: updateKidUid,
-                kidUid: kidUid,
-              ),
-            ),
-          );
+        : isError
+            ? ErrorReloadWidget(
+                errorMessage: 'An error occurred. Please try again.',
+                onReloadPressed: () {
+                  _initializeKidUid();
+                },
+              )
+            : Scaffold(
+                backgroundColor: Colors.blue[50],
+                body: StreamProvider<Trackers?>.value(
+                  value: DatabaseService(uid: users!.uid).tracker(kidUid, date),
+                  initialData: null,
+                  catchError: (context, error) {
+                    return null;
+                  },
+                  child: TrackerContent(
+                    updateDate: updateDate,
+                    updateKidUid: updateKidUid,
+                    kidUid: kidUid,
+                  ),
+                ),
+              );
   }
 
   void updateDate(DateTime newDate) {
@@ -990,109 +996,116 @@ class _TrackerContentState extends State<TrackerContent> {
               ),
               SizedBox(height: MediaQuery.of(context).size.height * 0.02),
               Column(
-                children: List.generate(tracker!.meals.length, (index) {
-                  Meals meal = tracker.meals[index];
-                  return Column(
-                    children: [
-                      Container(
-                        height: MediaQuery.of(context).size.height * 0.09,
-                        width: MediaQuery.of(context).size.width * 0.77,
-                        decoration: BoxDecoration(
-                            color: primaryContainer,
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(10)),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.4),
-                                offset: const Offset(2, 4),
-                                blurRadius: 5,
-                                spreadRadius: 1,
-                              ),
-                            ]),
-                        padding: EdgeInsets.fromLTRB(
-                            MediaQuery.of(context).size.width * 0.05,
-                            MediaQuery.of(context).size.height * 0.01,
-                            MediaQuery.of(context).size.width * 0.02,
-                            MediaQuery.of(context).size.height * 0.01),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                children: tracker?.meals != null
+                    ? List.generate(tracker!.meals.length, (index) {
+                        Meals meal = tracker.meals[index];
+                        return Column(
                           children: [
-                            // Image.network(
-                            //   meal.food.thumbnailUrl ?? '',
-                            // ),
                             Container(
-                              width: MediaQuery.of(context).size.width * 0.15,
-                              height:
-                                  MediaQuery.of(context).size.height * 0.075,
-                              padding: EdgeInsets.symmetric(
-                                  vertical: MediaQuery.of(context).size.height *
-                                      0.02),
-                              child: Image.network(
-                                meal.food.thumbnailUrl ?? '',
-                                fit: BoxFit.cover,
+                              height: MediaQuery.of(context).size.height * 0.09,
+                              width: MediaQuery.of(context).size.width * 0.77,
+                              decoration: BoxDecoration(
+                                  color: primaryContainer,
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(10)),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.4),
+                                      offset: const Offset(2, 4),
+                                      blurRadius: 5,
+                                      spreadRadius: 1,
+                                    ),
+                                  ]),
+                              padding: EdgeInsets.fromLTRB(
+                                  MediaQuery.of(context).size.width * 0.05,
+                                  MediaQuery.of(context).size.height * 0.01,
+                                  MediaQuery.of(context).size.width * 0.02,
+                                  MediaQuery.of(context).size.height * 0.01),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  // Image.network(
+                                  //   meal.food.thumbnailUrl ?? '',
+                                  // ),
+                                  Container(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.15,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.075,
+                                    padding: EdgeInsets.symmetric(
+                                        vertical:
+                                            MediaQuery.of(context).size.height *
+                                                0.02),
+                                    child: Image.network(
+                                      meal.food.thumbnailUrl ?? '',
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.025,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                          meal.food.foodName,
+                                          style: const TextStyle(
+                                            color: black,
+                                            fontFamily: 'Poppins',
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                            letterSpacing: 0.1,
+                                          ),
+                                        ),
+                                      ),
+                                      Text(
+                                        '${(meal.food.nutritions.calories * meal.amount).toStringAsFixed(0)} kcal ',
+                                        style: const TextStyle(
+                                          color: primary40,
+                                          fontFamily: 'Poppins',
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.w500,
+                                          letterSpacing: 0.5,
+                                        ),
+                                      ),
+                                      Text(
+                                        '${meal.amount} x (${meal.food.portion})',
+                                        style: const TextStyle(
+                                          color: outline,
+                                          fontFamily: 'Poppins',
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w500,
+                                          letterSpacing: 0.5,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const Spacer(),
+                                  IconButton(
+                                    icon: const Icon(
+                                      Icons.edit,
+                                      color: Colors.black,
+                                    ),
+                                    onPressed: () {
+                                      _warningEditModal(
+                                          context, meal, tracker, index);
+                                    },
+                                  )
+                                ],
                               ),
                             ),
                             SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.025,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    meal.food.foodName,
-                                    style: const TextStyle(
-                                      color: black,
-                                      fontFamily: 'Poppins',
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                      letterSpacing: 0.1,
-                                    ),
-                                  ),
-                                ),
-                                Text(
-                                  '${(meal.food.nutritions.calories * meal.amount).toStringAsFixed(0)} kcal ',
-                                  style: const TextStyle(
-                                    color: primary40,
-                                    fontFamily: 'Poppins',
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.w500,
-                                    letterSpacing: 0.5,
-                                  ),
-                                ),
-                                Text(
-                                  '${meal.amount} x (${meal.food.portion})',
-                                  style: const TextStyle(
-                                    color: outline,
-                                    fontFamily: 'Poppins',
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w500,
-                                    letterSpacing: 0.5,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const Spacer(),
-                            IconButton(
-                              icon: const Icon(
-                                Icons.edit,
-                                color: Colors.black,
-                              ),
-                              onPressed: () {
-                                _warningEditModal(
-                                    context, meal, tracker, index);
-                              },
+                              height:
+                                  MediaQuery.of(context).size.height * 0.025,
                             )
                           ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.025,
-                      )
-                    ],
-                  );
-                }),
+                        );
+                      })
+                    : [],
               ),
             ]),
           ),

@@ -19,7 +19,6 @@ class AddMeal extends StatefulWidget {
 }
 
 class _AddMealState extends State<AddMeal> {
-  final FoodTrackerService _foodTracker = FoodTrackerService();
   final Debouncer _debouncer = Debouncer(milliseconds: 500);
   String foodName = '';
   int amount = 0;
@@ -33,8 +32,6 @@ class _AddMealState extends State<AddMeal> {
 
   @override
   Widget build(BuildContext context) {
-    final Users? users = Provider.of<Users?>(context);
-
     Future<List<Foods>> getListOfFoodsData(String searchQuery) async {
       List<Foods> foodsList = [];
 

@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:nutribuddies/models/user.dart';
 import 'package:nutribuddies/screens/authenticate/forgot_password.dart';
-import 'package:nutribuddies/screens/home.dart';
 import 'package:nutribuddies/services/auth.dart';
 import 'package:nutribuddies/constant/text_input_decoration.dart';
 import 'package:nutribuddies/widgets/loading.dart';
 import 'package:nutribuddies/constant/colors.dart';
-import 'package:provider/provider.dart';
 
 import '../../widgets/wrapper.dart';
 
@@ -28,9 +25,6 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<Users?>(context);
-    if (user != null) return const Home();
-
     return loading
         ? const Loading()
         : Scaffold(
