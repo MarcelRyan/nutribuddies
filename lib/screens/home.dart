@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nutribuddies/constant/colors.dart';
+import 'package:nutribuddies/screens/menu_recommendation.dart';
 import 'package:nutribuddies/services/auth.dart';
 import 'package:nutribuddies/screens/tracker.dart';
 import 'package:nutribuddies/widgets/wrapper.dart';
@@ -30,7 +31,7 @@ class _HomeState extends State<Home> {
       ComingSoon.buildComingSoonWidget(),
       const ArticleInterest(),
       const Tracker(),
-      ComingSoon.buildComingSoonWidget(),
+      const MenuRecommendation(),
       ComingSoon.buildComingSoonWidget(),
     ];
 

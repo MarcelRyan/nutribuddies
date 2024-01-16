@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:nutribuddies/models/meals.dart';
+import 'package:nutribuddies/models/menu_recommendation.dart';
 import 'package:nutribuddies/models/tracker.dart';
 import 'package:nutribuddies/models/nutritions.dart';
 
@@ -23,6 +24,15 @@ class DatabaseService {
 
   final CollectionReference trackersCollection =
       FirebaseFirestore.instance.collection('trackers');
+
+  final CollectionReference menuCollection =
+      FirebaseFirestore.instance.collection('menu');
+
+  final CollectionReference answersCollection =
+      FirebaseFirestore.instance.collection('qna_menu_recommendation');
+
+  final CollectionReference forumCollection =
+      FirebaseFirestore.instance.collection('forum');
 
   // users
   Future<void> updateUserData({
@@ -784,6 +794,56 @@ class DatabaseService {
         carbs: 0,
         iron: 0,
       );
+    }
+  }
+
+  // Get Answers
+  Future<RecommendationAnswers> getRecommendationAnswers(
+      String parentUid, String kidUid) async {
+    QuerySnapshot querySnapshot = await answersCollection
+        .where('parentUid', isEqualTo: parentUid)
+        .where('kidUid', isEqualTo: kidUid)
+        .limit(1)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      Map<String, dynamic> data =
+          querySnapshot.docs.first.data() as Map<String, dynamic>;
+      return RecommendationAnswers(
+          answers: data["answers"], kidUid: kidUid, parentUid: parentUid);
+    } else {
+      return RecommendationAnswers(
+          answers: {"status": "failed"}, kidUid: kidUid, parentUid: parentUid);
+    }
+  }
+
+  // Add QnA Answers Menu Recommendation
+  Future<void> saveQnARecommendation(
+      Map<String, dynamic> answers, String kidUid, String parentUid) async {
+    QuerySnapshot querySnapshot = await answersCollection
+        .where('parentUid', isEqualTo: parentUid)
+        .where('kidUid', isEqualTo: kidUid)
+        .limit(1)
+        .get();
+
+    if (querySnapshot.docs.isEmpty) {
+      RecommendationAnswers newData = RecommendationAnswers(
+          answers: answers, kidUid: kidUid, parentUid: parentUid);
+
+      await answersCollection.add(newData.toJson());
+    }
+  }
+
+  // Get Menu Recommendation
+  Future<List<Menu>> getMenuRecommendation() async {
+    QuerySnapshot querySnapshot = await menuCollection.get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      return querySnapshot.docs
+          .map((doc) => Menu.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
+    } else {
+      return [];
     }
   }
 }
