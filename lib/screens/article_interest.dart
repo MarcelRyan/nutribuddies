@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nutribuddies/constant/colors.dart';
-import 'package:nutribuddies/models/article.dart';
+import 'package:nutribuddies/screens/article_list.dart';
 import 'package:nutribuddies/models/article_interest.dart';
 
 class ArticleInterest extends StatefulWidget {
