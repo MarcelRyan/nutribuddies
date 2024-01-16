@@ -12,7 +12,7 @@ class ComingSoon extends StatelessWidget {
       ),
       backgroundColor: background,
       body: Container(
-        padding: const EdgeInsets.fromLTRB(40, 250, 40, 65),
+        padding: const EdgeInsets.fromLTRB(40, 180, 40, 65),
         child: Column(
           children: [
             Image.asset('assets/coming_soon.png'),
