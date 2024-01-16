@@ -20,6 +20,8 @@ const Color tertiaryContainer = Color(0xFFFCF5D2);
 
 const Color onSurfaceVariant = Color(0xFF45484F);
 
+const Color neutral40 = Color(0xFF67646A);
+
 const Color neutral70 = Color(0xFFA19FA4);
 
 const Color onSurface = Color(0xFF1E1E1F);
