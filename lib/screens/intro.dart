@@ -14,16 +14,20 @@ class Intro1 extends StatelessWidget {
     return Scaffold(
       backgroundColor: background,
       body: Container(
-        padding: const EdgeInsets.fromLTRB(40, 175, 40, 65),
+        padding: EdgeInsets.fromLTRB(
+            MediaQuery.of(context).size.width * 0.08,
+            MediaQuery.of(context).size.height * 0.2,
+            MediaQuery.of(context).size.width * 0.08,
+            MediaQuery.of(context).size.height * 0.07),
         child: Column(
           children: [
             Image.asset('assets/Intro/track1.png'),
-            const SizedBox(
-              height: 20,
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.03,
             ),
             Image.asset('assets/Intro/ProgressStatus.png'),
-            const SizedBox(
-              height: 30,
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.03,
             ),
             const Text(
               "Track your kid's meals",
@@ -34,8 +38,8 @@ class Intro1 extends StatelessWidget {
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w400),
             ),
-            const SizedBox(
-              height: 20,
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.02,
             ),
             const Text(
               "Monitor your kids' meals and nutrition for a foundation of lifelong well-being!",
@@ -50,9 +54,7 @@ class Intro1 extends StatelessWidget {
                 letterSpacing: 0.25,
               ),
             ),
-            const SizedBox(
-              height: 90,
-            ),
+            const Spacer(),
             ElevatedButton(
               onPressed: () {
                 Navigator.pushReplacement(
@@ -64,7 +66,8 @@ class Intro1 extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(100.0),
                 ),
-                minimumSize: const Size(double.infinity, 48),
+                minimumSize: Size(
+                    double.infinity, MediaQuery.of(context).size.height * 0.06),
                 backgroundColor: primary,
                 foregroundColor: onPrimary,
               ),
@@ -72,7 +75,7 @@ class Intro1 extends StatelessWidget {
                 'Next',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 16,
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w500,
                   letterSpacing: 0.1,
@@ -94,16 +97,20 @@ class Intro2 extends StatelessWidget {
     return Scaffold(
       backgroundColor: background,
       body: Container(
-        padding: const EdgeInsets.fromLTRB(40, 175, 40, 65),
+        padding: EdgeInsets.fromLTRB(
+            MediaQuery.of(context).size.width * 0.08,
+            MediaQuery.of(context).size.height * 0.2,
+            MediaQuery.of(context).size.width * 0.08,
+            MediaQuery.of(context).size.height * 0.07),
         child: Column(
           children: [
             Image.asset('assets/Intro/menu_recommendations1.png'),
-            const SizedBox(
-              height: 20,
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.03,
             ),
             Image.asset('assets/Intro/ProgressStatus(1).png'),
-            const SizedBox(
-              height: 30,
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.03,
             ),
             const Text(
               "Discover kids’ menu recommendations",
@@ -115,8 +122,8 @@ class Intro2 extends StatelessWidget {
                   fontWeight: FontWeight.w400,
                   height: 1),
             ),
-            const SizedBox(
-              height: 20,
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.02,
             ),
             const Text(
               "Explore new personalized meals and recipes just for your kids!",
@@ -131,9 +138,7 @@ class Intro2 extends StatelessWidget {
                 letterSpacing: 0.25,
               ),
             ),
-            const SizedBox(
-              height: 70,
-            ),
+            const Spacer(),
             ElevatedButton(
               onPressed: () {
                 Navigator.pushReplacement(
@@ -145,7 +150,8 @@ class Intro2 extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(100.0),
                 ),
-                minimumSize: const Size(double.infinity, 48),
+                minimumSize: Size(
+                    double.infinity, MediaQuery.of(context).size.height * 0.06),
                 backgroundColor: primary,
                 foregroundColor: onPrimary,
               ),
@@ -153,7 +159,7 @@ class Intro2 extends StatelessWidget {
                 'Next',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 16,
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w500,
                   letterSpacing: 0.1,
@@ -175,16 +181,20 @@ class Intro3 extends StatelessWidget {
     return Scaffold(
       backgroundColor: background,
       body: Container(
-        padding: const EdgeInsets.fromLTRB(40, 175, 40, 65),
+        padding: EdgeInsets.fromLTRB(
+            MediaQuery.of(context).size.width * 0.08,
+            MediaQuery.of(context).size.height * 0.2,
+            MediaQuery.of(context).size.width * 0.08,
+            MediaQuery.of(context).size.height * 0.07),
         child: Column(
           children: [
             Image.asset('assets/Intro/articles_2(1).png'),
-            const SizedBox(
-              height: 20,
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.03,
             ),
             Image.asset('assets/Intro/ProgressStatus(2).png'),
-            const SizedBox(
-              height: 30,
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.03,
             ),
             const Text(
               "Read articles",
@@ -195,8 +205,8 @@ class Intro3 extends StatelessWidget {
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w400),
             ),
-            const SizedBox(
-              height: 20,
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.02,
             ),
             const Text(
               "Unlock the secrets to raising healthy kids with expert tips and insights!",
@@ -211,9 +221,7 @@ class Intro3 extends StatelessWidget {
                 letterSpacing: 0.25,
               ),
             ),
-            const SizedBox(
-              height: 90,
-            ),
+            const Spacer(),
             ElevatedButton(
               onPressed: () {
                 Navigator.pushReplacement(
@@ -225,7 +233,8 @@ class Intro3 extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(100.0),
                 ),
-                minimumSize: const Size(double.infinity, 48),
+                minimumSize: Size(
+                    double.infinity, MediaQuery.of(context).size.height * 0.06),
                 backgroundColor: primary,
                 foregroundColor: onPrimary,
               ),
@@ -233,7 +242,7 @@ class Intro3 extends StatelessWidget {
                 'Next',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 16,
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w500,
                   letterSpacing: 0.1,
@@ -255,16 +264,20 @@ class Intro4 extends StatelessWidget {
     return Scaffold(
       backgroundColor: background,
       body: Container(
-        padding: const EdgeInsets.fromLTRB(40, 175, 40, 65),
+        padding: EdgeInsets.fromLTRB(
+            MediaQuery.of(context).size.width * 0.08,
+            MediaQuery.of(context).size.height * 0.2,
+            MediaQuery.of(context).size.width * 0.08,
+            MediaQuery.of(context).size.height * 0.07),
         child: Column(
           children: [
             Image.asset('assets/Intro/Frame2.png'),
-            const SizedBox(
-              height: 20,
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.03,
             ),
             Image.asset('assets/Intro/ProgressStatus(3).png'),
-            const SizedBox(
-              height: 40,
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.03,
             ),
             const Text(
               "Discuss and ask questions",
@@ -276,8 +289,8 @@ class Intro4 extends StatelessWidget {
                   fontWeight: FontWeight.w400,
                   height: 1),
             ),
-            const SizedBox(
-              height: 20,
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.02,
             ),
             const Text(
               "Jump into our community forum to share your stories and gain fresh insights!",
@@ -292,9 +305,7 @@ class Intro4 extends StatelessWidget {
                 letterSpacing: 0.25,
               ),
             ),
-            const SizedBox(
-              height: 70,
-            ),
+            const Spacer(),
             ElevatedButton(
               onPressed: () {
                 Navigator.pushReplacement(
@@ -306,7 +317,8 @@ class Intro4 extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(100.0),
                 ),
-                minimumSize: const Size(double.infinity, 48),
+                minimumSize: Size(
+                    double.infinity, MediaQuery.of(context).size.height * 0.06),
                 backgroundColor: primary,
                 foregroundColor: onPrimary,
               ),
@@ -314,7 +326,7 @@ class Intro4 extends StatelessWidget {
                 'Next',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 16,
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w500,
                   letterSpacing: 0.1,
@@ -346,16 +358,20 @@ class _Intro5State extends State<Intro5> {
         : Scaffold(
             backgroundColor: background,
             body: Container(
-              padding: const EdgeInsets.fromLTRB(40, 145, 40, 65),
+              padding: EdgeInsets.fromLTRB(
+                  MediaQuery.of(context).size.width * 0.08,
+                  MediaQuery.of(context).size.height * 0.2,
+                  MediaQuery.of(context).size.width * 0.08,
+                  MediaQuery.of(context).size.height * 0.07),
               child: Column(
                 children: [
                   Image.asset('assets/Intro/consult1.png'),
-                  const SizedBox(
-                    height: 20,
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.03,
                   ),
                   Image.asset('assets/Intro/ProgressStatus(4).png'),
-                  const SizedBox(
-                    height: 30,
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.03,
                   ),
                   const Text(
                     "Get expert advice",
@@ -367,8 +383,8 @@ class _Intro5State extends State<Intro5> {
                         fontWeight: FontWeight.w400,
                         height: 1),
                   ),
-                  const SizedBox(
-                    height: 20,
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.02,
                   ),
                   const Text(
                     "Consult with trusted doctors and nutritionists for healthier kids!",
@@ -383,9 +399,7 @@ class _Intro5State extends State<Intro5> {
                       letterSpacing: 0.25,
                     ),
                   ),
-                  const SizedBox(
-                    height: 60,
-                  ),
+                  const Spacer(),
                   ElevatedButton(
                     onPressed: () {
                       Navigator.pushReplacement(
@@ -400,7 +414,8 @@ class _Intro5State extends State<Intro5> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(100.0),
                       ),
-                      minimumSize: const Size(double.infinity, 48),
+                      minimumSize: Size(double.infinity,
+                          MediaQuery.of(context).size.height * 0.06),
                       backgroundColor: primary,
                       foregroundColor: onPrimary,
                     ),
@@ -408,15 +423,15 @@ class _Intro5State extends State<Intro5> {
                       'Get Started',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 16,
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w500,
                         letterSpacing: 0.1,
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 20,
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.02,
                   ),
                   ElevatedButton(
                     onPressed: () async {
@@ -442,7 +457,8 @@ class _Intro5State extends State<Intro5> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(100.0),
                       ),
-                      minimumSize: const Size(double.infinity, 48),
+                      minimumSize: Size(double.infinity,
+                          MediaQuery.of(context).size.height * 0.06),
                       backgroundColor: background,
                       foregroundColor: primary,
                       side: const BorderSide(color: outline, width: 1),
@@ -451,7 +467,7 @@ class _Intro5State extends State<Intro5> {
                       'Continue as a Guest',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 16,
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w500,
                         letterSpacing: 0.1,

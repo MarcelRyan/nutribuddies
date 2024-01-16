@@ -29,10 +29,10 @@ class SplashScreen extends StatelessWidget {
     });
 
     return Scaffold(
-      backgroundColor: primaryFixedDim,
+      backgroundColor: onPrimaryFixed,
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.all(25.0),
+          padding: EdgeInsets.all(MediaQuery.of(context).size.height * 0.04),
           child: Image.asset('assets/logo.png'),
         ),
       ),

@@ -33,7 +33,11 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   child: Transform.translate(
                     offset: const Offset(0, -0),
                     child: Container(
-                      padding: const EdgeInsets.fromLTRB(40, 0, 40, 52),
+                      padding: EdgeInsets.fromLTRB(
+                          MediaQuery.of(context).size.width * 0.08,
+                          MediaQuery.of(context).size.height * 0,
+                          MediaQuery.of(context).size.width * 0.08,
+                          MediaQuery.of(context).size.height * 0.07),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -46,8 +50,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w400),
                           ),
-                          const SizedBox(
-                            height: 20,
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.02,
                           ),
                           const Text(
                             "Please enter the email address you'd like your password reset information sent to.",
@@ -65,8 +69,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           Form(
                             key: _formkey,
                             child: Column(children: [
-                              const SizedBox(
-                                height: 20,
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.02,
                               ),
                               TextFormField(
                                 decoration: textInputDecoration.copyWith(
@@ -77,8 +82,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                   setState(() => email = val);
                                 },
                               ),
-                              const SizedBox(
-                                height: 50,
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.05,
                               ),
                               ElevatedButton(
                                 onPressed: () async {
@@ -103,7 +109,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(100.0),
                                   ),
-                                  minimumSize: const Size(double.infinity, 48),
+                                  minimumSize: Size(
+                                      double.infinity,
+                                      MediaQuery.of(context).size.height *
+                                          0.06),
                                   backgroundColor: primary,
                                   foregroundColor: onPrimary,
                                 ),
@@ -111,7 +120,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                   'Send',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                    fontSize: 14,
+                                    fontSize: 16,
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w500,
                                     letterSpacing: 0.1,
@@ -120,8 +129,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                               ),
                             ]),
                           ),
-                          const SizedBox(
-                            height: 30,
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.03,
                           ),
                           Align(
                             alignment: Alignment.center,
@@ -188,7 +197,11 @@ class _CheckEmailState extends State<CheckEmail> {
             child: Transform.translate(
               offset: const Offset(0, -0),
               child: Container(
-                padding: const EdgeInsets.fromLTRB(40, 0, 40, 52),
+                padding: EdgeInsets.fromLTRB(
+                    MediaQuery.of(context).size.width * 0.08,
+                    MediaQuery.of(context).size.height * 0,
+                    MediaQuery.of(context).size.width * 0.08,
+                    MediaQuery.of(context).size.height * 0.07),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -201,8 +214,8 @@ class _CheckEmailState extends State<CheckEmail> {
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w400),
                     ),
-                    const SizedBox(
-                      height: 20,
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.02,
                     ),
                     const Text(
                       "We just emailed you with the instructions to reset your password.",
@@ -217,8 +230,8 @@ class _CheckEmailState extends State<CheckEmail> {
                         letterSpacing: 0.25,
                       ),
                     ),
-                    const SizedBox(
-                      height: 50,
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.05,
                     ),
                     ElevatedButton(
                       onPressed: () {
@@ -234,7 +247,8 @@ class _CheckEmailState extends State<CheckEmail> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(100.0),
                         ),
-                        minimumSize: const Size(double.infinity, 48),
+                        minimumSize: Size(double.infinity,
+                            MediaQuery.of(context).size.height * 0.06),
                         backgroundColor: primary,
                         foregroundColor: onPrimary,
                       ),
@@ -242,7 +256,7 @@ class _CheckEmailState extends State<CheckEmail> {
                         'Done',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: 16,
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w500,
                           letterSpacing: 0.1,

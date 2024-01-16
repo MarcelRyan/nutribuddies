@@ -87,22 +87,30 @@ class _AddMealState extends State<AddMeal> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Container(
-            padding: EdgeInsets.fromLTRB(16.0, 0, 0, 0),
-            margin: EdgeInsets.fromLTRB(40.0, 14.0, 40.0, 20.0),
+            padding: EdgeInsets.fromLTRB(
+                MediaQuery.of(context).size.width * 0.05, 0, 0, 0),
+            margin: EdgeInsets.fromLTRB(
+                MediaQuery.of(context).size.width * 0.06,
+                MediaQuery.of(context).size.height * 0.02,
+                MediaQuery.of(context).size.width * 0.06,
+                MediaQuery.of(context).size.height * 0.02),
             decoration: BoxDecoration(
               color: surfaceContainerHighest,
               borderRadius: BorderRadius.circular(65.0),
             ),
-            height: 56,
-            width: 332,
+            height: MediaQuery.of(context).size.height * 0.06,
+            width: MediaQuery.of(context).size.width * 0.85,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Icon(Icons.search),
+                const Icon(Icons.search),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(
-                        15, 0, 0, 3), // Add horizontal padding
+                    padding: EdgeInsets.fromLTRB(
+                        MediaQuery.of(context).size.width * 0.03,
+                        0,
+                        MediaQuery.of(context).size.width * 0.01,
+                        MediaQuery.of(context).size.height * 0.004),
                     child: TextField(
                       controller: searchController,
                       onChanged: (value) {
@@ -134,10 +142,16 @@ class _AddMealState extends State<AddMeal> {
                     children: foodRecords.map(
                       (record) {
                         return Container(
-                          width: 332,
-                          height: 80,
-                          padding: EdgeInsets.symmetric(horizontal: 20),
-                          margin: EdgeInsets.fromLTRB(25, 0, 25, 13),
+                          width: MediaQuery.of(context).size.width * 0.77,
+                          height: MediaQuery.of(context).size.height * 0.09,
+                          padding: EdgeInsets.symmetric(
+                              horizontal:
+                                  MediaQuery.of(context).size.width * 0.035),
+                          margin: EdgeInsets.fromLTRB(
+                              MediaQuery.of(context).size.width * 0.035,
+                              0,
+                              MediaQuery.of(context).size.width * 0.035,
+                              MediaQuery.of(context).size.height * 0.015),
                           decoration: BoxDecoration(
                             color: white,
                             borderRadius: BorderRadius.circular(20.0),
@@ -145,19 +159,25 @@ class _AddMealState extends State<AddMeal> {
                           child: Row(
                             children: [
                               Container(
-                                width: 52,
-                                height: 52,
-                                padding: EdgeInsets.symmetric(vertical: 14),
+                                width: MediaQuery.of(context).size.width * 0.15,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.075,
+                                padding: EdgeInsets.symmetric(
+                                    vertical:
+                                        MediaQuery.of(context).size.height *
+                                            0.02),
                                 child: Image.network(
                                   record.thumbnailUrl ?? '',
                                   fit: BoxFit.cover,
                                 ),
                               ),
                               Container(
-                                width: 184,
+                                width: MediaQuery.of(context).size.width * 0.55,
                                 padding: EdgeInsets.symmetric(
-                                  vertical: 12,
-                                  horizontal: 13,
+                                  vertical:
+                                      MediaQuery.of(context).size.height * 0.02,
+                                  horizontal:
+                                      MediaQuery.of(context).size.width * 0.03,
                                 ),
                                 child: Column(
                                   mainAxisAlignment:
@@ -165,10 +185,14 @@ class _AddMealState extends State<AddMeal> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Container(
-                                      padding: EdgeInsets.only(bottom: 6),
+                                      padding: EdgeInsets.only(
+                                          bottom: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.008),
                                       child: Text(
                                         record.foodName,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           color: Colors.black,
                                           fontSize: 16,
                                           fontFamily: 'Poppins',
@@ -181,10 +205,14 @@ class _AddMealState extends State<AddMeal> {
                                       ),
                                     ),
                                     Container(
-                                      padding: EdgeInsets.only(bottom: 4),
+                                      padding: EdgeInsets.only(
+                                          bottom: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.006),
                                       child: Text(
                                         "${record.nutritions.calories} kcal",
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           color: Color(0xFF5674A7),
                                           fontSize: 11,
                                           fontFamily: 'Poppins',
@@ -198,7 +226,7 @@ class _AddMealState extends State<AddMeal> {
                                     ),
                                     Text(
                                       "Portion: ${record.portion}",
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: Color(0xFF74747E),
                                         fontSize: 11,
                                         fontFamily: 'Poppins',
@@ -212,15 +240,13 @@ class _AddMealState extends State<AddMeal> {
                                   ],
                                 ),
                               ),
-                              SizedBox(
-                                width: 10,
-                              ),
+                              const Spacer(),
                               IconButton(
                                 onPressed: () {
                                   _addMealModal(
                                       context, record, widget.tracker);
                                 },
-                                icon: Icon(Icons.add_circle_rounded),
+                                icon: const Icon(Icons.add_circle_rounded),
                                 color: primary,
                                 iconSize: 30.0,
                               )
