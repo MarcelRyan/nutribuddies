@@ -6,6 +6,7 @@ import 'package:nutribuddies/constant/colors.dart';
 import 'package:nutribuddies/services/auth.dart';
 import 'package:nutribuddies/screens/tracker.dart';
 import 'package:nutribuddies/widgets/wrapper.dart';
+import 'package:nutribuddies/screens/article_interest.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -27,7 +28,7 @@ class _HomeState extends State<Home> {
 
     _tabs = [
       ComingSoon.buildComingSoonWidget(),
-      ComingSoon.buildComingSoonWidget(),
+      const ArticleInterest(),
       const Tracker(),
       ComingSoon.buildComingSoonWidget(),
       ComingSoon.buildComingSoonWidget(),
