@@ -29,7 +29,7 @@ class _HomeState extends State<Home> {
     _tabs = [
       ComingSoon.buildComingSoonWidget(),
       const ArticleInterest(),
-      const Tracker(),
+      _auth.isAnonymous() ? const DirectLogin() : const Tracker(),
       ComingSoon.buildComingSoonWidget(),
       ComingSoon.buildComingSoonWidget(),
     ];
@@ -76,6 +76,14 @@ class _HomeState extends State<Home> {
             onPressed: () async {
               await _auth.signOut();
               Fluttertoast.showToast(msg: "Signed Out");
+              // ignore: use_build_context_synchronously
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Wrapper(
+                          result: false,
+                        )),
+              );
             },
             style: ElevatedButton.styleFrom(
               foregroundColor: Colors.white,
@@ -102,6 +110,14 @@ class _HomeState extends State<Home> {
             onPressed: () async {
               await _auth.signOut();
               Fluttertoast.showToast(msg: "Signed Out");
+              // ignore: use_build_context_synchronously
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Wrapper(
+                          result: false,
+                        )),
+              );
             },
             style: ElevatedButton.styleFrom(
               foregroundColor: Colors.white,
@@ -128,6 +144,14 @@ class _HomeState extends State<Home> {
             onPressed: () async {
               await _auth.signOut();
               Fluttertoast.showToast(msg: "Signed Out");
+              // ignore: use_build_context_synchronously
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Wrapper(
+                          result: false,
+                        )),
+              );
             },
             style: ElevatedButton.styleFrom(
               foregroundColor: Colors.white,
@@ -154,6 +178,14 @@ class _HomeState extends State<Home> {
             onPressed: () async {
               await _auth.signOut();
               Fluttertoast.showToast(msg: "Signed Out");
+              // ignore: use_build_context_synchronously
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Wrapper(
+                          result: false,
+                        )),
+              );
             },
             style: ElevatedButton.styleFrom(
               foregroundColor: Colors.white,
@@ -257,6 +289,90 @@ class ComingSoon {
           ),
           const SizedBox(
             height: 90,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class DirectLogin extends StatelessWidget {
+  const DirectLogin({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final AuthService auth = AuthService();
+
+    return Container(
+      padding: const EdgeInsets.fromLTRB(40, 120, 40, 65),
+      child: Column(
+        children: [
+          Image.asset('assets/direct_login.png'),
+          const SizedBox(
+            height: 20,
+          ),
+          const Text(
+            "Oops...",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 22,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w500,
+              height: 0.06,
+            ),
+          ),
+          const SizedBox(
+            height: 35,
+          ),
+          const Text(
+            "This feature is only available for NutriBuddies users. Please sign in first to your account.",
+            textAlign: TextAlign.center,
+            softWrap: true,
+            style: TextStyle(
+              color: Color(0xFF74747E),
+              fontSize: 16,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w400,
+              height: 1,
+              letterSpacing: 0.50,
+            ),
+          ),
+          const SizedBox(
+            height: 60,
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              await auth.signOut();
+              Fluttertoast.showToast(msg: "Signed Out");
+              // ignore: use_build_context_synchronously
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Wrapper(
+                          result: false,
+                        )),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(100.0),
+              ),
+              minimumSize: Size(
+                  double.infinity, MediaQuery.of(context).size.height * 0.06),
+              backgroundColor: primary,
+              foregroundColor: onPrimary,
+            ),
+            child: const Text(
+              'Sign In',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 16,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w500,
+                letterSpacing: 0.1,
+              ),
+            ),
           ),
         ],
       ),

@@ -1771,24 +1771,10 @@ class editMealModal extends StatefulWidget {
 
 // ignore: camel_case_types
 class _editMealModalState extends State<editMealModal> {
-  int counter = 1;
-
-  void _incrementCounter() {
-    setState(() {
-      counter++;
-    });
-  }
-
-  void _decrementCounter() {
-    setState(() {
-      if (counter != 0) {
-        counter--;
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    Meals meal = widget.tracker.meals[widget.index];
+
     return AlertDialog(
       backgroundColor: white,
       content: SizedBox(
@@ -2072,7 +2058,11 @@ class _editMealModalState extends State<editMealModal> {
                           icon: const Icon(Icons.remove_circle_rounded),
                           color: primary,
                           onPressed: () {
-                            _decrementCounter();
+                            setState(() {
+                              if (meal.amount != 0) {
+                                meal.amount--;
+                              }
+                            });
                           },
                         ),
                         const Spacer(),
@@ -2081,7 +2071,7 @@ class _editMealModalState extends State<editMealModal> {
                           child: FittedBox(
                             fit: BoxFit.scaleDown,
                             child: Text(
-                              "$counter",
+                              "${meal.amount}",
                               style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 22,
@@ -2098,7 +2088,9 @@ class _editMealModalState extends State<editMealModal> {
                           icon: const Icon(Icons.add_circle_rounded),
                           color: primary,
                           onPressed: () {
-                            _incrementCounter();
+                            setState(() {
+                              meal.amount++;
+                            });
                           },
                         ),
                       ],
@@ -2185,7 +2177,7 @@ class _editMealModalState extends State<editMealModal> {
                             widget.tracker.uid,
                             widget.index,
                             widget.record.food,
-                            counter);
+                            meal.amount);
                         // ignore: use_build_context_synchronously
                         Navigator.pop(context);
                         // ignore: use_build_context_synchronously

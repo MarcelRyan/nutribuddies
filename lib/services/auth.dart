@@ -149,6 +149,11 @@ class AuthService {
     }
   }
 
+  // is anonymous
+  bool isAnonymous() {
+    return _auth.currentUser!.isAnonymous;
+  }
+
   // register kid
   Future registerKid(
       String parentUid,
