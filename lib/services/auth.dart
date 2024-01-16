@@ -58,7 +58,7 @@ class AuthService {
   }
 
   // sign in with google
-  static Future<User?> signInWithGoogle() async {
+  Future<Object?> signInWithGoogle() async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user;
 
@@ -80,7 +80,8 @@ class AuthService {
         final UserCredential userCredential =
             await auth.signInWithCredential(credential);
 
-        user = userCredential.user;
+        user = userCredential.user!;
+        return _user(user);
       } on FirebaseAuthException {
         // Error
       } catch (e) {
