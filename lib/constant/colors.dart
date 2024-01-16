@@ -55,3 +55,5 @@ const Color error = Color(0xFFBB2E27);
 const Color outlineVariant = Color(0xFFC4C7D0);
 
 const Color onPrimaryFixed = Color(0xFF192231);
+
+const Color surfaceContainerLowest = Color(0xFFFFFFFF);

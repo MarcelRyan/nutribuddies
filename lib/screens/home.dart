@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nutribuddies/constant/colors.dart';
 import 'package:nutribuddies/services/auth.dart';
 import 'package:nutribuddies/screens/tracker.dart';
+import 'package:nutribuddies/widgets/wrapper.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -40,6 +41,14 @@ class _HomeState extends State<Home> {
             onPressed: () async {
               await _auth.signOut();
               Fluttertoast.showToast(msg: "Signed Out");
+              // ignore: use_build_context_synchronously
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Wrapper(
+                          result: false,
+                        )),
+              );
             },
             style: ElevatedButton.styleFrom(
               foregroundColor: Colors.white,

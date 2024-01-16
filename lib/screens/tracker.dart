@@ -1024,9 +1024,6 @@ class _TrackerContentState extends State<TrackerContent> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  // Image.network(
-                                  //   meal.food.thumbnailUrl ?? '',
-                                  // ),
                                   Container(
                                     width: MediaQuery.of(context).size.width *
                                         0.15,
@@ -1145,21 +1142,22 @@ class WarningDeleteMealModal extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       backgroundColor: background,
-      content: Container(
-        width: 312,
-        height: 160,
+      content: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.7,
+        height: MediaQuery.of(context).size.height * 0.19,
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.fromLTRB(0, 24, 0, 0),
+              padding: EdgeInsets.fromLTRB(
+                  0, MediaQuery.of(context).size.width * 0.06, 0, 0),
               child: Column(
                 children: [
                   Container(
                     alignment: Alignment.centerLeft,
-                    child: Text(
+                    child: const Text(
                       "Warning",
                       style: TextStyle(
-                        color: Color(0xFF1E1E1F),
+                        color: onSurface,
                         fontSize: 24,
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w400,
@@ -1169,23 +1167,44 @@ class WarningDeleteMealModal extends StatelessWidget {
                     ),
                   ),
                   SizedBox(
-                    height: 36,
+                    height: MediaQuery.of(context).size.height * 0.035,
                   ),
-                  Container(
-                    child: Column(
-                      children: [
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          child: RichText(
+                  Column(
+                    children: [
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: RichText(
                             textAlign: TextAlign.start,
                             softWrap: true,
                             text: TextSpan(
                               children: [
-                                TextSpan(
+                                const TextSpan(
                                   text:
                                       'Are you sure want to delete your kid’s meal: ',
                                   style: TextStyle(
-                                    color: Color(0xFF45484F),
+                                    color: onSurfaceVariant,
+                                    fontSize: 14,
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w400,
+                                    height: 1,
+                                    letterSpacing: 0.25,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: record.food.foodName,
+                                  style: const TextStyle(
+                                    color: onSurfaceVariant,
+                                    fontSize: 14,
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w700,
+                                    height: 1,
+                                    letterSpacing: 0.25,
+                                  ),
+                                ),
+                                const TextSpan(
+                                  text: '?',
+                                  style: TextStyle(
+                                    color: onSurfaceVariant,
                                     fontSize: 14,
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w400,
@@ -1194,61 +1213,20 @@ class WarningDeleteMealModal extends StatelessWidget {
                                   ),
                                 ),
                               ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 14,
-                        ),
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          child: RichText(
-                              textAlign: TextAlign.start,
-                              softWrap: true,
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: record.food.foodName,
-                                    style: TextStyle(
-                                      color: Color(0xFF45484F),
-                                      fontSize: 14,
-                                      fontFamily: 'Poppins',
-                                      fontWeight: FontWeight.w700,
-                                      height: 0.10,
-                                      letterSpacing: 0.25,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: '?',
-                                    style: TextStyle(
-                                      color: Color(0xFF45484F),
-                                      fontSize: 14,
-                                      fontFamily: 'Poppins',
-                                      fontWeight: FontWeight.w400,
-                                      height: 0.10,
-                                      letterSpacing: 0.25,
-                                    ),
-                                  ),
-                                ],
-                              )),
-                        )
-                      ],
-                    ),
+                            )),
+                      )
+                    ],
                   )
                 ],
               ),
             ),
-            SizedBox(
-              height: 16,
-            ),
+            const Spacer(),
             Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 SizedBox(
-                  width: 30,
-                ),
-                Container(
-                  width: 130,
-                  height: 40,
+                  width: MediaQuery.of(context).size.width * 0.325,
+                  height: MediaQuery.of(context).size.height * 0.05,
                   child: ElevatedButton(
                     onPressed: () {
                       Navigator.pop(context);
@@ -1259,10 +1237,10 @@ class WarningDeleteMealModal extends StatelessWidget {
                       foregroundColor: primary,
                       elevation: 0.0,
                     ),
-                    child: Text(
+                    child: const Text(
                       "Cancel",
                       style: TextStyle(
-                        color: Color(0xFF74747E),
+                        color: outline,
                         fontSize: 14,
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w500,
@@ -1273,17 +1251,16 @@ class WarningDeleteMealModal extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  width: 8,
+                  width: MediaQuery.of(context).size.width * 0.02,
                 ),
                 Container(
-                  width: 94,
-                  height: 40,
+                  width: MediaQuery.of(context).size.width * 0.25,
+                  height: MediaQuery.of(context).size.height * 0.05,
                   decoration: ShapeDecoration(
-                    color: Color(0xFFBB2E27),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(100),
                     ),
-                    shadows: [
+                    shadows: const [
                       BoxShadow(
                         color: Color(0x26000000),
                         blurRadius: 3,
@@ -1300,23 +1277,24 @@ class WarningDeleteMealModal extends StatelessWidget {
                   ),
                   child: ElevatedButton(
                     onPressed: () async {
-                      // Delete algorithm
                       await DatabaseService(uid: '')
                           .deleteMealFromTracker(tracker.uid, index);
+                      // ignore: use_build_context_synchronously
                       Navigator.pop(context);
+                      // ignore: use_build_context_synchronously
                       Navigator.pop(context);
                     },
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(100.0),
                       ),
-                      backgroundColor: Colors.red,
+                      backgroundColor: error,
                       foregroundColor: onPrimary,
                     ),
-                    child: Text(
+                    child: const Text(
                       "Delete",
                       style: TextStyle(
-                        color: Colors.white,
+                        color: onPrimary,
                         fontSize: 14,
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w500,
@@ -1350,21 +1328,22 @@ class WarningEditMealModal extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       backgroundColor: white,
-      content: Container(
-        width: 265,
-        height: 140,
+      content: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.7,
+        height: MediaQuery.of(context).size.height * 0.19,
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.fromLTRB(0, 24, 0, 0),
+              padding: EdgeInsets.fromLTRB(
+                  0, MediaQuery.of(context).size.width * 0.06, 0, 0),
               child: Column(
                 children: [
                   Container(
                     alignment: Alignment.centerLeft,
-                    child: Text(
+                    child: const Text(
                       "Edit Meal",
                       style: TextStyle(
-                        color: Color(0xFF1E1E1F),
+                        color: onSurface,
                         fontSize: 24,
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w400,
@@ -1374,14 +1353,14 @@ class WarningEditMealModal extends StatelessWidget {
                     ),
                   ),
                   SizedBox(
-                    height: 36,
+                    height: MediaQuery.of(context).size.height * 0.045,
                   ),
                   Container(
                     alignment: Alignment.centerLeft,
-                    child: Text(
+                    child: const Text(
                       "Do you want to edit your kid's meal?",
                       style: TextStyle(
-                        color: Color(0xFF45484F),
+                        color: onSurfaceVariant,
                         fontSize: 14,
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w400,
@@ -1394,22 +1373,18 @@ class WarningEditMealModal extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(
-              height: 36,
-            ),
+            const Spacer(),
             Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                SizedBox(
-                  width: 30,
-                ),
                 Container(
-                  width: 130,
-                  height: 40,
+                  width: MediaQuery.of(context).size.width * 0.325,
+                  height: MediaQuery.of(context).size.height * 0.05,
                   decoration: BoxDecoration(
                     color: primary,
                     shape: BoxShape.rectangle,
                     borderRadius: BorderRadius.circular(30.0),
-                    boxShadow: [
+                    boxShadow: const [
                       BoxShadow(
                         color: Color(0x26000000),
                         blurRadius: 3,
@@ -1435,10 +1410,10 @@ class WarningEditMealModal extends StatelessWidget {
                       backgroundColor: primary,
                       foregroundColor: onPrimary,
                     ),
-                    child: Text(
+                    child: const Text(
                       "Edit portion",
                       style: TextStyle(
-                        color: Colors.white,
+                        color: onPrimary,
                         fontSize: 14,
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w500,
@@ -1449,15 +1424,15 @@ class WarningEditMealModal extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  width: 8,
+                  width: MediaQuery.of(context).size.width * 0.02,
                 ),
                 Container(
-                  width: 94,
-                  height: 40,
+                  width: MediaQuery.of(context).size.width * 0.25,
+                  height: MediaQuery.of(context).size.height * 0.05,
                   decoration: ShapeDecoration(
-                    color: Colors.white,
+                    color: surfaceContainerLowest,
                     shape: RoundedRectangleBorder(
-                      side: BorderSide(width: 1, color: Color(0xFFBB2E27)),
+                      side: const BorderSide(width: 1, color: error),
                       borderRadius: BorderRadius.circular(100),
                     ),
                   ),
@@ -1476,12 +1451,12 @@ class WarningEditMealModal extends StatelessWidget {
                       ),
                       backgroundColor: background,
                       foregroundColor: primary,
-                      side: const BorderSide(color: Colors.red, width: 1),
+                      side: const BorderSide(color: error, width: 1),
                     ),
-                    child: Text(
+                    child: const Text(
                       "Delete",
                       style: TextStyle(
-                        color: Color(0xFFBB2E27),
+                        color: error,
                         fontSize: 14,
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w500,
