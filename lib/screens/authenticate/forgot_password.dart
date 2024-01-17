@@ -26,147 +26,150 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         ? const Loading()
         : Scaffold(
             backgroundColor: background,
-            body: Column(
-              children: [
-                Image.asset('assets/Login/Group1(1).png'),
-                ClipRect(
-                  child: Transform.translate(
-                    offset: const Offset(0, -0),
-                    child: Container(
-                      padding: EdgeInsets.fromLTRB(
-                          MediaQuery.of(context).size.width * 0.08,
-                          MediaQuery.of(context).size.height * 0,
-                          MediaQuery.of(context).size.width * 0.08,
-                          MediaQuery.of(context).size.height * 0.07),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Forgot Password?",
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                                color: black,
-                                fontSize: 32,
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w400),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.02,
-                          ),
-                          const Text(
-                            "Please enter the email address you'd like your password reset information sent to.",
-                            textAlign: TextAlign.justify,
-                            softWrap: true,
-                            style: TextStyle(
-                              color: black,
-                              fontSize: 14,
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w400,
-                              height: 1.5,
-                              letterSpacing: 0.25,
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Image.asset('assets/Login/Group1(1).png'),
+                  ClipRect(
+                    child: Transform.translate(
+                      offset: const Offset(0, -0),
+                      child: Container(
+                        padding: EdgeInsets.fromLTRB(
+                            MediaQuery.of(context).size.width * 0.08,
+                            MediaQuery.of(context).size.height * 0,
+                            MediaQuery.of(context).size.width * 0.08,
+                            MediaQuery.of(context).size.height * 0.07),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Forgot Password?",
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                  color: black,
+                                  fontSize: 32,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w400),
                             ),
-                          ),
-                          Form(
-                            key: _formkey,
-                            child: Column(children: [
-                              SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.02,
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.02,
+                            ),
+                            const Text(
+                              "Please enter the email address you'd like your password reset information sent to.",
+                              textAlign: TextAlign.justify,
+                              softWrap: true,
+                              style: TextStyle(
+                                color: black,
+                                fontSize: 14,
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w400,
+                                height: 1.5,
+                                letterSpacing: 0.25,
                               ),
-                              TextFormField(
-                                decoration: textInputDecoration.copyWith(
-                                    hintText: 'Email'),
-                                validator: (val) =>
-                                    val!.isEmpty ? 'Enter an email' : null,
-                                onChanged: (val) {
-                                  setState(() => email = val);
-                                },
-                              ),
-                              SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.05,
-                              ),
-                              ElevatedButton(
-                                onPressed: () async {
-                                  if (_formkey.currentState!.validate()) {
-                                    setState(() => loading = true);
-                                    dynamic result =
-                                        await _auth.resetPassword(email);
-                                    if (result == null) {
-                                      setState(() => loading = false);
-                                    } else {
-                                      // ignore: use_build_context_synchronously
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const CheckEmail()),
-                                      );
-                                    }
-                                  }
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(100.0),
-                                  ),
-                                  minimumSize: Size(
-                                      double.infinity,
-                                      MediaQuery.of(context).size.height *
-                                          0.06),
-                                  backgroundColor: primary,
-                                  foregroundColor: onPrimary,
+                            ),
+                            Form(
+                              key: _formkey,
+                              child: Column(children: [
+                                SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.02,
                                 ),
-                                child: const Text(
-                                  'Send',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w500,
-                                    letterSpacing: 0.1,
-                                  ),
-                                ),
-                              ),
-                            ]),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.03,
-                          ),
-                          Align(
-                            alignment: Alignment.center,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Wrapper(
-                                                result: false,
-                                              )),
-                                    );
+                                TextFormField(
+                                  decoration: textInputDecoration.copyWith(
+                                      hintText: 'Email'),
+                                  validator: (val) =>
+                                      val!.isEmpty ? 'Enter an email' : null,
+                                  onChanged: (val) {
+                                    setState(() => email = val);
                                   },
+                                ),
+                                SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.05,
+                                ),
+                                ElevatedButton(
+                                  onPressed: () async {
+                                    if (_formkey.currentState!.validate()) {
+                                      setState(() => loading = true);
+                                      dynamic result =
+                                          await _auth.resetPassword(email);
+                                      if (result == null) {
+                                        setState(() => loading = false);
+                                      } else {
+                                        // ignore: use_build_context_synchronously
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const CheckEmail()),
+                                        );
+                                      }
+                                    }
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(100.0),
+                                    ),
+                                    minimumSize: Size(
+                                        double.infinity,
+                                        MediaQuery.of(context).size.height *
+                                            0.06),
+                                    backgroundColor: primary,
+                                    foregroundColor: onPrimary,
+                                  ),
                                   child: const Text(
-                                    'Back to Login',
+                                    'Send',
+                                    textAlign: TextAlign.center,
                                     style: TextStyle(
-                                      color: primary,
-                                      fontSize: 12,
+                                      fontSize: 16,
                                       fontFamily: 'Poppins',
-                                      fontWeight: FontWeight.w700,
-                                      letterSpacing: 0.5,
+                                      fontWeight: FontWeight.w500,
+                                      letterSpacing: 0.1,
                                     ),
                                   ),
                                 ),
-                              ],
+                              ]),
                             ),
-                          ),
-                        ],
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.03,
+                            ),
+                            Align(
+                              alignment: Alignment.center,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Wrapper(
+                                                  result: false,
+                                                )),
+                                      );
+                                    },
+                                    child: const Text(
+                                      'Back to Login',
+                                      style: TextStyle(
+                                        color: primary,
+                                        fontSize: 12,
+                                        fontFamily: 'Poppins',
+                                        fontWeight: FontWeight.w700,
+                                        letterSpacing: 0.5,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
   }

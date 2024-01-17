@@ -183,7 +183,6 @@ class _TrackerContentState extends State<TrackerContent> {
                       List<Kids> kidsList = snapshot.data!;
                       Future<Kids?> firstKidFuture =
                           foodTracker.getFirstKid(users.uid);
-                      String? selectedValue;
 
                       return FutureBuilder<Kids?>(
                           future: firstKidFuture,
@@ -194,8 +193,6 @@ class _TrackerContentState extends State<TrackerContent> {
                             } else if (kidSnapshot.hasError) {
                               return Text('Error: ${kidSnapshot.error}');
                             } else {
-                              Kids? firstKid = kidSnapshot.data;
-                              selectedValue = firstKid?.uid;
                               return DropdownButtonFormField<String>(
                                 value: widget.kidUid,
                                 onChanged: (String? newValue) {
