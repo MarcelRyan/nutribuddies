@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nutribuddies/constant/colors.dart';
+import 'package:nutribuddies/screens/home_page.dart';
 import 'package:nutribuddies/screens/menu_recommendation.dart';
 import 'package:nutribuddies/screens/profile.dart';
 import 'package:nutribuddies/services/auth.dart';
@@ -22,14 +23,20 @@ class _HomeState extends State<Home> {
   final AuthService _auth = AuthService();
 
   late List<Widget> _tabs;
-  late List<AppBar> _appBar;
+  late List<AppBar?> _appBar;
 
   @override
   void initState() {
     super.initState();
 
     _tabs = [
-      ComingSoon.buildComingSoonWidget(),
+      HomePage(
+        onIndexChanged: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+      ),
       const ArticleInterest(),
       _auth.isAnonymous() ? const DirectLogin() : const Tracker(),
       _auth.isAnonymous() ? const DirectLogin() : const MenuRecommendation(),
@@ -37,40 +44,7 @@ class _HomeState extends State<Home> {
     ];
 
     _appBar = [
-      AppBar(
-        title: const Text('NutriBuddies'),
-        actions: [
-          ElevatedButton(
-            onPressed: () async {
-              await _auth.signOut();
-              Fluttertoast.showToast(msg: "Signed Out");
-              // ignore: use_build_context_synchronously
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => Wrapper(
-                          result: false,
-                        )),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.white,
-              backgroundColor: Colors.blue,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-            ),
-            child: const Row(
-              children: [
-                Icon(Icons.person),
-                SizedBox(width: 8),
-                Text('Logout'),
-              ],
-            ),
-          )
-        ],
-      ),
+      null,
       AppBar(
         title: const Text('Article'),
         actions: [

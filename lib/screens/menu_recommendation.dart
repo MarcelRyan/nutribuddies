@@ -321,7 +321,11 @@ class _QnaPageState extends State<QnaPage> {
           const Text(
             "Discover Your Child's Perfect Plate: Menu Q&A!",
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Poppins',
+            ),
           ),
           const SizedBox(height: 16),
           ListView.builder(
@@ -359,7 +363,10 @@ class _QnaPageState extends State<QnaPage> {
                 Fluttertoast.showToast(msg: "Please answer all questions!");
               }
             },
-            child: const Text("Let's Go!"),
+            child: const Text("Let's Go!",
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                )),
           ),
         ],
       ),
@@ -393,7 +400,11 @@ class QnaCard extends StatelessWidget {
           children: [
             Text(
               question,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Poppins',
+              ),
             ),
             const SizedBox(height: 16),
             Column(
@@ -410,7 +421,10 @@ class QnaCard extends StatelessWidget {
                           onChanged?.call(value as String);
                         },
                       ),
-                      Text(option),
+                      Text(option,
+                          style: const TextStyle(
+                            fontFamily: 'Poppins',
+                          )),
                     ],
                   ),
                 );
@@ -464,7 +478,11 @@ class _MenuRecommendationListState extends State<MenuRecommendationList> {
           const Text(
             "Menu Recommendations",
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Poppins',
+            ),
           ),
           const SizedBox(height: 16),
           FutureBuilder<List<Menu>?>(
@@ -473,9 +491,15 @@ class _MenuRecommendationListState extends State<MenuRecommendationList> {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const CircularProgressIndicator();
               } else if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
+                return Text('Error: ${snapshot.error}',
+                    style: const TextStyle(
+                      fontFamily: 'Poppins',
+                    ));
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return const Text('No menus available');
+                return const Text('No menus available',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                    ));
               } else {
                 List<Menu> menus = snapshot.data!;
 
@@ -541,12 +565,15 @@ class MenuCard extends StatelessWidget {
             const SizedBox(height: 16),
             Text(
               menu.name,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Poppins'),
             ),
             const SizedBox(height: 8),
             Text(
               '${menu.calories} kcal',
-              style: const TextStyle(fontSize: 16),
+              style: const TextStyle(fontSize: 16, fontFamily: 'Poppins'),
             ),
             const SizedBox(height: 8),
           ],
@@ -566,7 +593,7 @@ class MenuDetailPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: background,
       appBar: AppBar(
-        title: const Text('Recipe'),
+        title: const Text('Recipe', style: TextStyle(fontFamily: 'Poppins')),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -585,13 +612,18 @@ class MenuDetailPage extends StatelessWidget {
               Center(
                   child: Text(
                 menu.name,
-                style:
-                    const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Poppins'),
               )),
               const SizedBox(height: 16),
               const Text(
                 'Ingredients:',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Poppins'),
               ),
               ...menu.ingredients.map((ingredient) {
                 return Padding(
@@ -604,7 +636,11 @@ class MenuDetailPage extends StatelessWidget {
                         child: Icon(Icons.brightness_1, size: 10),
                       ),
                       const SizedBox(width: 8),
-                      Expanded(child: Text(ingredient)),
+                      Expanded(
+                          child: Text(
+                        ingredient,
+                        style: const TextStyle(fontFamily: 'Poppins'),
+                      )),
                     ],
                   ),
                 );
@@ -612,7 +648,10 @@ class MenuDetailPage extends StatelessWidget {
               const SizedBox(height: 16),
               const Text(
                 'Directions:',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Poppins'),
               ),
               ...menu.directions.asMap().entries.map((entry) {
                 final index = entry.key + 1;
@@ -623,9 +662,15 @@ class MenuDetailPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('$index. ',
-                          style: const TextStyle(fontWeight: FontWeight.bold)),
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Poppins')),
                       const SizedBox(width: 8),
-                      Expanded(child: Text(direction)),
+                      Expanded(
+                          child: Text(
+                        direction,
+                        style: const TextStyle(fontFamily: 'Poppins'),
+                      )),
                     ],
                   ),
                 );

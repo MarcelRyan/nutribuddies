@@ -75,6 +75,7 @@ flutter:
     - assets/Intro/
     - assets/Login/
     - assets/Tracker/
+    - assets/Home/
     - assets/Article/
     - assets/Profile/
   #   - images/a_dot_ham.jpeg
