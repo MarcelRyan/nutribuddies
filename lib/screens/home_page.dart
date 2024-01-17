@@ -7,6 +7,8 @@ import 'package:nutribuddies/constant/colors.dart';
 import 'package:nutribuddies/models/kids.dart';
 import 'package:nutribuddies/models/user.dart';
 import 'package:nutribuddies/screens/forum.dart';
+import 'package:nutribuddies/screens/authenticate/authenticate.dart';
+import 'package:nutribuddies/services/auth.dart';
 import 'package:nutribuddies/services/database.dart';
 import 'package:provider/provider.dart';
 
@@ -36,6 +38,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final Users? users = Provider.of<Users?>(context);
+    final AuthService _auth = AuthService();
 
     List<Article> dummyData = [
       Article(
@@ -98,7 +101,7 @@ class _HomePageState extends State<HomePage> {
       });
     }
 
-    loadData("oj3pPxfiwsffe0FhnbYMKEBD1Oq1");
+    loadData(users?.uid ?? '');
 
     return Scaffold(
       backgroundColor: background,
@@ -125,7 +128,7 @@ class _HomePageState extends State<HomePage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Hi ${users?.displayName ?? "there"}",
+                        "Hi ${_auth.isAnonymous() ? "there" : (users?.displayName ?? 'there')}",
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 22,
@@ -184,7 +187,7 @@ class _HomePageState extends State<HomePage> {
                                         letterSpacing: 0.15,
                                       ),
                                     ),
-                                  if (kidsData.isNotEmpty)
+                                  if (!_auth.isAnonymous())
                                     for (int i = 0;
                                         i < kidsData.length;
                                         i++) ...[
@@ -262,244 +265,171 @@ class _HomePageState extends State<HomePage> {
                 spacing: MediaQuery.of(context).size.width * 0.026,
                 runSpacing: MediaQuery.of(context).size.height * 0.02,
                 children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.18,
-                    height: MediaQuery.of(context).size.height * 0.08,
-                    decoration: BoxDecoration(
+                  GestureDetector(
+                    onTap: () {
+                      widget.onIndexChanged(2);
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.18,
+                      height: MediaQuery.of(context).size.height * 0.08,
+                      decoration: BoxDecoration(
                         color: primaryContainer,
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.18,
-                          height: MediaQuery.of(context).size.height * 0.08,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              widget.onIndexChanged(2);
-                            },
-                            style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(100)),
-                                backgroundColor: primaryContainer,
-                                foregroundColor: white,
-                                elevation: 0),
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.22,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    "assets/Home/track.png",
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.2,
-                                    height: MediaQuery.of(context).size.height *
-                                        0.028,
-                                    fit: BoxFit.fill,
-                                  ),
-                                  SizedBox(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.003,
-                                  ),
-                                  const FittedBox(
-                                    fit: BoxFit.scaleDown,
-                                    child: Text(
-                                      "Track",
-                                      style: TextStyle(
-                                        color: Color(0xFF192231),
-                                        fontSize: 10,
-                                        fontFamily: 'Poppins',
-                                        fontWeight: FontWeight.w500,
-                                        height: 1,
-                                        letterSpacing: 0.10,
-                                      ),
-                                    ),
-                                  )
-                                ],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            "assets/Home/track.png",
+                            width: MediaQuery.of(context).size.width * 0.08,
+                            height: MediaQuery.of(context).size.height * 0.03,
+                            fit: BoxFit.fill,
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.003,
+                          ),
+                          const FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              "Track",
+                              style: TextStyle(
+                                color: Color(0xFF192231),
+                                fontSize: 10,
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w700,
+                                height: 1,
+                                letterSpacing: 0.10,
                               ),
                             ),
-                          ),
-                        ),
-                      ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.18,
-                    height: MediaQuery.of(context).size.height * 0.08,
-                    decoration: BoxDecoration(
+                  GestureDetector(
+                    onTap: () {
+                      widget.onIndexChanged(3);
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.18,
+                      height: MediaQuery.of(context).size.height * 0.08,
+                      decoration: BoxDecoration(
                         color: primaryContainer,
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.18,
-                          height: MediaQuery.of(context).size.height * 0.08,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              widget.onIndexChanged(3);
-                            },
-                            style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(100)),
-                                backgroundColor: primaryContainer,
-                                foregroundColor: white,
-                                elevation: 0),
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.22,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    "assets/Home/menu.png",
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.2,
-                                    height: MediaQuery.of(context).size.height *
-                                        0.028,
-                                    fit: BoxFit.fill,
-                                  ),
-                                  SizedBox(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.003,
-                                  ),
-                                  const FittedBox(
-                                    fit: BoxFit.scaleDown,
-                                    child: Text(
-                                      "Menu",
-                                      style: TextStyle(
-                                        color: Color(0xFF192231),
-                                        fontSize: 10,
-                                        fontFamily: 'Poppins',
-                                        fontWeight: FontWeight.w500,
-                                        height: 1,
-                                        letterSpacing: 0.10,
-                                      ),
-                                    ),
-                                  )
-                                ],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            "assets/Home/menu.png",
+                            width: MediaQuery.of(context).size.width * 0.08,
+                            height: MediaQuery.of(context).size.height * 0.03,
+                            fit: BoxFit.fill,
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.003,
+                          ),
+                          const FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              "Menu",
+                              style: TextStyle(
+                                color: Color(0xFF192231),
+                                fontSize: 10,
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w700,
+                                height: 1,
+                                letterSpacing: 0.10,
                               ),
                             ),
-                          ),
-                        ),
-                      ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.18,
-                    height: MediaQuery.of(context).size.height * 0.08,
-                    decoration: BoxDecoration(
+                  GestureDetector(
+                    onTap: () {
+                      widget.onIndexChanged(1);
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.18,
+                      height: MediaQuery.of(context).size.height * 0.08,
+                      decoration: BoxDecoration(
                         color: primaryContainer,
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.18,
-                          height: MediaQuery.of(context).size.height * 0.08,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              widget.onIndexChanged(1);
-                            },
-                            style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(100)),
-                                backgroundColor: primaryContainer,
-                                foregroundColor: white,
-                                elevation: 0),
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.22,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    "assets/Home/article.png",
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.2,
-                                    height: MediaQuery.of(context).size.height *
-                                        0.028,
-                                    fit: BoxFit.fill,
-                                  ),
-                                  SizedBox(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.003,
-                                  ),
-                                  const FittedBox(
-                                    fit: BoxFit.scaleDown,
-                                    child: Text(
-                                      "Article",
-                                      style: TextStyle(
-                                        color: Color(0xFF192231),
-                                        fontSize: 10,
-                                        fontFamily: 'Poppins',
-                                        fontWeight: FontWeight.w900,
-                                        height: 1,
-                                        letterSpacing: 0.10,
-                                      ),
-                                    ),
-                                  )
-                                ],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            "assets/Home/article.png",
+                            width: MediaQuery.of(context).size.width * 0.08,
+                            height: MediaQuery.of(context).size.height * 0.03,
+                            fit: BoxFit.fill,
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.003,
+                          ),
+                          const FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              "Article",
+                              style: TextStyle(
+                                color: Color(0xFF192231),
+                                fontSize: 10,
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w700,
+                                height: 1,
+                                letterSpacing: 0.10,
                               ),
                             ),
-                          ),
-                        ),
-                      ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.18,
-                    height: MediaQuery.of(context).size.height * 0.08,
-                    decoration: BoxDecoration(
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const ForumPage()));
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.18,
+                      height: MediaQuery.of(context).size.height * 0.08,
+                      decoration: BoxDecoration(
                         color: primaryContainer,
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.18,
-                          height: MediaQuery.of(context).size.height * 0.08,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const ForumPage()));
-                            },
-                            style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(100)),
-                                backgroundColor: primaryContainer,
-                                foregroundColor: white,
-                                elevation: 0),
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.22,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    "assets/Home/forum.png",
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.2,
-                                    height: MediaQuery.of(context).size.height *
-                                        0.028,
-                                    fit: BoxFit.fill,
-                                  ),
-                                  SizedBox(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.003,
-                                  ),
-                                  const Text(
-                                    "Forum",
-                                    style: TextStyle(
-                                      color: Color(0xFF192231),
-                                      fontSize: 8.5,
-                                      fontFamily: 'Poppins',
-                                      fontWeight: FontWeight.w900,
-                                      height: 1,
-                                      letterSpacing: 0.10,
-                                    ),
-                                  )
-                                ],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            "assets/Home/forum.png",
+                            width: MediaQuery.of(context).size.width * 0.08,
+                            height: MediaQuery.of(context).size.height * 0.03,
+                            fit: BoxFit.fill,
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.003,
+                          ),
+                          const FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              "Forum",
+                              style: TextStyle(
+                                color: Color(0xFF192231),
+                                fontSize: 10,
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w700,
+                                height: 1,
+                                letterSpacing: 0.10,
                               ),
                             ),
-                          ),
-                        ),
-                      ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
                   Stack(
@@ -601,114 +531,128 @@ class _HomePageState extends State<HomePage> {
                     primary: false,
                     padding: EdgeInsets.zero,
                     children: dummyData.map((record) {
-                      return Container(
-                        width: MediaQuery.of(context).size.width,
-                        margin: EdgeInsets.only(
-                            top: MediaQuery.of(context).size.height * 0.015),
-                        padding: EdgeInsets.symmetric(
-                            horizontal:
-                                MediaQuery.of(context).size.width * 0.05,
-                            vertical:
-                                MediaQuery.of(context).size.height * 0.02),
-                        height: MediaQuery.of(context).size.height * 0.14,
-                        decoration: BoxDecoration(
-                          color: surfaceBright,
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 2,
-                              blurRadius: 5,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          children: [
-                            Image.asset(
-                              record.imagePath,
-                              width: MediaQuery.of(context).size.width * 0.2,
-                              fit: BoxFit.fill,
-                            ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.03,
-                            ),
-                            Expanded(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.005,
-                                  ),
-                                  Text(
-                                    dateFormatter(record.date),
-                                    style: const TextStyle(
-                                      color: Color(0xFF74747E),
-                                      fontSize: 10,
-                                      fontFamily: 'Poppins',
-                                      fontWeight: FontWeight.w500,
-                                      height: 1,
-                                      letterSpacing: 0.50,
-                                    ),
-                                    textAlign: TextAlign.start,
-                                  ),
-                                  SizedBox(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.012,
-                                  ),
-                                  Text(
-                                    record.title,
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 16,
-                                      fontFamily: 'Poppins',
-                                      fontWeight: FontWeight.w600,
-                                      height: 1.2,
-                                      letterSpacing: 0.15,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.013,
-                                  ),
-                                  Row(
-                                    children: [
-                                      for (int i = 0;
-                                          i < record.tags.length;
-                                          i++) ...[
-                                        if (i == record.tags.length - 1)
-                                          Text(
-                                            record.tags[i],
-                                            style: const TextStyle(
-                                              color: Color(0xFF5674A7),
-                                              fontSize: 11,
-                                              fontFamily: 'Poppins',
-                                              fontWeight: FontWeight.w500,
-                                              height: 1,
-                                              letterSpacing: 0.50,
-                                            ),
-                                          ),
-                                        if (i != record.tags.length - 1)
-                                          Text(
-                                            "${record.tags[i]} ",
-                                            style: const TextStyle(
-                                              color: Color(0xFF5674A7),
-                                              fontSize: 11,
-                                              fontFamily: 'Poppins',
-                                              fontWeight: FontWeight.w500,
-                                              height: 1,
-                                              letterSpacing: 0.50,
-                                            ),
-                                          ),
-                                      ]
-                                    ],
-                                  )
-                                ],
+                      return GestureDetector(
+                        onTap: () {
+                          if (_auth.isAnonymous()) {
+                            showDialog(
+                                context: context,
+                                builder: (context) => anonymousModal());
+                          } else {
+                            // Connect article panggil page article
+                          }
+                        },
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          margin: EdgeInsets.only(
+                              top: MediaQuery.of(context).size.height * 0.015),
+                          padding: EdgeInsets.symmetric(
+                              horizontal:
+                                  MediaQuery.of(context).size.width * 0.05,
+                              vertical:
+                                  MediaQuery.of(context).size.height * 0.02),
+                          height: MediaQuery.of(context).size.height * 0.14,
+                          decoration: BoxDecoration(
+                            color: surfaceBright,
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 2,
+                                blurRadius: 5,
+                                offset: const Offset(0, 2),
                               ),
-                            )
-                          ],
+                            ],
+                          ),
+                          child: Row(
+                            children: [
+                              Image.asset(
+                                record.imagePath,
+                                width: MediaQuery.of(context).size.width * 0.2,
+                                fit: BoxFit.fill,
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.03,
+                              ),
+                              Expanded(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.005,
+                                    ),
+                                    Text(
+                                      dateFormatter(record.date),
+                                      style: const TextStyle(
+                                        color: Color(0xFF74747E),
+                                        fontSize: 10,
+                                        fontFamily: 'Poppins',
+                                        fontWeight: FontWeight.w500,
+                                        height: 1,
+                                        letterSpacing: 0.50,
+                                      ),
+                                      textAlign: TextAlign.start,
+                                    ),
+                                    SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.012,
+                                    ),
+                                    Text(
+                                      record.title,
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                        fontFamily: 'Poppins',
+                                        fontWeight: FontWeight.w600,
+                                        height: 1.2,
+                                        letterSpacing: 0.15,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.013,
+                                    ),
+                                    Row(
+                                      children: [
+                                        for (int i = 0;
+                                            i < record.tags.length;
+                                            i++) ...[
+                                          if (i == record.tags.length - 1)
+                                            Text(
+                                              record.tags[i],
+                                              style: const TextStyle(
+                                                color: Color(0xFF5674A7),
+                                                fontSize: 11,
+                                                fontFamily: 'Poppins',
+                                                fontWeight: FontWeight.w500,
+                                                height: 1,
+                                                letterSpacing: 0.50,
+                                              ),
+                                            ),
+                                          if (i != record.tags.length - 1)
+                                            Text(
+                                              "${record.tags[i]} ",
+                                              style: const TextStyle(
+                                                color: Color(0xFF5674A7),
+                                                fontSize: 11,
+                                                fontFamily: 'Poppins',
+                                                fontWeight: FontWeight.w500,
+                                                height: 1,
+                                                letterSpacing: 0.50,
+                                              ),
+                                            ),
+                                        ]
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       );
                     }).toList(),
@@ -717,6 +661,113 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             const SizedBox(height: 32)
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class anonymousModal extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: onPrimary,
+      content: Container(
+        width: MediaQuery.of(context).size.width * 0.8,
+        height: MediaQuery.of(context).size.height * 0.26,
+        padding: EdgeInsets.only(
+            left: MediaQuery.of(context).size.width * 0.03,
+            right: MediaQuery.of(context).size.width * 0.03,
+            top: MediaQuery.of(context).size.height * 0.015),
+        child: Column(
+          children: [
+            const FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                "Oops...",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 22,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w400,
+                  height: 1,
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            const Text(
+              'This feature is only available for NutriBuddies users. Please sign in first to your account.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 16,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w500,
+                height: 1.4,
+                letterSpacing: 0.15,
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Authenticate()),
+                );
+              },
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.74,
+                height: MediaQuery.of(context).size.height * 0.05,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    color: primary, borderRadius: BorderRadius.circular(100)),
+                child: const Text(
+                  "Sign in",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w500,
+                    height: 1,
+                    letterSpacing: 0.10,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.74,
+                height: MediaQuery.of(context).size.height * 0.04,
+                alignment: Alignment.center,
+                decoration:
+                    BoxDecoration(borderRadius: BorderRadius.circular(100)),
+                child: const Text(
+                  "Later",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Color(0xFF5674A7),
+                    fontSize: 12,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w700,
+                    height: 1,
+                    letterSpacing: 0.50,
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),

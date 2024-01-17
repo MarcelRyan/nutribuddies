@@ -143,7 +143,7 @@ class _TrackerContentState extends State<TrackerContent> {
     final tracker = Provider.of<Trackers?>(context);
     final users = Provider.of<Users?>(context);
     Nutritions currentNutritions = Nutritions(
-        calories: 10, proteins: 0, fiber: 0, fats: 0, carbs: 0, iron: 0);
+        calories: 0, proteins: 0, fiber: 0, fats: 0, carbs: 0, iron: 0);
     Nutritions maxNutritions = Nutritions(
         calories: 100,
         proteins: 100,
@@ -197,12 +197,12 @@ class _TrackerContentState extends State<TrackerContent> {
                               Kids? firstKid = kidSnapshot.data;
                               selectedValue = firstKid?.uid;
                               return DropdownButtonFormField<String>(
-                                value: selectedValue,
+                                value: widget.kidUid,
                                 onChanged: (String? newValue) {
                                   widget.updateKidUid(newValue ?? '');
-                                  setState(() {
-                                    selectedValue = newValue;
-                                  });
+                                  // setState(() {
+                                  //   selectedValue = newValue;
+                                  // });
                                 },
                                 items: kidsList.map<DropdownMenuItem<String>>(
                                   (Kids kid) {

@@ -1,13 +1,13 @@
 class Kids {
   final String uid;
   final String parentUid;
-  final String? displayName;
-  final DateTime dateOfBirth;
-  final String gender;
-  final double currentHeight;
-  final double currentWeight;
-  final double bornWeight;
-  final String? profilePictureUrl;
+  String? displayName;
+  DateTime dateOfBirth;
+  String gender;
+  double currentHeight;
+  double currentWeight;
+  double bornWeight;
+  String? profilePictureUrl;
 
   Kids(
       {required this.uid,
