@@ -200,9 +200,6 @@ class _TrackerContentState extends State<TrackerContent> {
                                 value: widget.kidUid,
                                 onChanged: (String? newValue) {
                                   widget.updateKidUid(newValue ?? '');
-                                  // setState(() {
-                                  //   selectedValue = newValue;
-                                  // });
                                 },
                                 items: kidsList.map<DropdownMenuItem<String>>(
                                   (Kids kid) {

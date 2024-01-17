@@ -3,10 +3,12 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nutribuddies/constant/colors.dart';
 import 'package:nutribuddies/services/auth.dart';
 import 'package:nutribuddies/widgets/wrapper.dart';
+import 'package:nutribuddies/services/settings.dart';
 
 class SettingsPage extends StatelessWidget {
   SettingsPage({super.key});
   final AuthService _auth = AuthService();
+  final SettingsService _settings = SettingsService();
 
   @override
   Widget build(BuildContext context) {
@@ -203,7 +205,7 @@ class SettingsPage extends StatelessWidget {
               alignment: Alignment.topLeft,
               child: TextButton.icon(
                 onPressed: () {
-                  // ntr ganti
+                  _settings.redirectEmail();
                 },
                 icon: const Icon(
                   Icons.contact_mail_rounded,

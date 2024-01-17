@@ -47,6 +47,7 @@ dependencies:
   uuid: ^4.2.2
   google_sign_in: ^6.2.1
   carousel_slider: ^4.2.1
+  url_launcher: ^6.2.3
 
 dev_dependencies:
   flutter_test:
