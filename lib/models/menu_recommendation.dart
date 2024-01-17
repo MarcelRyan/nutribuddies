@@ -80,3 +80,31 @@ class RecommendationAnswers {
     };
   }
 }
+
+class MenuRecommendation {
+  List<String> recommendations;
+  String kidUid;
+  String parentUid;
+
+  MenuRecommendation({
+    required this.recommendations,
+    required this.kidUid,
+    required this.parentUid,
+  });
+
+  factory MenuRecommendation.fromJson(Map<String, dynamic> json) {
+    return MenuRecommendation(
+      recommendations: List<String>.from(json['recommendations']),
+      kidUid: json['kidUid'],
+      parentUid: json['parentUid'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'recommendations': recommendations,
+      'kidUid': kidUid,
+      'parentUid': parentUid,
+    };
+  }
+}

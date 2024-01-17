@@ -28,9 +28,11 @@ class MenuRecommendationService {
     }
   }
 
-  Future<List<Menu>?> getMenuRecommendation() async {
+  Future<List<Menu>?> getMenuRecommendation(
+      String parentUid, String kidUid) async {
     try {
-      List<Menu> menus = await DatabaseService(uid: '').getMenuRecommendation();
+      List<Menu> menus = await DatabaseService(uid: '')
+          .getMenuRecommendation(parentUid, kidUid);
       return menus;
     } catch (e) {
       return null;

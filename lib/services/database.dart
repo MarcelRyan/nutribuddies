@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:nutribuddies/models/meals.dart';
 import 'package:nutribuddies/models/menu_recommendation.dart';
 import 'package:nutribuddies/models/tracker.dart';
 import 'package:nutribuddies/models/nutritions.dart';
+import 'package:http/http.dart' as http;
 
 import '../models/foods.dart';
 import '../models/kids.dart';
@@ -27,6 +30,9 @@ class DatabaseService {
 
   final CollectionReference menuCollection =
       FirebaseFirestore.instance.collection('menu');
+
+  final CollectionReference menuRecommendationCollection =
+      FirebaseFirestore.instance.collection('menu_recommendation');
 
   final CollectionReference answersCollection =
       FirebaseFirestore.instance.collection('qna_menu_recommendation');
@@ -829,6 +835,29 @@ class DatabaseService {
     }
   }
 
+  // Get Available Menu Recommendation
+  Future<MenuRecommendation> getAvailMenuRecommendation(
+      String parentUid, String kidUid) async {
+    QuerySnapshot querySnapshot = await menuRecommendationCollection
+        .where('parentUid', isEqualTo: parentUid)
+        .where('kidUid', isEqualTo: kidUid)
+        .limit(1)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      Map<String, dynamic> data =
+          querySnapshot.docs.first.data() as Map<String, dynamic>;
+      return MenuRecommendation(
+          recommendations:
+              (data["recommendations"] as List<dynamic>).cast<String>(),
+          kidUid: kidUid,
+          parentUid: parentUid);
+    } else {
+      return MenuRecommendation(
+          recommendations: ["failed"], kidUid: kidUid, parentUid: parentUid);
+    }
+  }
+
   // Add QnA Answers Menu Recommendation
   Future<void> saveQnARecommendation(
       Map<String, dynamic> answers, String kidUid, String parentUid) async {
@@ -846,15 +875,98 @@ class DatabaseService {
     }
   }
 
-  // Get Menu Recommendation
-  Future<List<Menu>> getMenuRecommendation() async {
-    QuerySnapshot querySnapshot = await menuCollection.get();
+  // Save Menu Recommendation
+  Future<void> saveMenuRecommendation(
+      List<String> recommendations, String kidUid, String parentUid) async {
+    QuerySnapshot querySnapshot = await menuRecommendationCollection
+        .where('parentUid', isEqualTo: parentUid)
+        .where('kidUid', isEqualTo: kidUid)
+        .limit(1)
+        .get();
 
-    if (querySnapshot.docs.isNotEmpty) {
-      return querySnapshot.docs
-          .map((doc) => Menu.fromJson(doc.data() as Map<String, dynamic>))
-          .toList();
-    } else {
+    if (querySnapshot.docs.isEmpty) {
+      MenuRecommendation newData = MenuRecommendation(
+          recommendations: recommendations,
+          kidUid: kidUid,
+          parentUid: parentUid);
+
+      await menuRecommendationCollection.add(newData.toJson());
+    }
+  }
+
+  Future<List<Menu>> getMenuRecommendation(
+      String parentUid, String kidUid) async {
+    try {
+      // Get RecommendationAnswers
+      RecommendationAnswers recommendationAnswers =
+          await getRecommendationAnswers(parentUid, kidUid);
+
+      // Check if answers retrieval was successful
+      if (recommendationAnswers.answers["status"] == "failed") {
+        return [];
+      }
+
+      // Check if menu recommendation already exists
+      MenuRecommendation menuRecommendation =
+          await getAvailMenuRecommendation(parentUid, kidUid);
+
+      if (menuRecommendation.recommendations.isNotEmpty &&
+          menuRecommendation.recommendations[0] != "failed") {
+        QuerySnapshot querySnapshot = await menuCollection
+            .where(FieldPath.documentId,
+                whereIn: menuRecommendation.recommendations)
+            .get();
+
+        if (querySnapshot.docs.isNotEmpty) {
+          return querySnapshot.docs
+              .map((doc) => Menu.fromJson(doc.data() as Map<String, dynamic>))
+              .toList();
+        }
+        return [];
+      } else {
+        // Hit the API with obtained answers
+        const String apiUrl =
+            "https://nutribuddies-db33c.et.r.appspot.com/predict";
+        final String requestBody = json.encode(recommendationAnswers.answers);
+
+        try {
+          // Dummy HTTP request (replace with actual implementation)
+          final apiResponse = await http.post(Uri.parse(apiUrl),
+              body: requestBody, headers: {'Content-Type': 'application/json'});
+
+          if (apiResponse.statusCode == 200) {
+            // Parse the API response to get the UID
+            final Map<String, dynamic> apiResponseBody =
+                json.decode(apiResponse.body);
+
+            // Get menuCollection based on UID from API response
+            List<String> recommendationsUIDs =
+                (apiResponseBody["recommendations"] as List<dynamic>)
+                    .map((e) => e.toString())
+                    .toList();
+
+            // Save menu recommendation
+            await saveMenuRecommendation(
+                recommendationsUIDs, kidUid, parentUid);
+
+            // Get list of menus
+            QuerySnapshot querySnapshot = await menuCollection
+                .where(FieldPath.documentId, whereIn: recommendationsUIDs)
+                .get();
+
+            if (querySnapshot.docs.isNotEmpty) {
+              return querySnapshot.docs
+                  .map((doc) =>
+                      Menu.fromJson(doc.data() as Map<String, dynamic>))
+                  .toList();
+            }
+          }
+        } catch (e) {
+          return [];
+        }
+        return [];
+      }
+    } catch (e) {
       return [];
     }
   }

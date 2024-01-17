@@ -1,3 +1,5 @@
+// ignore_for_file: no_logic_in_create_state
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nutribuddies/constant/colors.dart';
@@ -229,7 +231,7 @@ class _MenuRecommendationState extends State<MenuRecommendation> {
                           if (snapshot.connectionState ==
                               ConnectionState.done) {
                             if (snapshot.data == true) {
-                              return const MenuRecommendationList();
+                              return MenuRecommendationList(kidUid: kidUid);
                             } else {
                               return QnaPage(saveAnswers: saveAnswer);
                             }
@@ -441,13 +443,24 @@ class QnaCard extends StatelessWidget {
 }
 
 class MenuRecommendationList extends StatefulWidget {
-  const MenuRecommendationList({Key? key}) : super(key: key);
+  final String kidUid;
+
+  const MenuRecommendationList({Key? key, required this.kidUid})
+      : super(key: key);
 
   @override
   State<MenuRecommendationList> createState() => _MenuRecommendationListState();
 }
 
 class _MenuRecommendationListState extends State<MenuRecommendationList> {
+  late final String kidUid;
+
+  @override
+  void initState() {
+    super.initState();
+    kidUid = widget.kidUid;
+  }
+
   List<String> menus = [
     'Menu 1',
     'Menu 2',
@@ -459,11 +472,14 @@ class _MenuRecommendationListState extends State<MenuRecommendationList> {
 
   Future<List<Menu>?> getMenus(BuildContext context) async {
     try {
+      final Users? users = Provider.of<Users?>(context, listen: false);
+
       // Initialize menu recommendation service
       final MenuRecommendationService menuRecommendation =
           MenuRecommendationService();
 
-      final menus = await menuRecommendation.getMenuRecommendation();
+      final menus =
+          await menuRecommendation.getMenuRecommendation(users!.uid, kidUid);
 
       return menus;
     } catch (error) {
@@ -553,6 +569,7 @@ class MenuCard extends StatelessWidget {
     return Card(
       elevation: 3,
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+      surfaceTintColor: surfaceBright,
       child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Column(
