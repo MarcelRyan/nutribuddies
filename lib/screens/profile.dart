@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:nutribuddies/constant/colors.dart';
 import 'package:nutribuddies/models/kids.dart';
@@ -8,6 +9,7 @@ import 'package:nutribuddies/services/database.dart';
 import 'package:nutribuddies/services/profile.dart';
 import 'package:provider/provider.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:nutribuddies/screens/settings/settings.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -47,7 +49,12 @@ class _ProfileState extends State<Profile> {
                           MediaQuery.of(context).size.width * 0.03,
                           0),
                       child: IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SettingsPage()));
+                          },
                           icon: const Icon(
                             Icons.settings,
                             size: 30,

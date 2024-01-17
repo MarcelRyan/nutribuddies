@@ -51,139 +51,15 @@ class _HomeState extends State<Home> {
       null,
       AppBar(
         title: const Text('Article'),
-        actions: [
-          ElevatedButton(
-            onPressed: () async {
-              await _auth.signOut();
-              Fluttertoast.showToast(msg: "Signed Out");
-              // ignore: use_build_context_synchronously
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => Wrapper(
-                          result: false,
-                        )),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.white,
-              backgroundColor: Colors.blue,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-            ),
-            child: const Row(
-              children: [
-                Icon(Icons.person),
-                SizedBox(width: 8),
-                Text('Logout'),
-              ],
-            ),
-          )
-        ],
       ),
       AppBar(
         title: const Text('Tracker'),
-        actions: [
-          ElevatedButton(
-            onPressed: () async {
-              await _auth.signOut();
-              Fluttertoast.showToast(msg: "Signed Out");
-              // ignore: use_build_context_synchronously
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => Wrapper(
-                          result: false,
-                        )),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.white,
-              backgroundColor: Colors.blue,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-            ),
-            child: const Row(
-              children: [
-                Icon(Icons.person),
-                SizedBox(width: 8),
-                Text('Logout'),
-              ],
-            ),
-          )
-        ],
       ),
       AppBar(
         title: const Text('Menu'),
-        actions: [
-          ElevatedButton(
-            onPressed: () async {
-              await _auth.signOut();
-              Fluttertoast.showToast(msg: "Signed Out");
-              // ignore: use_build_context_synchronously
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => Wrapper(
-                          result: false,
-                        )),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.white,
-              backgroundColor: Colors.blue,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-            ),
-            child: const Row(
-              children: [
-                Icon(Icons.person),
-                SizedBox(width: 8),
-                Text('Logout'),
-              ],
-            ),
-          )
-        ],
       ),
       AppBar(
         title: const Text('Profile'),
-        actions: [
-          ElevatedButton(
-            onPressed: () async {
-              await _auth.signOut();
-              Fluttertoast.showToast(msg: "Signed Out");
-              // ignore: use_build_context_synchronously
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => Wrapper(
-                          result: false,
-                        )),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.white,
-              backgroundColor: Colors.blue,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-            ),
-            child: const Row(
-              children: [
-                Icon(Icons.person),
-                SizedBox(width: 8),
-                Text('Logout'),
-              ],
-            ),
-          )
-        ],
       ),
     ];
   }
