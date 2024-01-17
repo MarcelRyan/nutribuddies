@@ -265,241 +265,168 @@ class _HomePageState extends State<HomePage> {
                 spacing: MediaQuery.of(context).size.width * 0.026,
                 runSpacing: MediaQuery.of(context).size.height * 0.02,
                 children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.18,
-                    height: MediaQuery.of(context).size.height * 0.08,
-                    decoration: BoxDecoration(
+                  GestureDetector(
+                    onTap: () {
+                      widget.onIndexChanged(2);
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.18,
+                      height: MediaQuery.of(context).size.height * 0.08,
+                      decoration: BoxDecoration(
                         color: primaryContainer,
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.18,
-                          height: MediaQuery.of(context).size.height * 0.08,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              widget.onIndexChanged(2);
-                            },
-                            style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(100)),
-                                backgroundColor: primaryContainer,
-                                foregroundColor: white,
-                                elevation: 0),
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.22,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    "assets/Home/track.png",
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.2,
-                                    height: MediaQuery.of(context).size.height *
-                                        0.028,
-                                    fit: BoxFit.fill,
-                                  ),
-                                  SizedBox(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.003,
-                                  ),
-                                  const FittedBox(
-                                    fit: BoxFit.scaleDown,
-                                    child: Text(
-                                      "Track",
-                                      style: TextStyle(
-                                        color: Color(0xFF192231),
-                                        fontSize: 10,
-                                        fontFamily: 'Poppins',
-                                        fontWeight: FontWeight.w500,
-                                        height: 1,
-                                        letterSpacing: 0.10,
-                                      ),
-                                    ),
-                                  )
-                                ],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            "assets/Home/track.png",
+                            width: MediaQuery.of(context).size.width * 0.08,
+                            height: MediaQuery.of(context).size.height * 0.03,
+                            fit: BoxFit.fill,
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.003,
+                          ),
+                          const FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              "Track",
+                              style: TextStyle(
+                                color: Color(0xFF192231),
+                                fontSize: 10,
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w700,
+                                height: 1,
+                                letterSpacing: 0.10,
                               ),
                             ),
-                          ),
-                        ),
-                      ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.18,
-                    height: MediaQuery.of(context).size.height * 0.08,
-                    decoration: BoxDecoration(
+                  GestureDetector(
+                    onTap: () {
+                      widget.onIndexChanged(3);
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.18,
+                      height: MediaQuery.of(context).size.height * 0.08,
+                      decoration: BoxDecoration(
                         color: primaryContainer,
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.18,
-                          height: MediaQuery.of(context).size.height * 0.08,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              widget.onIndexChanged(3);
-                            },
-                            style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(100)),
-                                backgroundColor: primaryContainer,
-                                foregroundColor: white,
-                                elevation: 0),
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.22,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    "assets/Home/menu.png",
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.2,
-                                    height: MediaQuery.of(context).size.height *
-                                        0.028,
-                                    fit: BoxFit.fill,
-                                  ),
-                                  SizedBox(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.003,
-                                  ),
-                                  const FittedBox(
-                                    fit: BoxFit.scaleDown,
-                                    child: Text(
-                                      "Menu",
-                                      style: TextStyle(
-                                        color: Color(0xFF192231),
-                                        fontSize: 10,
-                                        fontFamily: 'Poppins',
-                                        fontWeight: FontWeight.w500,
-                                        height: 1,
-                                        letterSpacing: 0.10,
-                                      ),
-                                    ),
-                                  )
-                                ],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            "assets/Home/menu.png",
+                            width: MediaQuery.of(context).size.width * 0.08,
+                            height: MediaQuery.of(context).size.height * 0.03,
+                            fit: BoxFit.fill,
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.003,
+                          ),
+                          const FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              "Menu",
+                              style: TextStyle(
+                                color: Color(0xFF192231),
+                                fontSize: 10,
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w700,
+                                height: 1,
+                                letterSpacing: 0.10,
                               ),
                             ),
-                          ),
-                        ),
-                      ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.18,
-                    height: MediaQuery.of(context).size.height * 0.08,
-                    decoration: BoxDecoration(
+                  GestureDetector(
+                    onTap: () {
+                      widget.onIndexChanged(1);
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.18,
+                      height: MediaQuery.of(context).size.height * 0.08,
+                      decoration: BoxDecoration(
                         color: primaryContainer,
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.18,
-                          height: MediaQuery.of(context).size.height * 0.08,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              widget.onIndexChanged(1);
-                            },
-                            style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(100)),
-                                backgroundColor: primaryContainer,
-                                foregroundColor: white,
-                                elevation: 0),
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.22,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    "assets/Home/article.png",
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.2,
-                                    height: MediaQuery.of(context).size.height *
-                                        0.028,
-                                    fit: BoxFit.fill,
-                                  ),
-                                  SizedBox(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.003,
-                                  ),
-                                  const FittedBox(
-                                    fit: BoxFit.scaleDown,
-                                    child: Text(
-                                      "Article",
-                                      style: TextStyle(
-                                        color: Color(0xFF192231),
-                                        fontSize: 10,
-                                        fontFamily: 'Poppins',
-                                        fontWeight: FontWeight.w900,
-                                        height: 1,
-                                        letterSpacing: 0.10,
-                                      ),
-                                    ),
-                                  )
-                                ],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            "assets/Home/article.png",
+                            width: MediaQuery.of(context).size.width * 0.08,
+                            height: MediaQuery.of(context).size.height * 0.03,
+                            fit: BoxFit.fill,
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.003,
+                          ),
+                          const FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              "Article",
+                              style: TextStyle(
+                                color: Color(0xFF192231),
+                                fontSize: 10,
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w700,
+                                height: 1,
+                                letterSpacing: 0.10,
                               ),
                             ),
-                          ),
-                        ),
-                      ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.18,
-                    height: MediaQuery.of(context).size.height * 0.08,
-                    decoration: BoxDecoration(
+                  GestureDetector(
+                    onTap: () {
+                      widget.onIndexChanged(5);
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.18,
+                      height: MediaQuery.of(context).size.height * 0.08,
+                      decoration: BoxDecoration(
                         color: primaryContainer,
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.18,
-                          height: MediaQuery.of(context).size.height * 0.08,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              widget.onIndexChanged(5);
-                            },
-                            style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(100)),
-                                backgroundColor: primaryContainer,
-                                foregroundColor: white,
-                                elevation: 0),
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.22,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    "assets/Home/forum.png",
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.2,
-                                    height: MediaQuery.of(context).size.height *
-                                        0.028,
-                                    fit: BoxFit.fill,
-                                  ),
-                                  SizedBox(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.003,
-                                  ),
-                                  const Text(
-                                    "Forum",
-                                    style: TextStyle(
-                                      color: Color(0xFF192231),
-                                      fontSize: 8.5,
-                                      fontFamily: 'Poppins',
-                                      fontWeight: FontWeight.w900,
-                                      height: 1,
-                                      letterSpacing: 0.10,
-                                    ),
-                                  )
-                                ],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            "assets/Home/forum.png",
+                            width: MediaQuery.of(context).size.width * 0.08,
+                            height: MediaQuery.of(context).size.height * 0.03,
+                            fit: BoxFit.fill,
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.003,
+                          ),
+                          const FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              "Forum",
+                              style: TextStyle(
+                                color: Color(0xFF192231),
+                                fontSize: 10,
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w700,
+                                height: 1,
+                                letterSpacing: 0.10,
                               ),
                             ),
-                          ),
-                        ),
-                      ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
                   Stack(
