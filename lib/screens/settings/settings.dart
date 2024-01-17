@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nutribuddies/constant/colors.dart';
+import 'package:nutribuddies/screens/coming_soon.dart';
+import 'package:nutribuddies/screens/settings/account_settings.dart';
 import 'package:nutribuddies/services/auth.dart';
 import 'package:nutribuddies/widgets/wrapper.dart';
 import 'package:nutribuddies/services/settings.dart';
+import 'package:nutribuddies/screens/settings/about_us.dart';
 
 class SettingsPage extends StatelessWidget {
   SettingsPage({super.key});
@@ -59,7 +62,10 @@ class SettingsPage extends StatelessWidget {
               alignment: Alignment.topLeft,
               child: TextButton.icon(
                 onPressed: () {
-                  // ntr ganti
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const AccountSettings()));
                 },
                 icon: const Icon(
                   Icons.email,
@@ -141,7 +147,8 @@ class SettingsPage extends StatelessWidget {
               alignment: Alignment.topLeft,
               child: TextButton.icon(
                 onPressed: () {
-                  // ntr ganti
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => const AboutUs()));
                 },
                 icon: const Icon(
                   Icons.info,
@@ -173,7 +180,10 @@ class SettingsPage extends StatelessWidget {
               alignment: Alignment.topLeft,
               child: TextButton.icon(
                 onPressed: () {
-                  // ntr ganti
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ComingSoon()));
                 },
                 icon: const Icon(
                   Icons.help,
@@ -241,6 +251,8 @@ class SettingsPage extends StatelessWidget {
                   onPressed: () async {
                     await _auth.signOut();
                     Fluttertoast.showToast(msg: "Signed Out");
+                    // ignore: use_build_context_synchronously
+                    Navigator.pop(context);
                     // ignore: use_build_context_synchronously
                     Navigator.pushReplacement(
                       context,
