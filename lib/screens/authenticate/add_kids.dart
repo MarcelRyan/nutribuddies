@@ -14,9 +14,12 @@ import 'package:nutribuddies/services/debouncer.dart';
 
 class AddKids extends StatefulWidget {
   bool fromSignUp;
+  bool fromProfile;
+
   AddKids({
     super.key,
     this.fromSignUp = true,
+    this.fromProfile = false,
   });
 
   @override
@@ -583,6 +586,7 @@ class _AddKidsState extends State<AddKids> {
                                                           Wrapper(
                                                             result: true,
                                                             goToHome: true,
+                                                            goToProfile: true,
                                                           )));
                                             }
                                           }

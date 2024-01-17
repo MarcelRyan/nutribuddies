@@ -11,10 +11,13 @@ import 'package:nutribuddies/screens/authenticate/add_kids.dart';
 class Wrapper extends StatelessWidget {
   bool goToHome;
   bool goToAddKids;
+  bool goToProfile;
+
   final bool result;
   Wrapper(
       {super.key,
       this.goToHome = false,
+      this.goToProfile = false,
       required this.result,
       this.goToAddKids = false});
 
@@ -24,6 +27,10 @@ class Wrapper extends StatelessWidget {
 
     if (user != null && result && goToHome) {
       goToHome = false;
+      if (goToProfile) {
+        goToProfile = false;
+        return const Home(initialIndex: 4);
+      }
       return const Home();
     } else if (user != null && result && goToAddKids) {
       goToAddKids = false;

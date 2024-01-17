@@ -78,7 +78,6 @@ class _MenuRecommendationState extends State<MenuRecommendation> {
 
       return answers?.answers["status"] != "failed";
     } catch (error) {
-      print(error.toString());
       return false;
     }
   }
@@ -347,6 +346,10 @@ class _QnaPageState extends State<QnaPage> {
           ),
           const SizedBox(height: 16),
           ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              surfaceTintColor: surfaceBright,
+              foregroundColor: primary,
+            ),
             onPressed: () async {
               // Validate that every question is answered
               bool allQuestionsAnswered = questions.every((question) =>
@@ -393,6 +396,8 @@ class QnaCard extends StatelessWidget {
     return Card(
       elevation: 3,
       margin: const EdgeInsets.symmetric(vertical: 8),
+      color: surfaceBright,
+      surfaceTintColor: surfaceBright,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
