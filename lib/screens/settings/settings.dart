@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nutribuddies/constant/colors.dart';
 import 'package:nutribuddies/screens/coming_soon.dart';
-import 'package:nutribuddies/screens/settings/account_settings.dart';
 import 'package:nutribuddies/services/auth.dart';
 import 'package:nutribuddies/widgets/wrapper.dart';
 import 'package:nutribuddies/services/settings.dart';
@@ -65,10 +64,10 @@ class SettingsPage extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const AccountSettings()));
+                          builder: (context) => const ComingSoon()));
                 },
                 icon: const Icon(
-                  Icons.email,
+                  Icons.account_circle,
                   color: primary,
                   size: 30,
                 ),
@@ -79,38 +78,6 @@ class SettingsPage extends StatelessWidget {
                     fit: BoxFit.scaleDown,
                     child: Text(
                       "Account Settings",
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        color: primary,
-                        fontSize: 24,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w500,
-                        letterSpacing: 0.15,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-            Align(
-              alignment: Alignment.topLeft,
-              child: TextButton.icon(
-                onPressed: () {
-                  // ntr ganti
-                },
-                icon: const Icon(
-                  Icons.account_circle,
-                  color: primary,
-                  size: 30,
-                ),
-                label: Container(
-                  alignment: Alignment.centerLeft,
-                  width: MediaQuery.of(context).size.width * 0.3,
-                  child: const FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Text(
-                      "Edit Profile",
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         color: primary,
