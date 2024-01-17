@@ -6,10 +6,10 @@ import 'package:intl/intl.dart';
 import 'package:nutribuddies/constant/colors.dart';
 import 'package:nutribuddies/models/kids.dart';
 import 'package:nutribuddies/models/user.dart';
+import 'package:nutribuddies/screens/forum.dart';
 import 'package:nutribuddies/screens/authenticate/authenticate.dart';
 import 'package:nutribuddies/services/auth.dart';
 import 'package:nutribuddies/services/database.dart';
-import 'package:nutribuddies/widgets/wrapper.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -390,7 +390,10 @@ class _HomePageState extends State<HomePage> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      widget.onIndexChanged(5);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const ForumPage()));
                     },
                     child: Container(
                       width: MediaQuery.of(context).size.width * 0.18,

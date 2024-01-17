@@ -1,5 +1,3 @@
-// ignore_for_file: library_private_types_in_public_api
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nutribuddies/constant/colors.dart';
@@ -278,7 +276,7 @@ class QnaPage extends StatefulWidget {
   const QnaPage({super.key, required this.saveAnswers});
 
   @override
-  _QnaPageState createState() => _QnaPageState();
+  State<QnaPage> createState() => _QnaPageState();
 }
 
 class _QnaPageState extends State<QnaPage> {
@@ -446,7 +444,7 @@ class MenuRecommendationList extends StatefulWidget {
   const MenuRecommendationList({Key? key}) : super(key: key);
 
   @override
-  _MenuRecommendationListState createState() => _MenuRecommendationListState();
+  State<MenuRecommendationList> createState() => _MenuRecommendationListState();
 }
 
 class _MenuRecommendationListState extends State<MenuRecommendationList> {

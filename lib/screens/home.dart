@@ -106,52 +106,6 @@ class _HomeState extends State<Home> {
   }
 }
 
-class ComingSoon {
-  static Widget buildComingSoonWidget() {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(40, 180, 40, 65),
-      child: Column(
-        children: [
-          Image.asset('assets/coming_soon.png'),
-          const SizedBox(
-            height: 20,
-          ),
-          const Text(
-            "We're still cooking our app",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 22,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w500,
-              height: 0.06,
-            ),
-          ),
-          const SizedBox(
-            height: 35,
-          ),
-          const Text(
-            "New features coming soon!",
-            textAlign: TextAlign.center,
-            softWrap: true,
-            style: TextStyle(
-              color: Color(0xFF74747E),
-              fontSize: 16,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w400,
-              height: 0.09,
-              letterSpacing: 0.50,
-            ),
-          ),
-          const SizedBox(
-            height: 90,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class DirectLogin extends StatelessWidget {
   const DirectLogin({super.key});
 
