@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:nutribuddies/constant/colors.dart';
 import 'package:nutribuddies/models/article.dart';
+import 'package:nutribuddies/screens/article_interest.dart';
+import 'package:nutribuddies/screens/article_view.dart';
 import 'package:provider/provider.dart';
 
 class ArticleList extends StatefulWidget {
@@ -33,6 +35,8 @@ class _ArticleListState extends State<ArticleList> with TickerProviderStateMixin
         backgroundColor: background,
         appBar: AppBar(
           backgroundColor: background,
+          elevation: 0,
+          shadowColor: Colors.transparent,
           title: const Text (
               'Article',
               style: TextStyle(
@@ -138,6 +142,7 @@ class _ArticleListState extends State<ArticleList> with TickerProviderStateMixin
                     left: MediaQuery.of(context).size.width * 0.03,
                     right: MediaQuery.of(context).size.width * 0.015,
                   ),
+                  underline: Container(),
                   icon: Icon(
                     Icons.arrow_drop_down,
                     color: selectedTopic=='All Topics' ? primary : Colors.white,
@@ -179,127 +184,123 @@ class _ArticleListState extends State<ArticleList> with TickerProviderStateMixin
         body: TabBarView(
           controller: _tabController,
           children: [
-            Container(
-              padding: EdgeInsets.fromLTRB(
-                  MediaQuery.of(context).size.width*0.08,
-                  MediaQuery.of(context).size.width*0.125,
-                  MediaQuery.of(context).size.width*0.08,
-                  MediaQuery.of(context).size.width*0.07
-              ),
-              child: Column(
-                children: [
-                  Column(
-                    children: [
-                      Container(
-                        // height: MediaQuery.of(context).size.height * 0.09,
-                        width: MediaQuery.of(context).size.width * 0.77,
-                        decoration: BoxDecoration(
-                            color: surfaceBright,
-                            borderRadius: const BorderRadius.all(
-                                Radius.circular(10)),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.4),
-                                offset: const Offset(2, 4),
-                                blurRadius: 5,
-                                spreadRadius: 1,
-                              ),
-                            ]),
-                        padding: EdgeInsets.fromLTRB(
-                            MediaQuery.of(context).size.width * 0.05,
-                            MediaQuery.of(context).size.height * 0.01,
-                            MediaQuery.of(context).size.width * 0.02,
-                            MediaQuery.of(context).size.height * 0.01
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: MediaQuery.of(context).size.width * 0.18,
-                              height: MediaQuery.of(context).size.height * 0.125,
-                              padding: EdgeInsets.symmetric(
-                                vertical: MediaQuery.of(context). size.height * 0.01
-                              ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(50),
-                              ),
-                              clipBehavior: Clip.antiAlias,
-                              child: Image.asset('assets/Article/article_topic_6_cooking.png'),
-                            ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.025,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Date",
-                                  style: const TextStyle(
-                                    color: outline,
-                                    fontFamily: 'Poppins',
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                Container(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    "Judul",
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontFamily: 'Poppins',
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.w600,
-                                      letterSpacing: 0.1,
-                                    )
-                                  ),
-                                ),
-                                Text(
-                                  "#Topics",
-                                  style: const TextStyle(
-                                    color: primary,
-                                    fontFamily: 'Poppins',
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  )
-                ],
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.fromLTRB(
-                  MediaQuery.of(context).size.width*0.08,
-                  MediaQuery.of(context).size.width*0.125,
-                  MediaQuery.of(context).size.width*0.08,
-                  MediaQuery.of(context).size.width*0.07
-              ),
-              child: Column(
-                children: [
-                  Text('Latest')
-                ],
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.fromLTRB(
-                  MediaQuery.of(context).size.width*0.08,
-                  MediaQuery.of(context).size.width*0.125,
-                  MediaQuery.of(context).size.width*0.08,
-                  MediaQuery.of(context).size.width*0.07
-              ),
-              child: Column(
-                children: [
-                  Text('Topic Filter')
-                ],
-              ),
-            ),
+            ArticleContainersList(),
+            ArticleContainersList(),
+            ArticleContainersList(),
           ],)
+    );
+  }
+}
+
+class ArticleContainersList extends StatefulWidget {
+  @override
+  State<ArticleContainersList> createState() => _ArticleContainersListState();
+}
+
+class _ArticleContainersListState extends State<ArticleContainersList>{
+  @override
+  Widget build(BuildContext context){
+    return Scaffold(
+      backgroundColor: background,
+      body: Container(
+        padding: EdgeInsets.fromLTRB(
+            MediaQuery.of(context).size.width*0.08,
+            MediaQuery.of(context).size.width*0.125,
+            MediaQuery.of(context).size.width*0.08,
+            MediaQuery.of(context).size.width*0.07
+        ),
+        child: ListView.builder(
+          itemCount: 5, // Specify the number of times you want to loop
+          itemBuilder: (context, index) {
+            return InkWell(
+              onTap: (){
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const ArticleView())
+                );
+              },
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.77,
+                decoration: BoxDecoration(
+                  color: surfaceBright,
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.4),
+                      offset: const Offset(2, 4),
+                      blurRadius: 5,
+                      spreadRadius: 1,
+                    ),
+                  ],
+                ),
+                padding: EdgeInsets.fromLTRB(
+                  MediaQuery.of(context).size.width * 0.05,
+                  MediaQuery.of(context).size.height * 0.01,
+                  MediaQuery.of(context).size.width * 0.02,
+                  MediaQuery.of(context).size.height * 0.01,
+                ),
+                margin: EdgeInsets.only(bottom: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.18,
+                      height: MediaQuery.of(context).size.height * 0.125,
+                      padding: EdgeInsets.symmetric(
+                        vertical: MediaQuery.of(context).size.height * 0.01,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      clipBehavior: Clip.antiAlias,
+                      child: Image.asset('assets/Article/article_topic_6_cooking.png'),
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.025,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Date",
+                          style: const TextStyle(
+                            color: outline,
+                            fontFamily: 'Poppins',
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Judul",
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontFamily: 'Poppins',
+                              fontSize: 22,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 0.1,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          "#Topics",
+                          style: const TextStyle(
+                            color: primary,
+                            fontFamily: 'Poppins',
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            );
+          },
+        )
+      ),
     );
   }
 }
