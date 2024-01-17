@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:nutribuddies/screens/profile.dart';
 import 'package:nutribuddies/services/auth.dart';
 import 'package:nutribuddies/constant/text_input_decoration.dart';
 import 'package:nutribuddies/widgets/loading.dart';
@@ -12,7 +13,11 @@ import 'package:intl/intl.dart';
 import 'package:nutribuddies/services/debouncer.dart';
 
 class AddKids extends StatefulWidget {
-  const AddKids({super.key});
+  bool fromSignUp;
+  AddKids({
+    super.key,
+    this.fromSignUp = true,
+  });
 
   @override
   State<AddKids> createState() => _AddKidsState();
@@ -46,7 +51,26 @@ class _AddKidsState extends State<AddKids> {
             backgroundColor: background,
             body: Column(
               children: [
-                Image.asset('assets/Login/Group2(2).png'),
+                Stack(alignment: AlignmentDirectional.centerStart, children: [
+                  Image.asset('assets/Login/Group2(2).png'),
+                  if (!widget.fromSignUp)
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(
+                        MediaQuery.of(context).size.width * 0.05,
+                        MediaQuery.of(context).size.height * 0.01,
+                        MediaQuery.of(context).size.width * 0,
+                        MediaQuery.of(context).size.height * 0,
+                      ),
+                      child: IconButton(
+                        icon: const Icon(Icons.arrow_back),
+                        color: black,
+                        iconSize: 30.0,
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ),
+                ]),
                 ClipRect(
                   child: Transform.translate(
                     offset: const Offset(0, -0),
@@ -537,15 +561,30 @@ class _AddKidsState extends State<AddKids> {
                                           if (result == false) {
                                             setState(() => loading = false);
                                           } else {
-                                            // ignore: use_build_context_synchronously
-                                            Navigator.pushReplacement(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) => Wrapper(
-                                                        result: true,
-                                                        goToHome: true,
-                                                      )),
-                                            );
+                                            if (widget.fromSignUp) {
+                                              // ignore: use_build_context_synchronously
+                                              Navigator.pushReplacement(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        Wrapper(
+                                                          result: true,
+                                                          goToHome: true,
+                                                        )),
+                                              );
+                                            } else {
+                                              // ignore: use_build_context_synchronously
+                                              Navigator.pop(context);
+                                              // ignore: use_build_context_synchronously
+                                              Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          Wrapper(
+                                                            result: true,
+                                                            goToHome: true,
+                                                          )));
+                                            }
                                           }
                                         }
                                       },

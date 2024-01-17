@@ -27,7 +27,7 @@ class Wrapper extends StatelessWidget {
       return const Home();
     } else if (user != null && result && goToAddKids) {
       goToAddKids = false;
-      return const AddKids();
+      return AddKids();
     } else if (user != null) {
       return FutureBuilder(
         future: checkIfUserHasKids(context),
@@ -36,7 +36,7 @@ class Wrapper extends StatelessWidget {
             if (snapshot.data == true) {
               return const Home();
             } else {
-              return const AddKids();
+              return AddKids();
             }
           } else {
             return const Loading();
