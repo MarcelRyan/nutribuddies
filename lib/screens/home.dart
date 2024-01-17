@@ -1,4 +1,4 @@
-// ignore_for_file: library_private_types_in_public_api
+// ignore_for_file: library_private_types_in_public_api, no_logic_in_create_state
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -12,18 +12,22 @@ import 'package:nutribuddies/widgets/wrapper.dart';
 import 'package:nutribuddies/screens/article_interest.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+  final int initialIndex;
+
+  const Home({Key? key, this.initialIndex = 0}) : super(key: key);
 
   @override
-  _HomeState createState() => _HomeState();
+  _HomeState createState() => _HomeState(initialIndex);
 }
 
 class _HomeState extends State<Home> {
-  int _currentIndex = 0;
+  int _currentIndex;
   final AuthService _auth = AuthService();
 
   late List<Widget> _tabs;
   late List<AppBar?> _appBar;
+
+  _HomeState(this._currentIndex);
 
   @override
   void initState() {

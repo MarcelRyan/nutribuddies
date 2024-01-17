@@ -173,6 +173,7 @@ class _ProfileState extends State<Profile> {
                                     MaterialPageRoute(
                                         builder: (context) => AddKids(
                                               fromSignUp: false,
+                                              fromProfile: true,
                                             )));
                               },
                               style: ElevatedButton.styleFrom(
