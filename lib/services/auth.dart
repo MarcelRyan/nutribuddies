@@ -16,12 +16,14 @@ class AuthService {
 
   // create user object from firebase
   Users? _user(User? user) {
+    List<String> topicInterest = [];
     if (user != null) {
       return Users(
           uid: user.uid,
           displayName: user.displayName,
           email: user.email,
-          profilePictureUrl: user.photoURL);
+          profilePictureUrl: user.photoURL,
+          topicsInterest: topicInterest);
     } else {
       return null;
     }
@@ -109,13 +111,15 @@ class AuthService {
           email: email, password: password);
       User user = result.user!;
       String defaultPhotoPath = 'default_profile.png';
+      List<String> topicInterest = [];
       String defaultPhotoUrl =
           await DatabaseService(uid: user.uid).getPhotoUrl(defaultPhotoPath);
       await DatabaseService(uid: user.uid).updateUserData(
           uid: user.uid,
           displayName: displayName,
           email: email,
-          profilePicutreUrl: defaultPhotoUrl);
+          profilePictureUrl: defaultPhotoUrl,
+          topicInterest: topicInterest);
       return _user(user);
     } catch (e) {
       Fluttertoast.showToast(

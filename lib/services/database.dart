@@ -39,8 +39,8 @@ class DatabaseService {
     required String uid,
     required String displayName,
     required String email,
-    String? profilePictureUrl,
-    required String profilePicutreUrl,
+    required String profilePictureUrl,
+    required List<String> topicInterest,
   }) async {
     assert(uid.isNotEmpty, 'UID must not be empty');
     assert(displayName.isNotEmpty, 'Display Name must not be empty');
@@ -50,11 +50,9 @@ class DatabaseService {
       'uid': uid,
       'displayName': displayName,
       'email': email,
+      'profilePictureUrl': profilePictureUrl,
+      'topicInterest': topicInterest,
     };
-
-    if (profilePictureUrl != null) {
-      data['profilePictureUrl'] = profilePictureUrl;
-    }
 
     await usersCollection.doc(uid).set(data);
   }
@@ -78,11 +76,19 @@ class DatabaseService {
     if (querySnapshot.docs.isNotEmpty) {
       Map<String, dynamic> data =
           querySnapshot.docs.first.data() as Map<String, dynamic>;
+      List<dynamic>? rawTopicsInterest = data['topicsInterest'];
+
+      List<String> topicsInterest =
+          (rawTopicsInterest != null && rawTopicsInterest.isNotEmpty)
+              ? List<String>.from(rawTopicsInterest.cast<String>())
+              : [];
+
       return Users(
         uid: data['uid'],
         email: data['email'],
         displayName: data['displayName'],
         profilePictureUrl: data['profilePictureUrl'],
+        topicsInterest: topicsInterest,
       );
     } else {
       return Users(
@@ -90,6 +96,7 @@ class DatabaseService {
         email: '',
         displayName: '',
         profilePictureUrl: '',
+        topicsInterest: [],
       );
     }
   }
