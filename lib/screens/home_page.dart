@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:nutribuddies/constant/colors.dart';
 import 'package:nutribuddies/models/kids.dart';
 import 'package:nutribuddies/models/user.dart';
+import 'package:nutribuddies/screens/forum.dart';
 import 'package:nutribuddies/services/database.dart';
 import 'package:provider/provider.dart';
 
@@ -454,7 +455,10 @@ class _HomePageState extends State<HomePage> {
                           height: MediaQuery.of(context).size.height * 0.08,
                           child: ElevatedButton(
                             onPressed: () {
-                              widget.onIndexChanged(5);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const ForumPage()));
                             },
                             style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
