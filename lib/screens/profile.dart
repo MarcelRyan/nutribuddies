@@ -3,6 +3,7 @@ import 'package:nutribuddies/constant/colors.dart';
 import 'package:nutribuddies/models/kids.dart';
 import 'package:nutribuddies/models/user.dart';
 import 'package:nutribuddies/screens/authenticate/add_kids.dart';
+import 'package:nutribuddies/screens/my_kids.dart';
 import 'package:nutribuddies/services/database.dart';
 import 'package:nutribuddies/services/profile.dart';
 import 'package:provider/provider.dart';
@@ -16,14 +17,9 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  int _currentKid = 0;
-  final CarouselController _kidController = CarouselController();
-
   @override
   Widget build(BuildContext context) {
     final users = Provider.of<Users?>(context);
-    final ProfileService profile = ProfileService();
-    int currentKid = 0;
 
     return Scaffold(
       backgroundColor: background,
@@ -43,6 +39,21 @@ class _ProfileState extends State<Profile> {
                 Stack(
                   children: [
                     Image.asset('assets/Profile/Intersect.png'),
+                    Container(
+                      alignment: Alignment.centerRight,
+                      padding: EdgeInsets.fromLTRB(
+                          0,
+                          MediaQuery.of(context).size.height * 0.02,
+                          MediaQuery.of(context).size.width * 0.03,
+                          0),
+                      child: IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.settings,
+                            size: 30,
+                            color: white,
+                          )),
+                    ),
                     Positioned(
                       top: MediaQuery.of(context).size.height * 0.04,
                       left: MediaQuery.of(context).size.width * 0.33,
@@ -136,7 +147,12 @@ class _ProfileState extends State<Profile> {
                                 const Spacer(),
                                 GestureDetector(
                                   onTap: () {
-                                    // ntr ganti
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => MyKids(
+                                                  listOfKids: kidsList,
+                                                )));
                                   },
                                   child: Container(
                                     alignment: Alignment.centerRight,
@@ -262,7 +278,9 @@ class _KidsCarouselState extends State<KidsCarousel> {
                       horizontal: MediaQuery.of(context).size.width * 0.05),
                   decoration: BoxDecoration(
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
-                    color: secondaryFixedDim,
+                    color: kid.gender == "Boy"
+                        ? secondaryFixedDim
+                        : tertiaryContainer,
                     boxShadow: [
                       BoxShadow(
                         color: Colors.grey.withOpacity(0.4),
@@ -313,8 +331,9 @@ class _KidsCarouselState extends State<KidsCarousel> {
                         children: [
                           Text(
                             "Age $age",
-                            style: const TextStyle(
-                              color: tertiary20,
+                            style: TextStyle(
+                              color:
+                                  kid.gender == "Boy" ? primary40 : tertiary20,
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
                             ),

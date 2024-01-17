@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:nutribuddies/models/kids.dart';
 import 'package:nutribuddies/services/auth.dart';
 import 'package:nutribuddies/constant/text_input_decoration.dart';
+import 'package:nutribuddies/services/database.dart';
 import 'package:nutribuddies/widgets/loading.dart';
 import 'package:nutribuddies/constant/colors.dart';
 import 'package:nutribuddies/services/general.dart';
@@ -11,41 +13,33 @@ import '../../widgets/wrapper.dart';
 import 'package:intl/intl.dart';
 import 'package:nutribuddies/services/debouncer.dart';
 
-class AddKids extends StatefulWidget {
-  bool fromSignUp;
-  bool fromProfile;
+class EditKids extends StatefulWidget {
+  Kids kid;
 
-  AddKids({
+  EditKids({
     super.key,
-    this.fromSignUp = true,
-    this.fromProfile = false,
+    required this.kid,
   });
 
   @override
-  State<AddKids> createState() => _AddKidsState();
+  State<EditKids> createState() => _EditKidsState();
 }
 
-class _AddKidsState extends State<AddKids> {
+class _EditKidsState extends State<EditKids> {
   final AuthService _auth = AuthService();
   final GeneralService _general = GeneralService();
   final _formkey = GlobalKey<FormState>();
   final Debouncer _debouncer = Debouncer(milliseconds: 500);
   bool loading = false;
 
-  String kidName = '';
-  DateTime dateOfBirth = DateTime.now();
-  String gender = '';
-  String currentHeightUnit = 'cm';
-  double currentHeight = 0.0;
-  String currentWeightUnit = 'kg';
-  double currentWeight = 0.0;
-  String bornWeightUnit = 'kg';
-  double bornWeight = 0.0;
-
   @override
   Widget build(BuildContext context) {
+    String currentHeightUnit = 'cm';
+    String currentWeightUnit = 'kg';
+    String bornWeightUnit = 'kg';
     final Users? users = Provider.of<Users?>(context);
-    String formattedDate = DateFormat('dd/MM/yyyy').format(dateOfBirth);
+    String formattedDate =
+        DateFormat('dd/MM/yyyy').format(widget.kid.dateOfBirth);
 
     return loading
         ? const Loading()
@@ -55,23 +49,22 @@ class _AddKidsState extends State<AddKids> {
               children: [
                 Stack(alignment: AlignmentDirectional.centerStart, children: [
                   Image.asset('assets/Login/Group2(2).png'),
-                  if (!widget.fromSignUp)
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(
-                        MediaQuery.of(context).size.width * 0.05,
-                        MediaQuery.of(context).size.height * 0.01,
-                        MediaQuery.of(context).size.width * 0,
-                        MediaQuery.of(context).size.height * 0,
-                      ),
-                      child: IconButton(
-                        icon: const Icon(Icons.arrow_back),
-                        color: black,
-                        iconSize: 30.0,
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(
+                      MediaQuery.of(context).size.width * 0.05,
+                      MediaQuery.of(context).size.height * 0.01,
+                      MediaQuery.of(context).size.width * 0,
+                      MediaQuery.of(context).size.height * 0,
                     ),
+                    child: IconButton(
+                      icon: const Icon(Icons.arrow_back),
+                      color: black,
+                      iconSize: 30.0,
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ),
                 ]),
                 ClipRect(
                   child: Transform.translate(
@@ -86,7 +79,7 @@ class _AddKidsState extends State<AddKids> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
-                            "Add Kid's Profile",
+                            "Edit Kid's Profile",
                             textAlign: TextAlign.left,
                             style: TextStyle(
                                 color: black,
@@ -108,6 +101,7 @@ class _AddKidsState extends State<AddKids> {
                                     ),
                                     TextFormField(
                                       maxLength: 15,
+                                      initialValue: widget.kid.displayName,
                                       maxLengthEnforcement:
                                           MaxLengthEnforcement.enforced,
                                       decoration: textInputDecoration.copyWith(
@@ -116,7 +110,8 @@ class _AddKidsState extends State<AddKids> {
                                           ? "Enter a kid's name"
                                           : null,
                                       onChanged: (val) {
-                                        setState(() => kidName = val);
+                                        setState(
+                                            () => widget.kid.displayName = val);
                                       },
                                     ),
                                     SizedBox(
@@ -132,9 +127,10 @@ class _AddKidsState extends State<AddKids> {
                                         hintText: 'Select Date of Birth',
                                         suffixIcon: GestureDetector(
                                           onTap: () => _general.selectDate(
-                                              context, dateOfBirth, (picked) {
+                                              context, widget.kid.dateOfBirth,
+                                              (picked) {
                                             setState(() {
-                                              dateOfBirth = picked;
+                                              widget.kid.dateOfBirth = picked;
                                             });
                                           }),
                                           child:
@@ -178,10 +174,11 @@ class _AddKidsState extends State<AddKids> {
                                         ),
                                         Radio(
                                           value: 'Boy',
-                                          groupValue: gender,
+                                          groupValue: widget.kid.gender,
                                           onChanged: (value) {
                                             setState(() {
-                                              gender = value as String;
+                                              widget.kid.gender =
+                                                  value as String;
                                             });
                                           },
                                         ),
@@ -203,10 +200,11 @@ class _AddKidsState extends State<AddKids> {
                                         ),
                                         Radio(
                                           value: 'Girl',
-                                          groupValue: gender,
+                                          groupValue: widget.kid.gender,
                                           onChanged: (value) {
                                             setState(() {
-                                              gender = value as String;
+                                              widget.kid.gender =
+                                                  value as String;
                                             });
                                           },
                                         ),
@@ -251,11 +249,12 @@ class _AddKidsState extends State<AddKids> {
                                                 decimal: true),
                                             textAlign: TextAlign.center,
                                             controller: TextEditingController(
-                                                text: currentHeight.toString()),
+                                                text: widget.kid.currentHeight
+                                                    .toString()),
                                             onChanged: (value) {
                                               _debouncer.run(() {
                                                 setState(() {
-                                                  currentHeight =
+                                                  widget.kid.currentHeight =
                                                       double.tryParse(value) ??
                                                           0.0;
                                                 });
@@ -279,7 +278,8 @@ class _AddKidsState extends State<AddKids> {
                                                 ),
                                                 onPressed: () {
                                                   setState(() {
-                                                    currentHeight += 1.0;
+                                                    widget.kid.currentHeight +=
+                                                        1.0;
                                                   });
                                                 },
                                               ),
@@ -288,7 +288,8 @@ class _AddKidsState extends State<AddKids> {
                                                     .arrow_drop_down_circle_outlined),
                                                 onPressed: () {
                                                   setState(() {
-                                                    currentHeight -= 1.0;
+                                                    widget.kid.currentHeight -=
+                                                        1.0;
                                                   });
                                                 },
                                               ),
@@ -354,11 +355,12 @@ class _AddKidsState extends State<AddKids> {
                                                 decimal: true),
                                             textAlign: TextAlign.center,
                                             controller: TextEditingController(
-                                                text: currentWeight.toString()),
+                                                text: widget.kid.currentWeight
+                                                    .toString()),
                                             onChanged: (value) {
                                               _debouncer.run(() {
                                                 setState(() {
-                                                  currentWeight =
+                                                  widget.kid.currentWeight =
                                                       double.tryParse(value) ??
                                                           0.0;
                                                 });
@@ -382,7 +384,8 @@ class _AddKidsState extends State<AddKids> {
                                                 ),
                                                 onPressed: () {
                                                   setState(() {
-                                                    currentWeight += 1.0;
+                                                    widget.kid.currentWeight +=
+                                                        1.0;
                                                   });
                                                 },
                                               ),
@@ -391,7 +394,8 @@ class _AddKidsState extends State<AddKids> {
                                                     .arrow_drop_down_circle_outlined),
                                                 onPressed: () {
                                                   setState(() {
-                                                    currentWeight -= 1.0;
+                                                    widget.kid.currentWeight -=
+                                                        1.0;
                                                   });
                                                 },
                                               ),
@@ -457,11 +461,12 @@ class _AddKidsState extends State<AddKids> {
                                                 decimal: true),
                                             textAlign: TextAlign.center,
                                             controller: TextEditingController(
-                                                text: bornWeight.toString()),
+                                                text: widget.kid.bornWeight
+                                                    .toString()),
                                             onChanged: (value) {
                                               _debouncer.run(() {
                                                 setState(() {
-                                                  bornWeight =
+                                                  widget.kid.bornWeight =
                                                       double.tryParse(value) ??
                                                           0.0;
                                                 });
@@ -485,7 +490,8 @@ class _AddKidsState extends State<AddKids> {
                                                 ),
                                                 onPressed: () {
                                                   setState(() {
-                                                    bornWeight += 1.0;
+                                                    widget.kid.bornWeight +=
+                                                        1.0;
                                                   });
                                                 },
                                               ),
@@ -494,7 +500,8 @@ class _AddKidsState extends State<AddKids> {
                                                     .arrow_drop_down_circle_outlined),
                                                 onPressed: () {
                                                   setState(() {
-                                                    bornWeight -= 1.0;
+                                                    widget.kid.bornWeight -=
+                                                        1.0;
                                                   });
                                                 },
                                               ),
@@ -536,58 +543,56 @@ class _AddKidsState extends State<AddKids> {
                                       onPressed: () async {
                                         if (_formkey.currentState!.validate()) {
                                           if (currentHeightUnit == 'm') {
-                                            currentHeight *= 100;
+                                            widget.kid.currentHeight *= 100;
                                           }
                                           if (currentWeightUnit == 'oz') {
-                                            currentWeight *= 0.0283495;
+                                            widget.kid.currentWeight *=
+                                                0.0283495;
                                           }
                                           if (bornWeightUnit == 'oz') {
-                                            bornWeight *= 0.0283495;
+                                            widget.kid.bornWeight *= 0.0283495;
                                           }
                                           if (currentWeightUnit == 'lb') {
-                                            currentWeight *= 0.453592;
+                                            widget.kid.currentWeight *=
+                                                0.453592;
                                           }
                                           if (bornWeightUnit == 'lb') {
-                                            bornWeight *= 0.453592;
+                                            widget.kid.bornWeight *= 0.453592;
                                           }
                                           setState(() => loading = true);
-                                          dynamic result =
-                                              await _auth.registerKid(
-                                                  users!.uid,
-                                                  kidName,
-                                                  dateOfBirth,
-                                                  gender,
-                                                  currentHeight,
-                                                  currentWeight,
-                                                  bornWeight);
+                                          dynamic result = await DatabaseService(
+                                                  uid: users!.uid)
+                                              .updateKidData(
+                                                  kidsUid: widget.kid.uid,
+                                                  displayName:
+                                                      widget.kid.displayName ??
+                                                          '',
+                                                  dateOfBirth:
+                                                      widget.kid.dateOfBirth,
+                                                  gender: widget.kid.gender,
+                                                  currentHeight:
+                                                      widget.kid.currentHeight,
+                                                  currentWeight:
+                                                      widget.kid.currentWeight,
+                                                  bornWeight:
+                                                      widget.kid.bornWeight,
+                                                  profilePictureUrl: widget
+                                                      .kid.profilePictureUrl);
                                           if (result == false) {
                                             setState(() => loading = false);
                                           } else {
-                                            if (widget.fromSignUp) {
-                                              // ignore: use_build_context_synchronously
-                                              Navigator.pushReplacement(
+                                            // ignore: use_build_context_synchronously
+                                            Navigator.pop(context);
+                                            // ignore: use_build_context_synchronously
+                                            Navigator.pushReplacement(
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>
                                                         Wrapper(
                                                           result: true,
                                                           goToHome: true,
-                                                        )),
-                                              );
-                                            } else {
-                                              // ignore: use_build_context_synchronously
-                                              Navigator.pop(context);
-                                              // ignore: use_build_context_synchronously
-                                              Navigator.pushReplacement(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          Wrapper(
-                                                            result: true,
-                                                            goToHome: true,
-                                                            goToProfile: true,
-                                                          )));
-                                            }
+                                                          goToProfile: true,
+                                                        )));
                                           }
                                         }
                                       },

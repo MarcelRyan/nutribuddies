@@ -95,7 +95,7 @@ class DatabaseService {
   }
 
   // kids
-  Future<void> updateKidData({
+  Future<bool> updateKidData({
     required String kidsUid,
     required String displayName,
     required DateTime dateOfBirth,
@@ -127,7 +127,12 @@ class DatabaseService {
       data['profilePictureUrl'] = profilePictureUrl;
     }
 
-    await kidsCollection.doc(kidsUid).set(data);
+    try {
+      await kidsCollection.doc(kidsUid).set(data);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   // check if kidsUid unique
