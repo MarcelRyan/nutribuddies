@@ -67,13 +67,6 @@ class FoodTrackerService {
     Nutritions currentNutritions = Nutritions(
         calories: 0, proteins: 0, fiber: 0, fats: 0, carbs: 0, iron: 0);
 
-    Nutritions maxNutritions = Nutritions(
-        calories: 100,
-        proteins: 100,
-        fiber: 100,
-        fats: 100,
-        carbs: 100,
-        iron: 100);
     List<Meals> meals = [];
 
     final DateTime? picked = await showDatePicker(

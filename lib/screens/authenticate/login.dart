@@ -166,8 +166,7 @@ class _LoginState extends State<Login> {
                           ElevatedButton(
                             onPressed: () async {
                               setState(() => loading = true);
-                              dynamic result =
-                                  await AuthService.signInWithGoogle();
+                              dynamic result = await _auth.signInWithGoogle();
                               if (result == null) {
                                 setState(() => loading = false);
                               } else {

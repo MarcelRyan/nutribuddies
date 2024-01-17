@@ -58,7 +58,7 @@ class AuthService {
   }
 
   // sign in with google
-  static Future<User?> signInWithGoogle() async {
+  Future<Object?> signInWithGoogle() async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user;
 
@@ -80,7 +80,8 @@ class AuthService {
         final UserCredential userCredential =
             await auth.signInWithCredential(credential);
 
-        user = userCredential.user;
+        user = userCredential.user!;
+        return _user(user);
       } on FirebaseAuthException {
         // Error
       } catch (e) {
@@ -148,6 +149,11 @@ class AuthService {
     }
   }
 
+  // is anonymous
+  bool isAnonymous() {
+    return _auth.currentUser!.isAnonymous;
+  }
+
   // register kid
   Future registerKid(
       String parentUid,
@@ -189,13 +195,7 @@ class AuthService {
 
       Nutritions currentNutritions = Nutritions(
           calories: 0, proteins: 0, fiber: 0, fats: 0, carbs: 0, iron: 0);
-      Nutritions maxNutritions = Nutritions(
-          calories: 100,
-          proteins: 100,
-          fiber: 100,
-          fats: 100,
-          carbs: 100,
-          iron: 100);
+
       List<Meals> meals = [];
 
       await DatabaseService(uid: parentUid).updateKidData(
