@@ -203,14 +203,13 @@ class _ArticleContainersListState extends State<ArticleContainersList>{
     return Scaffold(
       backgroundColor: background,
       body: Container(
-        padding: EdgeInsets.fromLTRB(
-            MediaQuery.of(context).size.width*0.08,
-            MediaQuery.of(context).size.width*0.125,
-            MediaQuery.of(context).size.width*0.08,
-            MediaQuery.of(context).size.width*0.07
+        padding: EdgeInsets.only(
+            left: MediaQuery.of(context).size.width*0.08,
+            right: MediaQuery.of(context).size.width*0.08,
         ),
+        margin: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.025),
         child: ListView.builder(
-          itemCount: 5, // Specify the number of times you want to loop
+          itemCount: 10, // Specify the number of times you want to loop
           itemBuilder: (context, index) {
             return InkWell(
               onTap: (){
