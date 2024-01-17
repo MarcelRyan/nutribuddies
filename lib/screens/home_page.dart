@@ -1,17 +1,18 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:nutribuddies/constant/colors.dart';
 import 'package:nutribuddies/models/kids.dart';
 import 'package:nutribuddies/models/user.dart';
-import 'package:nutribuddies/services/auth.dart';
-import 'package:nutribuddies/screens/tracker.dart';
 import 'package:nutribuddies/services/database.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final void Function(int) onIndexChanged;
+
+  const HomePage({Key? key, required this.onIndexChanged}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -110,11 +111,11 @@ class _HomePageState extends State<HomePage> {
                 Image.asset(
                   'assets/Home/Intersect.png',
                   width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height * 0.25,
+                  height: MediaQuery.of(context).size.height * 0.35,
                   fit: BoxFit.fill,
                 ),
                 Positioned(
-                  top: MediaQuery.of(context).size.height * 0.02,
+                  top: MediaQuery.of(context).size.height * 0.1,
                   left: MediaQuery.of(context).size.width * 0.1,
                   height: MediaQuery.of(context).size.height * 0.2,
                   width: MediaQuery.of(context).size.width * 0.8,
@@ -124,7 +125,7 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       Text(
                         "Hi ${users?.displayName ?? "there"}",
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 22,
                           fontFamily: 'Poppins',
@@ -159,7 +160,7 @@ class _HomePageState extends State<HomePage> {
                                 maxLines: 5,
                                 softWrap: true,
                                 text: TextSpan(children: [
-                                  TextSpan(
+                                  const TextSpan(
                                     text: "Lets track ",
                                     style: TextStyle(
                                       color: Colors.black,
@@ -171,7 +172,7 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ),
                                   if (kidsData.isEmpty)
-                                    TextSpan(
+                                    const TextSpan(
                                       text: "your kids ",
                                       style: TextStyle(
                                         color: Colors.black,
@@ -182,7 +183,7 @@ class _HomePageState extends State<HomePage> {
                                         letterSpacing: 0.15,
                                       ),
                                     ),
-                                  if (!kidsData.isEmpty)
+                                  if (kidsData.isNotEmpty)
                                     for (int i = 0;
                                         i < kidsData.length;
                                         i++) ...[
@@ -190,7 +191,7 @@ class _HomePageState extends State<HomePage> {
                                         TextSpan(
                                             text:
                                                 "${kidsData[i].displayName}'s",
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               color: Colors.black,
                                               fontSize: 16,
                                               fontFamily: 'Poppins',
@@ -200,7 +201,7 @@ class _HomePageState extends State<HomePage> {
                                       if (i == 0)
                                         TextSpan(
                                             text: "${kidsData[i].displayName}",
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               color: Colors.black,
                                               fontSize: 16,
                                               fontFamily: 'Poppins',
@@ -212,7 +213,7 @@ class _HomePageState extends State<HomePage> {
                                         TextSpan(
                                             text:
                                                 " and ${kidsData[i].displayName}'s ",
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               color: Colors.black,
                                               fontSize: 16,
                                               fontFamily: 'Poppins',
@@ -223,7 +224,7 @@ class _HomePageState extends State<HomePage> {
                                         TextSpan(
                                             text:
                                                 ", ${kidsData[i].displayName},",
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               color: Colors.black,
                                               fontSize: 16,
                                               fontFamily: 'Poppins',
@@ -231,7 +232,7 @@ class _HomePageState extends State<HomePage> {
                                               height: 1.4,
                                             ))
                                     ],
-                                  TextSpan(
+                                  const TextSpan(
                                     text: "nutrition today",
                                     style: TextStyle(
                                       color: Colors.black,
@@ -254,7 +255,7 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.035,
             ),
-            Container(
+            SizedBox(
               width: MediaQuery.of(context).size.width * 0.8,
               child: Wrap(
                 spacing: MediaQuery.of(context).size.width * 0.026,
@@ -268,18 +269,20 @@ class _HomePageState extends State<HomePage> {
                         borderRadius: BorderRadius.circular(10)),
                     child: Column(
                       children: [
-                        Container(
+                        SizedBox(
                           width: MediaQuery.of(context).size.width * 0.18,
                           height: MediaQuery.of(context).size.height * 0.08,
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              widget.onIndexChanged(2);
+                            },
                             style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(100)),
                                 backgroundColor: primaryContainer,
                                 foregroundColor: white,
                                 elevation: 0),
-                            child: Container(
+                            child: SizedBox(
                               width: MediaQuery.of(context).size.width * 0.22,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -296,7 +299,7 @@ class _HomePageState extends State<HomePage> {
                                     height: MediaQuery.of(context).size.height *
                                         0.003,
                                   ),
-                                  FittedBox(
+                                  const FittedBox(
                                     fit: BoxFit.scaleDown,
                                     child: Text(
                                       "Track",
@@ -326,18 +329,20 @@ class _HomePageState extends State<HomePage> {
                         borderRadius: BorderRadius.circular(10)),
                     child: Column(
                       children: [
-                        Container(
+                        SizedBox(
                           width: MediaQuery.of(context).size.width * 0.18,
                           height: MediaQuery.of(context).size.height * 0.08,
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              widget.onIndexChanged(3);
+                            },
                             style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(100)),
                                 backgroundColor: primaryContainer,
                                 foregroundColor: white,
                                 elevation: 0),
-                            child: Container(
+                            child: SizedBox(
                               width: MediaQuery.of(context).size.width * 0.22,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -354,7 +359,7 @@ class _HomePageState extends State<HomePage> {
                                     height: MediaQuery.of(context).size.height *
                                         0.003,
                                   ),
-                                  FittedBox(
+                                  const FittedBox(
                                     fit: BoxFit.scaleDown,
                                     child: Text(
                                       "Menu",
@@ -384,18 +389,20 @@ class _HomePageState extends State<HomePage> {
                         borderRadius: BorderRadius.circular(10)),
                     child: Column(
                       children: [
-                        Container(
+                        SizedBox(
                           width: MediaQuery.of(context).size.width * 0.18,
                           height: MediaQuery.of(context).size.height * 0.08,
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              widget.onIndexChanged(1);
+                            },
                             style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(100)),
                                 backgroundColor: primaryContainer,
                                 foregroundColor: white,
                                 elevation: 0),
-                            child: Container(
+                            child: SizedBox(
                               width: MediaQuery.of(context).size.width * 0.22,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -412,7 +419,7 @@ class _HomePageState extends State<HomePage> {
                                     height: MediaQuery.of(context).size.height *
                                         0.003,
                                   ),
-                                  FittedBox(
+                                  const FittedBox(
                                     fit: BoxFit.scaleDown,
                                     child: Text(
                                       "Article",
@@ -442,18 +449,20 @@ class _HomePageState extends State<HomePage> {
                         borderRadius: BorderRadius.circular(10)),
                     child: Column(
                       children: [
-                        Container(
+                        SizedBox(
                           width: MediaQuery.of(context).size.width * 0.18,
                           height: MediaQuery.of(context).size.height * 0.08,
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              widget.onIndexChanged(5);
+                            },
                             style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(100)),
                                 backgroundColor: primaryContainer,
                                 foregroundColor: white,
                                 elevation: 0),
-                            child: Container(
+                            child: SizedBox(
                               width: MediaQuery.of(context).size.width * 0.22,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -470,7 +479,7 @@ class _HomePageState extends State<HomePage> {
                                     height: MediaQuery.of(context).size.height *
                                         0.003,
                                   ),
-                                  Text(
+                                  const Text(
                                     "Forum",
                                     style: TextStyle(
                                       color: Color(0xFF192231),
@@ -495,7 +504,7 @@ class _HomePageState extends State<HomePage> {
                         width: MediaQuery.of(context).size.width * 0.18,
                         height: MediaQuery.of(context).size.height * 0.08,
                         decoration: BoxDecoration(
-                          color: Color(0xAFAFAFAF),
+                          color: const Color(0xAFAFAFAF),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Column(
@@ -511,7 +520,7 @@ class _HomePageState extends State<HomePage> {
                               height:
                                   MediaQuery.of(context).size.height * 0.003,
                             ),
-                            FittedBox(
+                            const FittedBox(
                               fit: BoxFit.scaleDown,
                               child: Text(
                                 "Consult",
@@ -544,7 +553,7 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.03,
             ),
-            Container(
+            SizedBox(
               width: MediaQuery.of(context).size.width * 0.8,
               height: MediaQuery.of(context).size.height * 0.345,
               child: Column(
@@ -552,7 +561,7 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   Row(
                     children: [
-                      FittedBox(
+                      const FittedBox(
                         fit: BoxFit.scaleDown,
                         child: Text(
                           "Featured Articles",
@@ -569,7 +578,7 @@ class _HomePageState extends State<HomePage> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.35,
                       ),
-                      FittedBox(
+                      const FittedBox(
                         fit: BoxFit.scaleDown,
                         child: Text(
                           "View All",
@@ -589,7 +598,7 @@ class _HomePageState extends State<HomePage> {
                     child: ListView(
                       children: dummyData.map((record) {
                         return Container(
-                          width: MediaQuery.of(context).size.width * 0.8,
+                          width: MediaQuery.of(context).size.width,
                           margin: EdgeInsets.only(
                               top: MediaQuery.of(context).size.height * 0.015),
                           padding: EdgeInsets.symmetric(
@@ -599,8 +608,17 @@ class _HomePageState extends State<HomePage> {
                                   MediaQuery.of(context).size.height * 0.02),
                           height: MediaQuery.of(context).size.height * 0.14,
                           decoration: BoxDecoration(
-                              color: surfaceBright,
-                              borderRadius: BorderRadius.circular(10)),
+                            color: surfaceBright,
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 2,
+                                blurRadius: 5,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
                           child: Row(
                             children: [
                               Image.asset(
@@ -623,7 +641,7 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                     Text(
                                       dateFormatter(record.date),
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: Color(0xFF74747E),
                                         fontSize: 10,
                                         fontFamily: 'Poppins',
@@ -640,7 +658,7 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                     Text(
                                       record.title,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: Colors.black,
                                         fontSize: 16,
                                         fontFamily: 'Poppins',
@@ -662,7 +680,7 @@ class _HomePageState extends State<HomePage> {
                                           if (i == record.tags.length - 1)
                                             Text(
                                               record.tags[i],
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 color: Color(0xFF5674A7),
                                                 fontSize: 11,
                                                 fontFamily: 'Poppins',
@@ -674,7 +692,7 @@ class _HomePageState extends State<HomePage> {
                                           if (i != record.tags.length - 1)
                                             Text(
                                               "${record.tags[i]} ",
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 color: Color(0xFF5674A7),
                                                 fontSize: 11,
                                                 fontFamily: 'Poppins',
@@ -697,7 +715,8 @@ class _HomePageState extends State<HomePage> {
                   )
                 ],
               ),
-            )
+            ),
+            const SizedBox(height: 32)
           ],
         ),
       ),
