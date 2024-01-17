@@ -125,7 +125,6 @@ class _MenuRecommendationState extends State<MenuRecommendation> {
                                   List<Kids> kidsList = snapshot.data!;
                                   Future<Kids?> firstKidFuture =
                                       menuRecommendation.getFirstKid(users.uid);
-                                  String? selectedValue;
 
                                   return FutureBuilder<Kids?>(
                                       future: firstKidFuture,
@@ -137,16 +136,11 @@ class _MenuRecommendationState extends State<MenuRecommendation> {
                                           return Text(
                                               'Error: ${kidSnapshot.error}');
                                         } else {
-                                          Kids? firstKid = kidSnapshot.data;
-                                          selectedValue = firstKid?.uid;
                                           return DropdownButtonFormField<
                                               String>(
-                                            value: selectedValue,
+                                            value: kidUid,
                                             onChanged: (String? newValue) {
                                               updateKidUid(newValue ?? '');
-                                              setState(() {
-                                                selectedValue = newValue;
-                                              });
                                             },
                                             items: kidsList
                                                 .map<DropdownMenuItem<String>>(

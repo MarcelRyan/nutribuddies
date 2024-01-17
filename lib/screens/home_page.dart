@@ -96,16 +96,23 @@ class _HomePageState extends State<HomePage> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              "Hi ${_auth.isAnonymous() ? "there" : (userData.displayName ?? 'there')}",
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 22,
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w700,
-                                height: 0.06,
+                            Container(
+                              alignment: Alignment.centerLeft,
+                              width: MediaQuery.of(context).size.width * 0.35,
+                              child: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  "Hi ${_auth.isAnonymous() ? "there" : (userData.displayName ?? 'there')}",
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 22,
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w700,
+                                    height: 0.06,
+                                  ),
+                                  textAlign: TextAlign.start,
+                                ),
                               ),
-                              textAlign: TextAlign.start,
                             ),
                             SizedBox(
                               height:
@@ -169,7 +176,7 @@ class _HomePageState extends State<HomePage> {
                                                   text: "Lets track ",
                                                   style: TextStyle(
                                                     color: Colors.black,
-                                                    fontSize: 16,
+                                                    fontSize: 14,
                                                     fontFamily: 'Poppins',
                                                     fontWeight: FontWeight.w500,
                                                     height: 1.4,
@@ -181,7 +188,7 @@ class _HomePageState extends State<HomePage> {
                                                     text: "your kids ",
                                                     style: TextStyle(
                                                       color: Colors.black,
-                                                      fontSize: 16,
+                                                      fontSize: 14,
                                                       fontFamily: 'Poppins',
                                                       fontWeight:
                                                           FontWeight.w500,
@@ -215,7 +222,7 @@ class _HomePageState extends State<HomePage> {
                                                           style:
                                                               const TextStyle(
                                                             color: Colors.black,
-                                                            fontSize: 16,
+                                                            fontSize: 14,
                                                             fontFamily:
                                                                 'Poppins',
                                                             fontWeight:
@@ -232,7 +239,7 @@ class _HomePageState extends State<HomePage> {
                                                           style:
                                                               const TextStyle(
                                                             color: Colors.black,
-                                                            fontSize: 16,
+                                                            fontSize: 14,
                                                             fontFamily:
                                                                 'Poppins',
                                                             fontWeight:
@@ -248,7 +255,7 @@ class _HomePageState extends State<HomePage> {
                                                           style:
                                                               const TextStyle(
                                                             color: Colors.black,
-                                                            fontSize: 16,
+                                                            fontSize: 14,
                                                             fontFamily:
                                                                 'Poppins',
                                                             fontWeight:
@@ -260,7 +267,7 @@ class _HomePageState extends State<HomePage> {
                                                   text: "nutrition today",
                                                   style: TextStyle(
                                                     color: Colors.black,
-                                                    fontSize: 16,
+                                                    fontSize: 14,
                                                     fontFamily: 'Poppins',
                                                     fontWeight: FontWeight.w500,
                                                     height: 1.4,
@@ -528,9 +535,9 @@ class _HomePageState extends State<HomePage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Row(
+                        const Row(
                           children: [
-                            const FittedBox(
+                            FittedBox(
                               fit: BoxFit.scaleDown,
                               child: Text(
                                 "Featured Articles",
@@ -544,10 +551,8 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                             ),
-                            SizedBox(
-                                width:
-                                    MediaQuery.of(context).size.width * 0.35),
-                            const FittedBox(
+                            Spacer(),
+                            FittedBox(
                               fit: BoxFit.scaleDown,
                               child: Text(
                                 "View All",
@@ -646,25 +651,20 @@ class _HomePageState extends State<HomePage> {
                                             height: MediaQuery.of(context)
                                                     .size
                                                     .height *
-                                                0.012,
+                                                0.011,
                                           ),
                                           Text(
                                             record.title,
                                             style: const TextStyle(
                                               color: Colors.black,
-                                              fontSize: 16,
+                                              fontSize: 14,
                                               fontFamily: 'Poppins',
                                               fontWeight: FontWeight.w600,
                                               height: 1.2,
                                               letterSpacing: 0.15,
                                             ),
                                           ),
-                                          SizedBox(
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.013,
-                                          ),
+                                          const Spacer(),
                                           Row(
                                             children: [
                                               for (int i = 0;

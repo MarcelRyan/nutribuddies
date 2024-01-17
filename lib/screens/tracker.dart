@@ -193,7 +193,6 @@ class _TrackerContentState extends State<TrackerContent> {
                             } else if (kidSnapshot.hasError) {
                               return Text('Error: ${kidSnapshot.error}');
                             } else {
-                              Kids? firstKid = kidSnapshot.data;
                               return DropdownButtonFormField<String>(
                                 value: widget.kidUid,
                                 onChanged: (String? newValue) {
