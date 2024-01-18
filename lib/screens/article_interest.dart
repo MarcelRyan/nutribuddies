@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nutribuddies/constant/colors.dart';
+import 'package:nutribuddies/models/user.dart';
 import 'package:nutribuddies/screens/article_list.dart';
 import 'package:nutribuddies/models/article_interest.dart';
+import 'package:provider/provider.dart';
 
 class ArticleInterest extends StatefulWidget {
   const ArticleInterest({Key? key}) : super(key: key);
@@ -133,6 +135,8 @@ class _InterestContentState extends State<InterestContent> {
   ];
   @override
   Widget build(BuildContext context) {
+    final Users? users = Provider.of<Users?>(context);
+
     return Scaffold(
       backgroundColor: background,
       body: GridView.count(

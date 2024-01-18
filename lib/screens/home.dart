@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nutribuddies/constant/colors.dart';
+import 'package:nutribuddies/screens/article_list.dart';
 import 'package:nutribuddies/screens/home_page.dart';
 import 'package:nutribuddies/screens/menu_recommendation.dart';
 import 'package:nutribuddies/screens/profile.dart';
@@ -41,7 +42,7 @@ class _HomeState extends State<Home> {
           });
         },
       ),
-      const ArticleInterest(),
+      _auth.isAnonymous() ? const ArticleList() : const ArticleInterest(),
       _auth.isAnonymous() ? const DirectLogin() : const Tracker(),
       _auth.isAnonymous() ? const DirectLogin() : const MenuRecommendation(),
       _auth.isAnonymous() ? const DirectLogin() : const Profile(),
@@ -49,9 +50,7 @@ class _HomeState extends State<Home> {
 
     _appBar = [
       null,
-      AppBar(
-        title: const Text('Article'),
-      ),
+      null,
       AppBar(
         title: const Text('Tracker'),
       ),
