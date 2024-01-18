@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:nutribuddies/constant/colors.dart';
 import 'package:nutribuddies/models/kids.dart';
@@ -53,7 +52,9 @@ class _ProfileState extends State<Profile> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => SettingsPage()));
+                                    builder: (context) => SettingsPage(
+                                          user: userData,
+                                        )));
                           },
                           icon: const Icon(
                             Icons.settings,

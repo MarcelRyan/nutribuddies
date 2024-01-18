@@ -11,6 +11,7 @@ import '../../widgets/wrapper.dart';
 import 'package:intl/intl.dart';
 import 'package:nutribuddies/services/debouncer.dart';
 
+// ignore: must_be_immutable
 class AddKids extends StatefulWidget {
   bool fromSignUp;
   bool fromProfile;

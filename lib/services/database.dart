@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:nutribuddies/models/forum.dart';
+import 'package:nutribuddies/models/article.dart';
 import 'package:nutribuddies/models/meals.dart';
 import 'package:nutribuddies/models/menu_recommendation.dart';
 import 'package:nutribuddies/models/tracker.dart';
@@ -41,8 +44,11 @@ class DatabaseService {
   final CollectionReference forumCollection =
       FirebaseFirestore.instance.collection('forum');
 
+  final CollectionReference articleCollection =
+      FirebaseFirestore.instance.collection('article');
+
   // users
-  Future<void> updateUserData({
+  Future<bool> updateUserData({
     required String uid,
     required String displayName,
     required String email,
@@ -61,7 +67,12 @@ class DatabaseService {
       'topicInterest': topicInterest,
     };
 
-    await usersCollection.doc(uid).set(data);
+    try {
+      await usersCollection.doc(uid).set(data);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   // get photo url
@@ -105,6 +116,25 @@ class DatabaseService {
         profilePictureUrl: '',
         topicsInterest: [],
       );
+    }
+  }
+
+  Future<String> uploadFile(PlatformFile? pickedFile) async {
+    final path = '$uid/${pickedFile!.name}';
+    final file = File(pickedFile.path!);
+
+    final ref = FirebaseStorage.instance.ref().child(path);
+
+    try {
+      UploadTask uploadTask = ref.putFile(file);
+
+      final snapshot = await uploadTask.whenComplete(() {});
+
+      final photoUrl = await snapshot.ref.getDownloadURL();
+
+      return photoUrl;
+    } catch (e) {
+      return '';
     }
   }
 
@@ -1043,5 +1073,87 @@ class DatabaseService {
     } catch (e) {
       // Error
     }
+  }
+
+  // article
+  Future<Article> getArticleData() async {
+    QuerySnapshot querySnapshot =
+        await articleCollection.where('uid', isEqualTo: uid).limit(1).get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      Map<String, dynamic> data =
+          querySnapshot.docs.first.data() as Map<String, dynamic>;
+      List<dynamic>? rawTopics = data['topics'];
+
+      List<String> topics = (rawTopics != null && rawTopics.isNotEmpty)
+          ? List<String>.from(rawTopics.cast<String>())
+          : [];
+
+      return Article(
+        uid: data['uid'],
+        title: data['title'],
+        date: data['date'],
+        topics: topics,
+        imageUrl: data['imageUrl'],
+        content: data['content'],
+      );
+    } else {
+      return Article(
+        uid: '',
+        title: '',
+        date: Timestamp.now(),
+        topics: [],
+        imageUrl: '',
+        content: '',
+      );
+    }
+  }
+
+  Future<List<Article>> getListOfArticlesData() async {
+    List<Article> articlesList = [];
+
+    QuerySnapshot querySnapshot = await articleCollection.get();
+
+    for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
+      Map<String, dynamic> data =
+          documentSnapshot.data() as Map<String, dynamic>;
+      Article article = Article(
+        uid: data['uid'] ?? '',
+        title: data['title'],
+        date: data['date'],
+        topics: data['topics'] ?? [],
+        imageUrl: data['imageUrl'],
+        content: data['content'],
+      );
+      articlesList.add(article);
+    }
+
+    return articlesList;
+  }
+
+  Future<List<Article>> getListOfArticlesDatas(String searchQuery) async {
+    List<Article> articlesList = [];
+
+    QuerySnapshot querySnapshot = await articleCollection.get();
+
+    for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
+      Map<String, dynamic> data =
+          documentSnapshot.data() as Map<String, dynamic>;
+      Article article = Article(
+        uid: data['uid'] ?? '',
+        title: data['title'],
+        date: data['date'],
+        topics: data['topics'] ?? [],
+        imageUrl: data['imageUrl'],
+        content: data['content'],
+      );
+
+      // Check if the food name contains the search query
+      if (article.title.toLowerCase().contains(searchQuery.toLowerCase())) {
+        articlesList.add(article);
+      }
+    }
+
+    return articlesList;
   }
 }

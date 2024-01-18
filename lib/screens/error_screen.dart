@@ -4,7 +4,8 @@ class ErrorReloadWidget extends StatelessWidget {
   final String errorMessage;
   final VoidCallback onReloadPressed;
 
-  ErrorReloadWidget({
+  const ErrorReloadWidget({
+    super.key,
     required this.errorMessage,
     required this.onReloadPressed,
   });
