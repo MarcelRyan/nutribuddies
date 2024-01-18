@@ -25,7 +25,7 @@ NutriBuddies aims to tackle the challenges associated with stunting by developin
     ```bash
      flutter run
      ```
-## Installable Application
+## Installable Application (for Android)
 
 https://drive.google.com/file/d/1-36c3RuETUlyOxbOPTJDGJ5KLLq6MDAq/view
 
