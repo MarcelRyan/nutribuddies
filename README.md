@@ -8,7 +8,7 @@ NutriBuddies aims to tackle the challenges associated with stunting by developin
 
 ### Prerequisites
 
-- Ensure you use an Android Smartphone and internet connection. [Flutter installation guide](https://flutter.dev/docs/get-started/install).
+- Ensure you use an Android Smartphone and internet connection.
 
 ### Steps
 
