@@ -171,7 +171,7 @@ class _HomePageState extends State<HomePage> {
                                                   text: "Lets track ",
                                                   style: TextStyle(
                                                     color: Colors.black,
-                                                    fontSize: 16,
+                                                    fontSize: 14,
                                                     fontFamily: 'Poppins',
                                                     fontWeight: FontWeight.w500,
                                                     height: 1.4,
@@ -183,7 +183,7 @@ class _HomePageState extends State<HomePage> {
                                                     text: "your kids ",
                                                     style: TextStyle(
                                                       color: Colors.black,
-                                                      fontSize: 16,
+                                                      fontSize: 14,
                                                       fontFamily: 'Poppins',
                                                       fontWeight:
                                                           FontWeight.w500,
@@ -204,7 +204,7 @@ class _HomePageState extends State<HomePage> {
                                                           style:
                                                               const TextStyle(
                                                             color: Colors.black,
-                                                            fontSize: 16,
+                                                            fontSize: 14,
                                                             fontFamily:
                                                                 'Poppins',
                                                             fontWeight:
@@ -219,7 +219,7 @@ class _HomePageState extends State<HomePage> {
                                                           style:
                                                               const TextStyle(
                                                             color: Colors.black,
-                                                            fontSize: 16,
+                                                            fontSize: 14,
                                                             fontFamily:
                                                                 'Poppins',
                                                             fontWeight:
@@ -237,7 +237,7 @@ class _HomePageState extends State<HomePage> {
                                                           style:
                                                               const TextStyle(
                                                             color: Colors.black,
-                                                            fontSize: 16,
+                                                            fontSize: 14,
                                                             fontFamily:
                                                                 'Poppins',
                                                             fontWeight:
@@ -255,7 +255,7 @@ class _HomePageState extends State<HomePage> {
                                                           style:
                                                               const TextStyle(
                                                             color: Colors.black,
-                                                            fontSize: 16,
+                                                            fontSize: 14,
                                                             fontFamily:
                                                                 'Poppins',
                                                             fontWeight:
@@ -271,7 +271,7 @@ class _HomePageState extends State<HomePage> {
                                                           style:
                                                               const TextStyle(
                                                             color: Colors.black,
-                                                            fontSize: 16,
+                                                            fontSize: 14,
                                                             fontFamily:
                                                                 'Poppins',
                                                             fontWeight:
@@ -283,7 +283,7 @@ class _HomePageState extends State<HomePage> {
                                                   text: "nutrition today",
                                                   style: TextStyle(
                                                     color: Colors.black,
-                                                    fontSize: 16,
+                                                    fontSize: 14,
                                                     fontFamily: 'Poppins',
                                                     fontWeight: FontWeight.w500,
                                                     height: 1.4,
