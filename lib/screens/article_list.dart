@@ -370,7 +370,7 @@ class _ArticleListState extends State<ArticleList> with TickerProviderStateMixin
                                                     style: const TextStyle(
                                                       color: Colors.black,
                                                       fontFamily: 'Poppins',
-                                                      fontSize: 22,
+                                                      fontSize: 16,
                                                       fontWeight: FontWeight.w600,
                                                       letterSpacing: 0.1,
                                                       height: 1.25
@@ -512,7 +512,7 @@ class _ArticleListState extends State<ArticleList> with TickerProviderStateMixin
                                                 style: const TextStyle(
                                                   color: Colors.black,
                                                   fontFamily: 'Poppins',
-                                                  fontSize: 22,
+                                                  fontSize: 16,
                                                   fontWeight: FontWeight.w600,
                                                   letterSpacing: 0.1,
                                                   height: 1.25,
@@ -654,7 +654,7 @@ class _ArticleListState extends State<ArticleList> with TickerProviderStateMixin
                                                 style: const TextStyle(
                                                   color: Colors.black,
                                                   fontFamily: 'Poppins',
-                                                  fontSize: 22,
+                                                  fontSize: 16,
                                                   fontWeight: FontWeight.w600,
                                                   letterSpacing: 0.1,
                                                   height: 1.25,
