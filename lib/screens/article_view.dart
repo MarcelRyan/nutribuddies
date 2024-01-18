@@ -15,6 +15,7 @@ class _ArticleViewState extends State<ArticleView> {
     return Scaffold(
       backgroundColor: background,
       appBar: AppBar(
+        toolbarHeight: 110,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.of(context).pop(),

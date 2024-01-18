@@ -1,9 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:nutribuddies/constant/colors.dart';
 import 'package:nutribuddies/models/article.dart';
+import 'package:nutribuddies/models/user.dart';
 import 'package:nutribuddies/screens/article_interest.dart';
 import 'package:nutribuddies/screens/article_view.dart';
+import 'package:nutribuddies/services/auth.dart';
+import 'package:nutribuddies/services/debouncer.dart';
 import 'package:provider/provider.dart';
+import 'package:nutribuddies/services/database.dart';
 
 class ArticleList extends StatefulWidget {
   const ArticleList({Key? key}) : super(key: key);
@@ -12,10 +17,14 @@ class ArticleList extends StatefulWidget {
 }
 
 class _ArticleListState extends State<ArticleList> with TickerProviderStateMixin {
+  final Debouncer _debouncer = Debouncer(milliseconds: 500);
+
   late TabController _tabController;
   String? selectedTopic;
   final List<String> topics = ["All Topics", "Parenting", "Kids\' Nutrition", "Kids\' Lifestyle", "Kids\' Health", "Kids\' Diet", "Cooking"];
   List<Article> articles = [];
+
+  TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
@@ -31,31 +40,79 @@ class _ArticleListState extends State<ArticleList> with TickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
+    Future<List<Article>> getListOfArticlesData(String searchQuery) async {
+      List<Article> articlesList = [];
+
+      QuerySnapshot querySnapshot =
+        await DatabaseService(uid:'').articleCollection.get();
+
+      for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
+        Map<String, dynamic> data =
+        documentSnapshot.data() as Map<String, dynamic>;
+        Article article = Article(
+          uid: data['uid'] ?? '',
+          title: data['title'],
+          date: data['date'],
+          topics: data['topics'] ?? [],
+          imageUrl: data['imageUrl'],
+          content: data['content'],
+        );
+        if (article.title.toLowerCase().contains(searchQuery.toLowerCase())) {
+          articlesList.add(article);
+        }
+      }
+
+      return articlesList;
+    }
+
+    Future<void> loadData(String searchQuery) async {
+      List<Article> data = await getListOfArticlesData(searchQuery);
+      setState(() {
+        articles = data;
+      });
+    }
+
     return Scaffold(
         backgroundColor: background,
         appBar: AppBar(
           backgroundColor: background,
           elevation: 0,
           shadowColor: Colors.transparent,
-          title: const Text (
-              'Article',
-              style: TextStyle(
-                color: Colors.black,
-                // fontSize: 32,
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w500,
-                letterSpacing: 0.10,
-              )
-          ),
-          actions: [
-            IconButton(
-              iconSize: 30, // Set the icon size here
-              icon: Icon(Icons.search),
-              onPressed: () {
-                // Handle search button press
+          toolbarHeight: 110,
+          title: Container(
+            height: MediaQuery.of(context).size.height * 0.065,
+            child: TextField(
+              controller: searchController,
+              onChanged: (value) {
+                _debouncer.run(() {
+                  loadData(value);
+                });
               },
+              decoration: InputDecoration(
+                prefixIcon: Icon(Icons.search),
+                hintText: "Search articles...",
+                border: InputBorder.none,
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: outline, width: 2.0),
+                  borderRadius: BorderRadius.circular(25.0),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: outline, width: 2.0),
+                  borderRadius: BorderRadius.circular(25.0),
+                ),
+              ),
             ),
-          ],
+          ),
+          // title: const Text (
+          //     'Article',
+          //     style: TextStyle(
+          //       color: Colors.black,
+          //       // fontSize: 32,
+          //       fontFamily: 'Poppins',
+          //       fontWeight: FontWeight.w500,
+          //       letterSpacing: 0.10,
+          //     )
+          // ),
           bottom: TabBar(
             controller: _tabController,
             unselectedLabelColor: primary,
@@ -198,8 +255,12 @@ class ArticleContainersList extends StatefulWidget {
 }
 
 class _ArticleContainersListState extends State<ArticleContainersList>{
+
   @override
   Widget build(BuildContext context){
+    final Users? users = Provider.of<Users?>(context);
+    final AuthService _auth = AuthService();
+
     return Scaffold(
       backgroundColor: background,
       body: Container(
