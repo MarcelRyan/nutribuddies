@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:nutribuddies/constant/colors.dart';
 import 'package:nutribuddies/models/forum.dart';
 import 'package:nutribuddies/models/user.dart';
+import 'package:nutribuddies/services/database.dart';
 import 'package:nutribuddies/services/forum.dart';
 import 'package:nutribuddies/widgets/loading.dart';
 import 'package:provider/provider.dart';
@@ -340,12 +341,20 @@ class _NewDiscussionPageState extends State<NewDiscussionPage> {
   Future<void> createForum(String title) async {
     // Get user
     final Users? users = Provider.of<Users?>(context, listen: false);
+    final Users user = await DatabaseService(uid: users!.uid).getUserData();
+    String defaultPhotoPath = 'default_profile.png';
+    String defaultPhotoUrl =
+        await DatabaseService(uid: user.uid).getPhotoUrl(defaultPhotoPath);
+    print(defaultPhotoUrl);
 
     // Create Forum
     final ForumService forumService = ForumService();
 
-    await forumService.createForum(users!.uid, title,
-        users.profilePictureUrl ?? "User", users.displayName ?? "Anonymous");
+    await forumService.createForum(
+        user.uid,
+        title,
+        user.profilePictureUrl ?? defaultPhotoUrl,
+        user.displayName ?? "Anonymous");
   }
 
   @override
@@ -417,12 +426,21 @@ class _NewAnswerPageState extends State<NewAnswerPage> {
   Future<void> answerForum(String answer) async {
     // Get user
     final Users? users = Provider.of<Users?>(context, listen: false);
+    final Users user = await DatabaseService(uid: users!.uid).getUserData();
+
+    String defaultPhotoPath = 'default_profile.png';
+    String defaultPhotoUrl =
+        await DatabaseService(uid: user.uid).getPhotoUrl(defaultPhotoPath);
 
     // Create Answer
     final ForumService forumService = ForumService();
 
-    await forumService.answerForum(widget.forum.forumId, users!.uid, answer,
-        users.profilePictureUrl ?? "User", users.displayName ?? "Anonymous");
+    await forumService.answerForum(
+        widget.forum.forumId,
+        user.uid,
+        answer,
+        user.profilePictureUrl ?? defaultPhotoUrl,
+        user.displayName ?? "Anonymous");
   }
 
   @override
