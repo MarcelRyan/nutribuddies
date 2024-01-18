@@ -612,13 +612,7 @@ class _HomePageState extends State<HomePage> {
                           children: dummyData.map((record) {
                             return GestureDetector(
                               onTap: () {
-                                if (_auth.isAnonymous()) {
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) => anonymousModal());
-                                } else {
-                                  widget.onIndexChanged(1);
-                                }
+                                widget.onIndexChanged(1);
                               },
                               child: Container(
                                 width: MediaQuery.of(context).size.width,
