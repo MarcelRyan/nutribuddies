@@ -62,7 +62,7 @@ class AuthService {
   // sign in with google
   Future<Object?> signInWithGoogle() async {
     FirebaseAuth auth = FirebaseAuth.instance;
-    User? user;
+    User user;
 
     final GoogleSignIn googleSignIn = GoogleSignIn();
 
@@ -83,6 +83,22 @@ class AuthService {
             await auth.signInWithCredential(credential);
 
         user = userCredential.user!;
+
+        List<String> topicInterest = [];
+
+        Users checkUser = await DatabaseService(uid: user.uid).getUserData();
+
+        if (checkUser.uid == "") {
+          // Update user data in Firestore
+          await DatabaseService(uid: user.uid).updateUserData(
+            uid: user.uid,
+            displayName: user.displayName!,
+            email: user.email!,
+            profilePictureUrl: user.photoURL!,
+            topicInterest: topicInterest,
+          );
+        }
+
         return _user(user);
       } on FirebaseAuthException {
         // Error
@@ -90,8 +106,7 @@ class AuthService {
         // Error
       }
     }
-
-    return user;
+    return null;
   }
 
   static SnackBar customSnackBar({required String content}) {
