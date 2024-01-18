@@ -690,6 +690,32 @@ class DatabaseService {
         .map((querySnapshot) => _getTrackerForToday(querySnapshot));
   }
 
+  double calculateBMR(double weight, double height, int age, String gender) {
+    double bmr = 0;
+    if (gender.toLowerCase() == 'boy') {
+      bmr = 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age);
+    } else {
+      bmr = 447.593 + (9.247 * weight) + (3.098 * height) - (4.33 * age);
+    }
+    return bmr;
+  }
+
+  double calculateTDEE(double bmr) {
+    return bmr * 1.55; // moderate execercise
+  }
+
+  double calculateProtein(double weight) {
+    return 0.8 * weight;
+  }
+
+  double convertKcalToGram(double calories) {
+    return 0.129598 * calories;
+  }
+
+  double calculateFats(double calories) {
+    return 0.275 * calories;
+  }
+
   Future<Nutritions> getMaxNutritions(String kidUid) async {
     try {
       QuerySnapshot querySnapshot =
@@ -703,114 +729,77 @@ class DatabaseService {
                 .inDays ~/
             365;
         String gender = data['gender'];
+        double weight = data['currentWeight'];
 
-        double calories = 0.0;
-        double protein = 0.0;
+        double calories = calculateTDEE(
+            calculateBMR(weight, data['currentHeight'], age, gender));
+        double protein = calculateProtein(weight);
         double fiber = 0.0;
-        double fat = 0.0;
+        double fat = calculateFats(convertKcalToGram(calories));
         double carbs = 0.0;
         double iron = 0.0;
 
         if (age >= 0 && age <= 3) {
-          calories = 1000;
-          protein = 13;
           fiber = 14.0;
-          fat = 35;
           carbs = 130;
           iron = 7;
         } else if (age >= 4 && age <= 8) {
-          if (gender.toLowerCase() == 'female') {
-            calories = 1200;
-            protein = 19;
+          if (gender.toLowerCase() == 'girl') {
             fiber = 16.8;
-            fat = 30;
             carbs = 130;
             iron = 10;
-          } else if (gender.toLowerCase() == 'male') {
-            calories = 1500;
-            protein = 19;
+          } else if (gender.toLowerCase() == 'boy') {
             fiber = 19.6;
-            fat = 30;
             carbs = 130;
             iron = 10;
           }
         } else if (age >= 9 && age <= 13) {
-          if (gender.toLowerCase() == 'female') {
-            calories = 1600;
-            protein = 34;
+          if (gender.toLowerCase() == 'girl') {
             fiber = 22.4;
-            fat = 30;
             carbs = 130;
             iron = 8;
-          } else if (gender.toLowerCase() == 'male') {
-            calories = 1800;
-            protein = 34;
+          } else if (gender.toLowerCase() == 'boy') {
             fiber = 25.2;
-            fat = 30;
             carbs = 130;
             iron = 8;
           }
         } else if (age >= 14 && age <= 18) {
-          if (gender.toLowerCase() == 'female') {
-            calories = 1800;
-            protein = 46;
+          if (gender.toLowerCase() == 'girl') {
             fiber = 25.2;
-            fat = 30;
             carbs = 130;
             iron = 15;
-          } else if (gender.toLowerCase() == 'male') {
-            calories = 2700;
-            protein = 52;
+          } else if (gender.toLowerCase() == 'boy') {
             fiber = 30.8;
-            fat = 30;
             carbs = 130;
             iron = 11;
           }
         } else if (age >= 19 && age <= 30) {
-          if (gender.toLowerCase() == 'female') {
-            calories = 1800;
-            protein = 46;
+          if (gender.toLowerCase() == 'girl') {
             fiber = 28.0;
-            fat = 27.5;
             carbs = 130;
             iron = 18;
-          } else if (gender.toLowerCase() == 'male') {
-            calories = 2700;
-            protein = 56;
+          } else if (gender.toLowerCase() == 'boy') {
             fiber = 33.6;
-            fat = 27.5;
             carbs = 130;
             iron = 8;
           }
         } else if (age >= 31 && age <= 50) {
-          if (gender.toLowerCase() == 'female') {
-            calories = 1800;
-            protein = 46;
+          if (gender.toLowerCase() == 'girl') {
             fiber = 25.2;
-            fat = 27.5;
             carbs = 130;
             iron = 18;
-          } else if (gender.toLowerCase() == 'male') {
-            calories = 2200;
-            protein = 56;
+          } else if (gender.toLowerCase() == 'boy') {
             fiber = 30.8;
-            fat = 27.5;
             carbs = 130;
             iron = 8;
           }
         } else if (age >= 51) {
-          if (gender.toLowerCase() == 'female') {
-            calories = 1600;
-            protein = 46;
+          if (gender.toLowerCase() == 'girl') {
             fiber = 22.4;
-            fat = 27.5;
             carbs = 130;
             iron = 8;
-          } else if (gender.toLowerCase() == 'male') {
-            calories = 2000;
-            protein = 56;
+          } else if (gender.toLowerCase() == 'boy') {
             fiber = 28.0;
-            fat = 27.5;
             carbs = 130;
             iron = 8;
           }
