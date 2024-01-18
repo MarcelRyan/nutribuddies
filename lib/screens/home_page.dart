@@ -551,9 +551,9 @@ class _HomePageState extends State<HomePage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        const Row(
+                        Row(
                           children: [
-                            FittedBox(
+                            const FittedBox(
                               fit: BoxFit.scaleDown,
                               child: Text(
                                 "Featured Articles",
@@ -567,18 +567,23 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                             ),
-                            Spacer(),
-                            FittedBox(
-                              fit: BoxFit.scaleDown,
-                              child: Text(
-                                "View All",
-                                style: TextStyle(
-                                  color: Color(0xFF5674A7),
-                                  fontSize: 14,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w500,
-                                  height: 1,
-                                  letterSpacing: 0.50,
+                            const Spacer(),
+                            GestureDetector(
+                              onTap: () {
+                                widget.onIndexChanged(1);
+                              },
+                              child: const FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  "View All",
+                                  style: TextStyle(
+                                    color: Color(0xFF5674A7),
+                                    fontSize: 14,
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w500,
+                                    height: 1,
+                                    letterSpacing: 0.50,
+                                  ),
                                 ),
                               ),
                             )
@@ -597,7 +602,7 @@ class _HomePageState extends State<HomePage> {
                                       context: context,
                                       builder: (context) => anonymousModal());
                                 } else {
-                                  // Connect article panggil page article
+                                  widget.onIndexChanged(1);
                                 }
                               },
                               child: Container(
