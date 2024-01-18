@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nutribuddies/models/kids.dart';
-import 'package:nutribuddies/services/auth.dart';
 import 'package:nutribuddies/constant/text_input_decoration.dart';
 import 'package:nutribuddies/services/database.dart';
 import 'package:nutribuddies/widgets/loading.dart';
@@ -13,6 +12,7 @@ import '../../widgets/wrapper.dart';
 import 'package:intl/intl.dart';
 import 'package:nutribuddies/services/debouncer.dart';
 
+// ignore: must_be_immutable
 class EditKids extends StatefulWidget {
   Kids kid;
 
@@ -26,7 +26,6 @@ class EditKids extends StatefulWidget {
 }
 
 class _EditKidsState extends State<EditKids> {
-  final AuthService _auth = AuthService();
   final GeneralService _general = GeneralService();
   final _formkey = GlobalKey<FormState>();
   final Debouncer _debouncer = Debouncer(milliseconds: 500);

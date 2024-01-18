@@ -1,6 +1,3 @@
-// ignore_for_file: library_private_types_in_public_api
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:nutribuddies/constant/colors.dart';
@@ -18,6 +15,7 @@ class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.onIndexChanged}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _HomePageState createState() => _HomePageState();
 }
 
@@ -196,7 +194,8 @@ class _HomePageState extends State<HomePage> {
                                                       letterSpacing: 0.15,
                                                     ),
                                                   ),
-                                                if (!_auth.isAnonymous())
+                                                if (!_auth.isAnonymous() &&
+                                                    kidsList.isNotEmpty)
                                                   for (int i = 0;
                                                       i < kidsList.length;
                                                       i++) ...[
