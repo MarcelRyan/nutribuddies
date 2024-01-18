@@ -4,30 +4,17 @@
 
 NutriBuddies aims to tackle the challenges associated with stunting by developing a comprehensive mobile application that encompasses all the necessary features for parents, ensuring an effective solution to promote optimal child growth and development.
 
-## How to Run
+## How to Run (for Android)
 
 ### Prerequisites
 
-- Ensure you have Flutter and Dart installed on your machine. If not, follow the official [Flutter installation guide](https://flutter.dev/docs/get-started/install).
-- Clone this repository to your local machine.
+- Ensure you use an Android Smartphone and internet connection. [Flutter installation guide](https://flutter.dev/docs/get-started/install).
 
 ### Steps
 
-1. Open a terminal and navigate to the project directory.
-2. Run the following command to get the dependencies:
-
-   ```bash
-   flutter pub get
-   ```
-4. Connect your device or start an emulator.
-5. Run the application
-
-    ```bash
-     flutter run
-     ```
-## Installable Application (for Android)
-
-https://drive.google.com/file/d/1-36c3RuETUlyOxbOPTJDGJ5KLLq6MDAq/view
+1. Download the application from [here](https://drive.google.com/file/d/1-36c3RuETUlyOxbOPTJDGJ5KLLq6MDAq/view).
+2. Once the download is complete, you can start the installation.
+3. After a successful installation, you can use the application.
 
 ## Screenshots
 ![splash_screen](https://github.com/Raylouiss/nutribuddies/assets/92111319/1ac453c6-f619-4461-a098-bc3a21a9c27d)
