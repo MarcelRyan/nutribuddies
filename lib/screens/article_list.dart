@@ -21,7 +21,7 @@ class _ArticleListState extends State<ArticleList> with TickerProviderStateMixin
 
   late TabController _tabController;
   List<String> selectedTopic = [];
-  final List<String> topics = ["All Topics", "Parenting", "Kids' Nutrition", "Kids' Lifestyle", "Kids' Health", "Kids' Diet", "Cooking"];
+  List<String> topics = ["All Topics", "Parenting", "Kids' Nutrition", "Kids' Lifestyle", "Kids' Health", "Kids' Diet", "Cooking"];
   List<Article> articles = [];
 
   TextEditingController searchController = TextEditingController();
@@ -283,7 +283,7 @@ class _ArticleListState extends State<ArticleList> with TickerProviderStateMixin
           children: [
             Expanded(
               child: FutureBuilder<List<Article>>(
-                future: getListOfArticlesFiltered(searchController.text, users!.topicsInterest),
+                future: getListOfArticlesFiltered(searchController.text, (users!.topicsInterest.isEmpty) ? topics : users.topicsInterest),
                 builder: (context, snapshot){
                   if (snapshot.connectionState == ConnectionState.waiting){
                     return const CircularProgressIndicator();
@@ -300,8 +300,8 @@ class _ArticleListState extends State<ArticleList> with TickerProviderStateMixin
                                   right: MediaQuery.of(context).size.width*0.08,
                                 ),
                                 margin: EdgeInsets.only(
-                                    top: MediaQuery.of(context).size.height*0.025,
-                                    bottom: MediaQuery.of(context).size.height*0.025
+                                    top: MediaQuery.of(context).size.height*0.0125,
+                                    bottom: MediaQuery.of(context).size.height*0.0125
                                 ),
                                 child: InkWell(
                                       onTap: (){
