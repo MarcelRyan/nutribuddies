@@ -313,7 +313,13 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         GestureDetector(
                           onTap: () {
-                            widget.onIndexChanged(2);
+                            if (_auth.isAnonymous()) {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) => anonymousModal());
+                            } else {
+                              widget.onIndexChanged(2);
+                            }
                           },
                           child: Container(
                             width: MediaQuery.of(context).size.width * 0.18,
@@ -357,7 +363,13 @@ class _HomePageState extends State<HomePage> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            widget.onIndexChanged(3);
+                            if (_auth.isAnonymous()) {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) => anonymousModal());
+                            } else {
+                              widget.onIndexChanged(3);
+                            }
                           },
                           child: Container(
                             width: MediaQuery.of(context).size.width * 0.18,
