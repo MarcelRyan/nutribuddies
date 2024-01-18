@@ -1,8 +1,35 @@
-import 'package:flutter/material.dart';
-import 'package:nutribuddies/constant/colors.dart';
+// ignore_for_file: use_build_context_synchronously
 
-class ForumPage extends StatelessWidget {
-  const ForumPage({super.key});
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
+import 'package:nutribuddies/constant/colors.dart';
+import 'package:nutribuddies/models/forum.dart';
+import 'package:nutribuddies/models/user.dart';
+import 'package:nutribuddies/services/forum.dart';
+import 'package:nutribuddies/widgets/loading.dart';
+import 'package:provider/provider.dart';
+
+class ForumPage extends StatefulWidget {
+  const ForumPage({Key? key}) : super(key: key);
+
+  @override
+  State<ForumPage> createState() => _ForumPageState();
+}
+
+class _ForumPageState extends State<ForumPage> {
+  Future<List<Forum>?> getForum(BuildContext context) async {
+    try {
+      // Initialize forum service
+      final ForumService forumService = ForumService();
+
+      final forums = await forumService.getForum();
+
+      return forums;
+    } catch (error) {
+      return [];
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,13 +52,15 @@ class ForumPage extends StatelessWidget {
                       surfaceTintColor: primary,
                       foregroundColor: onPrimary,
                       backgroundColor: primary),
-                  onPressed: () {
-                    Navigator.push(
+                  onPressed: () async {
+                    await Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => const NewDiscussionPage(),
                       ),
                     );
+
+                    setState(() {});
                   },
                   child: const Text(
                     'Start A Discussion!',
@@ -41,44 +70,44 @@ class ForumPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 16),
-                ListView(
-                  padding: const EdgeInsets.all(0),
-                  shrinkWrap: true,
-                  primary: false,
-                  children: const [
-                    DiscussionCard(
-                      userProfile: 'A',
-                      userName: 'John Doe',
-                      createdAt: '2 hours ago',
-                      question: 'What is your favorite programming language?',
-                      answers: 2,
-                      isTopic: true,
-                    ),
-                    DiscussionCard(
-                      userProfile: 'B',
-                      userName: 'Jane Smith',
-                      createdAt: '1 day ago',
-                      question: 'Flutter vs React Native - pros and cons?',
-                      answers: 3,
-                      isTopic: true,
-                    ),
-                    DiscussionCard(
-                      userProfile: 'A',
-                      userName: 'John Doe',
-                      createdAt: '2 hours ago',
-                      question: 'What is your favorite programming language?',
-                      answers: 2,
-                      isTopic: true,
-                    ),
-                    DiscussionCard(
-                      userProfile: 'B',
-                      userName: 'Jane Smith',
-                      createdAt: '1 day ago',
-                      question: 'Flutter vs React Native - pros and cons?',
-                      answers: 3,
-                      isTopic: true,
-                    ),
-                  ],
+                FutureBuilder<List<Forum>?>(
+                  future: getForum(context),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}',
+                          style: const TextStyle(
+                            fontFamily: 'Poppins',
+                          ));
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return const Text('No discussion available',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                          ));
+                    } else {
+                      List<Forum> forums = snapshot.data!;
+
+                      return ListView.builder(
+                        itemCount: forums.length,
+                        shrinkWrap: true,
+                        primary: false,
+                        itemBuilder: (context, index) {
+                          Forum forum = forums[index];
+                          return DiscussionCard(
+                            forum: forum,
+                            userProfile: forum.profilePicture,
+                            userName: forum.name,
+                            createdAt: forum.createdAt.toString(),
+                            question: forum.question,
+                            answers: forum.answers.length,
+                            isTopic: true,
+                            refresh: () => {setState(() {})},
+                          );
+                        },
+                      );
+                    }
+                  },
                 ),
               ],
             ),
@@ -88,12 +117,14 @@ class ForumPage extends StatelessWidget {
 }
 
 class DiscussionCard extends StatelessWidget {
+  final Forum forum;
   final String userProfile;
   final String userName;
   final String createdAt;
   final String question;
   final int answers;
   final bool isTopic;
+  final Function? refresh;
 
   const DiscussionCard({
     Key? key,
@@ -103,19 +134,21 @@ class DiscussionCard extends StatelessWidget {
     required this.question,
     required this.isTopic,
     this.answers = 0,
+    required this.forum,
+    this.refresh,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
         if (isTopic) {
-          Navigator.push(
+          await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const DiscussionPage(),
+              builder: (context) => DiscussionPage(forumId: forum.forumId),
             ),
-          );
+          ).then((value) => refresh!());
         }
       },
       child: Card(
@@ -130,7 +163,8 @@ class DiscussionCard extends StatelessWidget {
               Row(
                 children: [
                   CircleAvatar(
-                    child: Text(userProfile),
+                    backgroundImage: NetworkImage(userProfile),
+                    radius: 20,
                   ),
                   const SizedBox(width: 8),
                   Column(
@@ -142,7 +176,8 @@ class DiscussionCard extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Text(createdAt),
+                      Text(DateFormat('dd-MM-yyyy HH:mm')
+                          .format(forum.createdAt)),
                     ],
                   ),
                 ],
@@ -156,7 +191,7 @@ class DiscussionCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              answers != 0
+              isTopic
                   ? Text(
                       '$answers answer(s)',
                       style: const TextStyle(
@@ -173,8 +208,32 @@ class DiscussionCard extends StatelessWidget {
   }
 }
 
-class DiscussionPage extends StatelessWidget {
-  const DiscussionPage({super.key});
+class DiscussionPage extends StatefulWidget {
+  final String forumId;
+  const DiscussionPage({Key? key, required this.forumId}) : super(key: key);
+
+  @override
+  State<DiscussionPage> createState() => _DiscussionPageState();
+}
+
+class _DiscussionPageState extends State<DiscussionPage> {
+  late Future<Forum?> forumFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    forumFuture = getForumById();
+  }
+
+  Future<Forum?> getForumById() async {
+    try {
+      final ForumService forumService = ForumService();
+      final forum = await forumService.getForumById(widget.forumId);
+      return forum;
+    } catch (error) {
+      return null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -185,78 +244,82 @@ class DiscussionPage extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Question
-              const DiscussionCard(
-                userProfile: 'A',
-                userName: 'John Doe',
-                createdAt: '2 hours ago',
-                question: 'What is your favorite programming language?',
-                answers: 4,
-                isTopic: false,
-              ),
-              const SizedBox(height: 8),
-              // Button to add a new answer
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    surfaceTintColor: primary,
-                    foregroundColor: onPrimary,
-                    backgroundColor: primary),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const NewAnswerPage(),
+          child: FutureBuilder<Forum?>(
+            future: forumFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Loading();
+              } else if (snapshot.hasError || !snapshot.hasData) {
+                return const Text('Error fetching forum details',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                    ));
+              } else {
+                Forum forum = snapshot.data!;
+
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // Question
+                    DiscussionCard(
+                      forum: forum,
+                      userProfile: forum.profilePicture,
+                      userName: forum.name,
+                      createdAt: forum.createdAt.toString(),
+                      question: forum.question,
+                      answers: forum.answers.length,
+                      isTopic: false,
                     ),
-                  );
-                },
-                child: const Text('Add New Answer'),
-              ),
-              const SizedBox(height: 16),
-              // Answers
-              const Text(
-                "Answers (14)",
-                style: TextStyle(fontFamily: 'Poppins'),
-              ),
-              const SizedBox(height: 16),
-              ListView(
-                padding: const EdgeInsets.all(0),
-                shrinkWrap: true,
-                primary: false,
-                children: const [
-                  DiscussionCard(
-                    userProfile: 'A',
-                    userName: 'John Doe',
-                    createdAt: '2 hours ago',
-                    question: 'What is your favorite programming language?',
-                    isTopic: false,
-                  ),
-                  DiscussionCard(
-                    userProfile: 'B',
-                    userName: 'Jane Smith',
-                    createdAt: '1 day ago',
-                    question: 'Flutter vs React Native - pros and cons?',
-                    isTopic: false,
-                  ),
-                  DiscussionCard(
-                    userProfile: 'A',
-                    userName: 'John Doe',
-                    createdAt: '2 hours ago',
-                    question: 'What is your favorite programming language?',
-                    isTopic: false,
-                  ),
-                  DiscussionCard(
-                    userProfile: 'B',
-                    userName: 'Jane Smith',
-                    createdAt: '1 day ago',
-                    question: 'Flutter vs React Native - pros and cons?',
-                    isTopic: false,
-                  ),
-                ],
-              ),
-            ],
+                    const SizedBox(height: 8),
+                    // Button to add a new answer
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          surfaceTintColor: primary,
+                          foregroundColor: onPrimary,
+                          backgroundColor: primary),
+                      onPressed: () async {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => NewAnswerPage(forum: forum),
+                          ),
+                        );
+
+                        setState(() {
+                          forumFuture = getForumById();
+                        });
+                      },
+                      child: const Text('Add New Answer'),
+                    ),
+                    const SizedBox(height: 16),
+                    // Answers
+                    Text(
+                      "Answers (${forum.answers.length})",
+                      style: const TextStyle(fontFamily: 'Poppins'),
+                    ),
+                    const SizedBox(height: 16),
+                    ListView.builder(
+                      padding: const EdgeInsets.all(0),
+                      itemCount: forum.answers.length,
+                      shrinkWrap: true,
+                      primary: false,
+                      itemBuilder: (context, index) {
+                        ForumAnswers answer = forum.answers[index];
+                        return DiscussionCard(
+                          forum: forum,
+                          userProfile: answer.profilePicture,
+                          userName: answer.name,
+                          createdAt: answer.createdAt.toString(),
+                          question: answer.answer,
+                          answers: 0,
+                          isTopic: false,
+                        );
+                      },
+                    ),
+                  ],
+                );
+              }
+            },
           ),
         ),
       ),
@@ -264,8 +327,26 @@ class DiscussionPage extends StatelessWidget {
   }
 }
 
-class NewDiscussionPage extends StatelessWidget {
-  const NewDiscussionPage({super.key});
+class NewDiscussionPage extends StatefulWidget {
+  const NewDiscussionPage({Key? key}) : super(key: key);
+
+  @override
+  State<NewDiscussionPage> createState() => _NewDiscussionPageState();
+}
+
+class _NewDiscussionPageState extends State<NewDiscussionPage> {
+  final TextEditingController _titleController = TextEditingController();
+
+  Future<void> createForum(String title) async {
+    // Get user
+    final Users? users = Provider.of<Users?>(context, listen: false);
+
+    // Create Forum
+    final ForumService forumService = ForumService();
+
+    await forumService.createForum(users!.uid, title,
+        users.profilePictureUrl ?? "User", users.displayName ?? "Anonymous");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -286,9 +367,10 @@ class NewDiscussionPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            const TextField(
+            TextField(
+              controller: _titleController,
               maxLines: 8,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: 'Enter discussion title...',
               ),
@@ -296,11 +378,20 @@ class NewDiscussionPage extends StatelessWidget {
             const SizedBox(height: 16),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                  surfaceTintColor: primary,
-                  foregroundColor: onPrimary,
-                  backgroundColor: primary),
-              onPressed: () {
-                // Handle starting a new discussion
+                surfaceTintColor: primary,
+                foregroundColor: onPrimary,
+                backgroundColor: primary,
+              ),
+              onPressed: () async {
+                String title = _titleController.text;
+                try {
+                  await createForum(title);
+                  Navigator.pop(context, true);
+                  Fluttertoast.showToast(
+                      msg: "Discussion created successfully.");
+                } catch (e) {
+                  Fluttertoast.showToast(msg: "Error creating new discussion.");
+                }
               },
               child: const Text('Start Discussion!'),
             ),
@@ -311,8 +402,28 @@ class NewDiscussionPage extends StatelessWidget {
   }
 }
 
-class NewAnswerPage extends StatelessWidget {
-  const NewAnswerPage({Key? key}) : super(key: key);
+class NewAnswerPage extends StatefulWidget {
+  const NewAnswerPage({Key? key, required this.forum}) : super(key: key);
+
+  final Forum forum;
+
+  @override
+  State<NewAnswerPage> createState() => _NewAnswerPageState();
+}
+
+class _NewAnswerPageState extends State<NewAnswerPage> {
+  final TextEditingController _answerController = TextEditingController();
+
+  Future<void> answerForum(String answer) async {
+    // Get user
+    final Users? users = Provider.of<Users?>(context, listen: false);
+
+    // Create Answer
+    final ForumService forumService = ForumService();
+
+    await forumService.answerForum(widget.forum.forumId, users!.uid, answer,
+        users.profilePictureUrl ?? "User", users.displayName ?? "Anonymous");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -333,9 +444,10 @@ class NewAnswerPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            const TextField(
+            TextField(
+              controller: _answerController,
               maxLines: 8,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: 'Enter your answer...',
               ),
@@ -343,11 +455,19 @@ class NewAnswerPage extends StatelessWidget {
             const SizedBox(height: 16),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                  surfaceTintColor: primary,
-                  foregroundColor: onPrimary,
-                  backgroundColor: primary),
-              onPressed: () {
-                // Handle add new answer
+                surfaceTintColor: primary,
+                foregroundColor: onPrimary,
+                backgroundColor: primary,
+              ),
+              onPressed: () async {
+                String answer = _answerController.text;
+                try {
+                  await answerForum(answer);
+                  Navigator.pop(context, true);
+                  Fluttertoast.showToast(msg: "Answer created successfully.");
+                } catch (e) {
+                  Fluttertoast.showToast(msg: "Error creating answer.");
+                }
               },
               child: const Text('Add your answer!'),
             ),

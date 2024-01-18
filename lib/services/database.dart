@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:nutribuddies/models/forum.dart';
 import 'package:nutribuddies/models/meals.dart';
 import 'package:nutribuddies/models/menu_recommendation.dart';
 import 'package:nutribuddies/models/tracker.dart';
@@ -968,6 +969,79 @@ class DatabaseService {
       }
     } catch (e) {
       return [];
+    }
+  }
+
+  Future<List<Forum>> getForum() async {
+    QuerySnapshot querySnapshot = await forumCollection.get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      List<Forum> forums = querySnapshot.docs.map((doc) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+
+        // Access the document ID using doc.id
+        String forumId = doc.id;
+
+        return Forum.fromJson(data, forumId);
+      }).toList();
+
+      return forums;
+    } else {
+      return [];
+    }
+  }
+
+  Future<Forum?> getForumById(String forumId) async {
+    try {
+      // Get the document snapshot for the specified forum ID
+      DocumentSnapshot docSnapshot = await forumCollection.doc(forumId).get();
+
+      if (docSnapshot.exists) {
+        // Access data and create Forum object
+        Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
+        return Forum.fromJson(data, forumId);
+      } else {
+        // Forum with the specified ID doesn't exist
+        return null;
+      }
+    } catch (e) {
+      // Handle errors if any
+      return null;
+    }
+  }
+
+  Future<void> createForum(String userId, String question,
+      String profilePicture, String name) async {
+    try {
+      await forumCollection.add({
+        'userId': userId,
+        'question': question,
+        'profilePicture': profilePicture,
+        'name': name,
+        'createdAt': FieldValue.serverTimestamp(),
+        'answers': [],
+      });
+    } catch (e) {
+      // Error
+    }
+  }
+
+  Future<void> answerForum(String forumId, String userId, String answer,
+      String profilePicture, String name) async {
+    try {
+      await forumCollection.doc(forumId).update({
+        'answers': FieldValue.arrayUnion([
+          {
+            'userId': userId,
+            'answer': answer,
+            'profilePicture': profilePicture,
+            'name': name,
+            'createdAt': Timestamp.now(),
+          },
+        ]),
+      });
+    } catch (e) {
+      // Error
     }
   }
 }
