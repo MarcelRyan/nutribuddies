@@ -23,7 +23,9 @@ class AuthService {
           displayName: user.displayName,
           email: user.email,
           profilePictureUrl: user.photoURL,
-          topicsInterest: topicInterest);
+          topicsInterest: topicInterest,
+          isGoogleSignIn: user.providerData
+              .any((userInfo) => userInfo.providerId == 'google.com'));
     } else {
       return null;
     }

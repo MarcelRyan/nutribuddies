@@ -150,44 +150,7 @@ class _SignUpState extends State<SignUp> {
                               ]),
                             ),
                             SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.02,
-                            ),
-                            ElevatedButton(
-                              onPressed: () async {},
-                              style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(100.0),
-                                ),
-                                minimumSize: Size(double.infinity,
-                                    MediaQuery.of(context).size.height * 0.06),
-                                backgroundColor: background,
-                                foregroundColor: primary,
-                                side:
-                                    const BorderSide(color: outline, width: 1),
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset('assets/Login/icon.png'),
-                                  SizedBox(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.02,
-                                  ),
-                                  const Text(
-                                    'Sign Up with Google',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontFamily: 'Poppins',
-                                      fontWeight: FontWeight.w500,
-                                      letterSpacing: 0.1,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.02,
+                              height: MediaQuery.of(context).size.height * 0.03,
                             ),
                             Align(
                               alignment: Alignment.center,
