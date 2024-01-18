@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nutribuddies/models/user.dart';
 import 'package:nutribuddies/screens/authenticate/authenticate.dart';
 import 'package:nutribuddies/screens/home.dart';
+import 'package:nutribuddies/services/auth.dart';
 import 'package:nutribuddies/services/food_tracker.dart';
 import 'package:nutribuddies/widgets/loading.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +15,8 @@ class Wrapper extends StatelessWidget {
   bool goToProfile;
 
   final bool result;
+  final AuthService _auth = AuthService();
+
   Wrapper(
       {super.key,
       this.goToHome = false,
@@ -35,7 +38,7 @@ class Wrapper extends StatelessWidget {
     } else if (user != null && result && goToAddKids) {
       goToAddKids = false;
       return AddKids();
-    } else if (user != null) {
+    } else if (user != null && !_auth.isAnonymous()) {
       return FutureBuilder(
         future: checkIfUserHasKids(context),
         builder: (context, snapshot) {
