@@ -114,7 +114,7 @@ class DirectLogin extends StatelessWidget {
 
     return Container(
       color: background,
-      padding: const EdgeInsets.fromLTRB(40, 120, 40, 65),
+      padding: const EdgeInsets.fromLTRB(40, 80, 40, 65),
       child: Column(
         children: [
           Image.asset('assets/direct_login.png'),
@@ -133,7 +133,7 @@ class DirectLogin extends StatelessWidget {
             ),
           ),
           const SizedBox(
-            height: 35,
+            height: 20,
           ),
           const Text(
             "This feature is only available for NutriBuddies users. Please sign in first to your account.",
@@ -149,7 +149,7 @@ class DirectLogin extends StatelessWidget {
             ),
           ),
           const SizedBox(
-            height: 60,
+            height: 40,
           ),
           ElevatedButton(
             onPressed: () async {

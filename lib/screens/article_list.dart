@@ -262,7 +262,8 @@ class _ArticleListState extends State<ArticleList>
         body: TabBarView(
           controller: _tabController,
           children: [
-            Expanded(
+            // ignore: avoid_unnecessary_containers
+            Container(
               child: FutureBuilder<List<Article>>(
                 future: getListOfArticlesFiltered(
                     searchController.text, selectedTopic),
