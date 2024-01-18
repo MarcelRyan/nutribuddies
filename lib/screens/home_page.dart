@@ -214,7 +214,7 @@ class _HomePageState extends State<HomePage> {
                                                                 FontWeight.w700,
                                                             height: 1.4,
                                                           )),
-                                                    if (i == 0)
+                                                    if (i == 0 && kidsList.length != 1)
                                                       TextSpan(
                                                           text:
                                                               "${kidsList[i].displayName}",

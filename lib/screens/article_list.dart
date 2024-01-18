@@ -5,7 +5,6 @@ import 'package:nutribuddies/constant/colors.dart';
 import 'package:nutribuddies/models/article.dart';
 import 'package:nutribuddies/models/user.dart';
 import 'package:nutribuddies/screens/article_interest.dart';
-import 'package:nutribuddies/screens/article_view.dart';
 import 'package:nutribuddies/services/auth.dart';
 import 'package:nutribuddies/services/debouncer.dart';
 import 'package:provider/provider.dart';
@@ -21,8 +20,8 @@ class _ArticleListState extends State<ArticleList> with TickerProviderStateMixin
   final Debouncer _debouncer = Debouncer(milliseconds: 500);
 
   late TabController _tabController;
-  String? selectedTopic;
-  final List<String> topics = ["All Topics", "Parenting", "Kids\' Nutrition", "Kids\' Lifestyle", "Kids\' Health", "Kids\' Diet", "Cooking"];
+  List<String> selectedTopic = [];
+  final List<String> topics = ["All Topics", "Parenting", "Kids' Nutrition", "Kids' Lifestyle", "Kids' Health", "Kids' Diet", "Cooking"];
   List<Article> articles = [];
 
   TextEditingController searchController = TextEditingController();
@@ -31,6 +30,7 @@ class _ArticleListState extends State<ArticleList> with TickerProviderStateMixin
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
+    selectedTopic = ["All Topics"];
   }
 
   @override
@@ -41,6 +41,8 @@ class _ArticleListState extends State<ArticleList> with TickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
+    final Users? users = Provider.of<Users?>(context);
+
     Future<List<Article>> getListOfArticlesData(String searchQuery) async {
       List<Article> articlesList = [];
 
@@ -62,6 +64,43 @@ class _ArticleListState extends State<ArticleList> with TickerProviderStateMixin
           articlesList.add(article);
         }
       }
+
+      // Sort the articlesList by date
+      articlesList.sort((a, b) => a.date.compareTo(b.date));
+
+      return articlesList;
+    }
+
+    Future<List<Article>> getListOfArticlesFiltered(String searchQuery, List<String> selectedTopics) async{
+      List<Article> articlesList = [];
+
+      QuerySnapshot querySnapshot =
+      await DatabaseService(uid:'').articleCollection.get();
+
+      for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
+        Map<String, dynamic> data =
+        documentSnapshot.data() as Map<String, dynamic>;
+        Article article = Article(
+          uid: data['uid'] ?? '',
+          title: data['title'],
+          date: data['date'],
+          topics: List<String>.from(data['topics'] ?? []),
+          imageUrl: data['imageUrl'],
+          content: data['content'],
+        );
+        // Check if any selected topic is present in the article's topics
+        for (String topic in selectedTopics) {
+          if (article.title.toLowerCase().contains(searchQuery.toLowerCase()) && topic == "All Topics"){
+            articlesList.add(article);
+          } else if (article.title.toLowerCase().contains(searchQuery.toLowerCase()) && article.topics.contains(topic) && !articlesList.contains(article)) {
+            articlesList.add(article);
+            break; // No need to continue checking topics if one is found
+          }
+        }
+      }
+
+      // Sort the articlesList by date
+      articlesList.sort((a, b) => a.date.compareTo(b.date));
 
       return articlesList;
     }
@@ -173,7 +212,7 @@ class _ArticleListState extends State<ArticleList> with TickerProviderStateMixin
                 ),
               ),
               Container(
-                decoration: (selectedTopic=='All Topics') ?
+                decoration: (selectedTopic[0]=='All Topics') ?
                 BoxDecoration(
                   borderRadius: BorderRadius.circular(30),
                   border: Border.all(
@@ -190,10 +229,10 @@ class _ArticleListState extends State<ArticleList> with TickerProviderStateMixin
                   color: primary,
                 ),
                 child: DropdownButton<String?>(
-                  value: selectedTopic,
+                  value: selectedTopic[0],
                   onChanged: (value) {
                     setState(() {
-                      selectedTopic = value;
+                      selectedTopic[0] = value!;
                     });
                   },
                   padding: EdgeInsets.only(
@@ -203,7 +242,7 @@ class _ArticleListState extends State<ArticleList> with TickerProviderStateMixin
                   underline: Container(),
                   icon: Icon(
                     Icons.arrow_drop_down,
-                    color: selectedTopic=='All Topics' ? primary : Colors.white,
+                    color: selectedTopic[0]=='All Topics' ? primary : Colors.white,
                   ),
                   selectedItemBuilder: (BuildContext context) {
                     return topics
@@ -212,7 +251,7 @@ class _ArticleListState extends State<ArticleList> with TickerProviderStateMixin
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: selectedTopic=='All Topics' ? primary : Colors.white,
+                        color: selectedTopic[0]=='All Topics' ? primary : Colors.white,
                       ),
                     ),
                     ).toList();
@@ -244,7 +283,7 @@ class _ArticleListState extends State<ArticleList> with TickerProviderStateMixin
           children: [
             Expanded(
               child: FutureBuilder<List<Article>>(
-                future: getListOfArticlesData(searchController.text),
+                future: getListOfArticlesFiltered(searchController.text, users!.topicsInterest),
                 builder: (context, snapshot){
                   if (snapshot.connectionState == ConnectionState.waiting){
                     return const CircularProgressIndicator();
@@ -260,13 +299,13 @@ class _ArticleListState extends State<ArticleList> with TickerProviderStateMixin
                                   left: MediaQuery.of(context).size.width*0.08,
                                   right: MediaQuery.of(context).size.width*0.08,
                                 ),
-                                margin: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.025),
+                                margin: EdgeInsets.only(
+                                    top: MediaQuery.of(context).size.height*0.025,
+                                    bottom: MediaQuery.of(context).size.height*0.025
+                                ),
                                 child: InkWell(
                                       onTap: (){
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(builder: (context) => const ArticleView())
-                                        );
+                                        _articleViewPage(context, record);
                                       },
                                       child: Container(
                                         width: MediaQuery.of(context).size.width * 0.77,
@@ -389,7 +428,7 @@ class _ArticleListState extends State<ArticleList> with TickerProviderStateMixin
             ),
             Expanded(
               child: FutureBuilder<List<Article>>(
-                future: getListOfArticlesData(searchController.text),
+                future: getListOfArticlesFiltered(searchController.text, selectedTopic),
                 builder: (context, snapshot){
                   if (snapshot.connectionState == ConnectionState.waiting){
                     return const CircularProgressIndicator();
@@ -405,13 +444,10 @@ class _ArticleListState extends State<ArticleList> with TickerProviderStateMixin
                                   left: MediaQuery.of(context).size.width*0.08,
                                   right: MediaQuery.of(context).size.width*0.08,
                                 ),
-                                margin: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.025),
+                                margin: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.0125, bottom: MediaQuery.of(context).size.height*0.0125),
                                 child: InkWell(
                                   onTap: (){
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(builder: (context) => const ArticleView())
-                                    );
+                                    _articleViewPage(context, record);
                                   },
                                   child: Container(
                                     width: MediaQuery.of(context).size.width * 0.77,
@@ -533,8 +569,8 @@ class _ArticleListState extends State<ArticleList> with TickerProviderStateMixin
               ),
             ),
             Expanded(
-              child: FutureBuilder<List<Article>>(
-                future: getListOfArticlesData(searchController.text),
+    child: FutureBuilder<List<Article>>(
+    future: getListOfArticlesFiltered(searchController.text, selectedTopic),
                 builder: (context, snapshot){
                   if (snapshot.connectionState == ConnectionState.waiting){
                     return const CircularProgressIndicator();
@@ -550,13 +586,10 @@ class _ArticleListState extends State<ArticleList> with TickerProviderStateMixin
                                   left: MediaQuery.of(context).size.width*0.08,
                                   right: MediaQuery.of(context).size.width*0.08,
                                 ),
-                                margin: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.025),
+                                margin: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.0125, bottom: MediaQuery.of(context).size.height*0.0125),
                                 child: InkWell(
                                   onTap: (){
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(builder: (context) => const ArticleView())
-                                    );
+                                    _articleViewPage(context, record);
                                   },
                                   child: Container(
                                     width: MediaQuery.of(context).size.width * 0.77,
@@ -678,6 +711,112 @@ class _ArticleListState extends State<ArticleList> with TickerProviderStateMixin
               ),
             ),
           ],)
+    );
+  }
+
+
+  void _articleViewPage(BuildContext context, Article record){
+    Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ArticleView(record: record))
+    );
+  }
+}
+
+class ArticleView extends StatefulWidget {
+  final Article record;
+
+  const ArticleView({Key? key, required this.record}) : super(key: key);
+
+  @override
+  _ArticleViewState createState() => _ArticleViewState();
+}
+
+class _ArticleViewState extends State<ArticleView> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: background,
+      appBar: AppBar(
+        toolbarHeight: 110,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        centerTitle: true,
+        title: const Text(
+          'Article',
+          style: TextStyle(
+            color: black,
+            fontSize: 16,
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+        elevation: 0.0,
+        backgroundColor: background,
+        foregroundColor: black,
+      ),
+      body: Container(
+          padding: EdgeInsets.only(
+              left: MediaQuery.of(context).size.width*0.08,
+              right: MediaQuery.of(context).size.width*0.08,
+              bottom: MediaQuery.of(context).size.width*0.07
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  margin: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.width*0.015,
+                      bottom: MediaQuery.of(context).size.width*0.025,
+                  ),
+                  child: Text(
+                    widget.record.title,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontFamily: 'Poppins',
+                      fontSize: 32,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.025),
+                  child: Text(
+                    DateFormat.yMMMMd('en_US').format(widget.record.date.toDate()),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: outline,
+                      fontFamily: 'Poppins',
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.025),
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  ),
+                  child: Image.asset(widget.record.imageUrl),
+                ),
+                Container(
+                  child: Text(
+                    widget.record.content.replaceAll("\\n", "\n"),
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontFamily: 'Poppins',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )
+      ),
     );
   }
 }
