@@ -125,9 +125,6 @@ class _HomePageState extends State<HomePage> {
                                     return const CircularProgressIndicator();
                                   } else if (snapshot.hasError) {
                                     return Text('Error: ${snapshot.error}');
-                                  } else if (!snapshot.hasData ||
-                                      snapshot.data!.isEmpty) {
-                                    return const Text('No kids available');
                                   } else {
                                     List<Kids> kidsList = snapshot.data!;
                                     return Container(
@@ -203,18 +200,19 @@ class _HomePageState extends State<HomePage> {
                                                         kidsList.length == 1)
                                                       TextSpan(
                                                           text:
-                                                              "${kidsList[i].displayName}'s",
+                                                              "${kidsList[i].displayName}'s ",
                                                           style:
                                                               const TextStyle(
                                                             color: Colors.black,
-                                                            fontSize: 16,
+                                                            fontSize: 14,
                                                             fontFamily:
                                                                 'Poppins',
                                                             fontWeight:
                                                                 FontWeight.w700,
                                                             height: 1.4,
                                                           )),
-                                                    if (i == 0 && kidsList.length != 1)
+                                                    if (i == 0 &&
+                                                        kidsList.length != 1)
                                                       TextSpan(
                                                           text:
                                                               "${kidsList[i].displayName}",
@@ -231,10 +229,29 @@ class _HomePageState extends State<HomePage> {
                                                     if (i ==
                                                             kidsList.length -
                                                                 1 &&
-                                                        kidsList.length != 1)
+                                                        kidsList.length != 1 &&
+                                                        kidsList.length != 2)
                                                       TextSpan(
                                                           text:
                                                               ", and ${kidsList[i].displayName}'s ",
+                                                          style:
+                                                              const TextStyle(
+                                                            color: Colors.black,
+                                                            fontSize: 14,
+                                                            fontFamily:
+                                                                'Poppins',
+                                                            fontWeight:
+                                                                FontWeight.w700,
+                                                            height: 1.4,
+                                                          )),
+                                                    if (i ==
+                                                            kidsList.length -
+                                                                1 &&
+                                                        kidsList.length != 1 &&
+                                                        kidsList.length == 2)
+                                                      TextSpan(
+                                                          text:
+                                                              " and ${kidsList[i].displayName}'s ",
                                                           style:
                                                               const TextStyle(
                                                             color: Colors.black,
