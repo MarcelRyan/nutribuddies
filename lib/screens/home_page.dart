@@ -5,6 +5,7 @@ import 'package:nutribuddies/models/kids.dart';
 import 'package:nutribuddies/models/user.dart';
 import 'package:nutribuddies/screens/forum.dart';
 import 'package:nutribuddies/screens/authenticate/authenticate.dart';
+import 'package:nutribuddies/screens/home.dart';
 import 'package:nutribuddies/services/auth.dart';
 import 'package:nutribuddies/services/database.dart';
 import 'package:provider/provider.dart';
@@ -444,10 +445,24 @@ class _HomePageState extends State<HomePage> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const ForumPage()));
+                            _auth.isAnonymous()
+                                ? Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => Scaffold(
+                                        backgroundColor: background,
+                                        appBar: AppBar(
+                                          title: const Text('Forum'),
+                                        ),
+                                        body: const DirectLogin(),
+                                      ),
+                                    ),
+                                  )
+                                : Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const ForumPage()));
                           },
                           child: Container(
                             width: MediaQuery.of(context).size.width * 0.18,

@@ -113,6 +113,7 @@ class DirectLogin extends StatelessWidget {
     final AuthService auth = AuthService();
 
     return Container(
+      color: background,
       padding: const EdgeInsets.fromLTRB(40, 120, 40, 65),
       child: Column(
         children: [
