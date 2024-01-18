@@ -196,7 +196,8 @@ class _HomePageState extends State<HomePage> {
                                                       letterSpacing: 0.15,
                                                     ),
                                                   ),
-                                                if (!_auth.isAnonymous())
+                                                if (!_auth.isAnonymous() &&
+                                                    kidsList.isNotEmpty)
                                                   for (int i = 0;
                                                       i < kidsList.length;
                                                       i++) ...[
