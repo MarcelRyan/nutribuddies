@@ -111,6 +111,24 @@ class DatabaseService {
     }
   }
 
+  Future updateDisplayNameData(String displayName) async {
+    return await usersCollection.doc(uid).update({
+      'displayName': displayName,
+    });
+  }
+
+  Future updateEmailData(String email) async {
+    return await usersCollection.doc(uid).update({
+      'email': email,
+    });
+  }
+
+  Future updateProfilePictureUrlData(String profilePictureUrl) async {
+    return await usersCollection.doc(uid).update({
+      'profilePicturUrl': profilePictureUrl,
+    });
+  }
+
   // kids
   Future<bool> updateKidData({
     required String kidsUid,
@@ -1002,7 +1020,7 @@ class DatabaseService {
       return Article(
         uid: '',
         title: '',
-        date: DateTime.now(),
+        date: Timestamp.now(),
         topics: [],
         imageUrl: '',
         content: '',

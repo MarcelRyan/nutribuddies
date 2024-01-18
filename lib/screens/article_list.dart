@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:nutribuddies/constant/colors.dart';
 import 'package:nutribuddies/models/article.dart';
 import 'package:nutribuddies/models/user.dart';
@@ -48,12 +49,12 @@ class _ArticleListState extends State<ArticleList> with TickerProviderStateMixin
 
       for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
         Map<String, dynamic> data =
-        documentSnapshot.data() as Map<String, dynamic>;
+          documentSnapshot.data() as Map<String, dynamic>;
         Article article = Article(
           uid: data['uid'] ?? '',
           title: data['title'],
           date: data['date'],
-          topics: data['topics'] ?? [],
+          topics: List<String>.from(data['topics'] ?? []),
           imageUrl: data['imageUrl'],
           content: data['content'],
         );
@@ -241,126 +242,442 @@ class _ArticleListState extends State<ArticleList> with TickerProviderStateMixin
         body: TabBarView(
           controller: _tabController,
           children: [
-            ArticleContainersList(),
-            ArticleContainersList(),
-            ArticleContainersList(),
-          ],)
-    );
-  }
-}
-
-class ArticleContainersList extends StatefulWidget {
-  @override
-  State<ArticleContainersList> createState() => _ArticleContainersListState();
-}
-
-class _ArticleContainersListState extends State<ArticleContainersList>{
-
-  @override
-  Widget build(BuildContext context){
-    final Users? users = Provider.of<Users?>(context);
-    final AuthService _auth = AuthService();
-
-    return Scaffold(
-      backgroundColor: background,
-      body: Container(
-        padding: EdgeInsets.only(
-            left: MediaQuery.of(context).size.width*0.08,
-            right: MediaQuery.of(context).size.width*0.08,
-        ),
-        margin: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.025),
-        child: ListView.builder(
-          itemCount: 10, // Specify the number of times you want to loop
-          itemBuilder: (context, index) {
-            return InkWell(
-              onTap: (){
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const ArticleView())
-                );
-              },
-              child: Container(
-                width: MediaQuery.of(context).size.width * 0.77,
-                decoration: BoxDecoration(
-                  color: surfaceBright,
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.4),
-                      offset: const Offset(2, 4),
-                      blurRadius: 5,
-                      spreadRadius: 1,
-                    ),
-                  ],
-                ),
-                padding: EdgeInsets.fromLTRB(
-                  MediaQuery.of(context).size.width * 0.05,
-                  MediaQuery.of(context).size.height * 0.01,
-                  MediaQuery.of(context).size.width * 0.02,
-                  MediaQuery.of(context).size.height * 0.01,
-                ),
-                margin: EdgeInsets.only(bottom: 15),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.18,
-                      height: MediaQuery.of(context).size.height * 0.125,
-                      padding: EdgeInsets.symmetric(
-                        vertical: MediaQuery.of(context).size.height * 0.01,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      clipBehavior: Clip.antiAlias,
-                      child: Image.asset('assets/Article/article_topic_6_cooking.png'),
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.025,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Date",
-                          style: const TextStyle(
-                            color: outline,
-                            fontFamily: 'Poppins',
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            "Judul",
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontFamily: 'Poppins',
-                              fontSize: 22,
-                              fontWeight: FontWeight.w600,
-                              letterSpacing: 0.1,
-                            ),
-                          ),
-                        ),
-                        Text(
-                          "#Topics",
-                          style: const TextStyle(
-                            color: primary,
-                            fontFamily: 'Poppins',
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
+            Expanded(
+              child: FutureBuilder<List<Article>>(
+                future: getListOfArticlesData(searchController.text),
+                builder: (context, snapshot){
+                  if (snapshot.connectionState == ConnectionState.waiting){
+                    return const CircularProgressIndicator();
+                  } else if (snapshot.hasError){
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    List<Article> articleRecords = snapshot.data!;
+                    return ListView(
+                      children: articleRecords.map(
+                          (record) {
+                            return Container(
+                                padding: EdgeInsets.only(
+                                  left: MediaQuery.of(context).size.width*0.08,
+                                  right: MediaQuery.of(context).size.width*0.08,
+                                ),
+                                margin: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.025),
+                                child: InkWell(
+                                      onTap: (){
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(builder: (context) => const ArticleView())
+                                        );
+                                      },
+                                      child: Container(
+                                        width: MediaQuery.of(context).size.width * 0.77,
+                                        decoration: BoxDecoration(
+                                          color: surfaceBright,
+                                          borderRadius: const BorderRadius.all(Radius.circular(10)),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.grey.withOpacity(0.4),
+                                              offset: const Offset(2, 4),
+                                              blurRadius: 5,
+                                              spreadRadius: 1,
+                                            ),
+                                          ],
+                                        ),
+                                        padding: EdgeInsets.fromLTRB(
+                                          MediaQuery.of(context).size.width * 0.05,
+                                          MediaQuery.of(context).size.height * 0.01,
+                                          MediaQuery.of(context).size.width * 0.02,
+                                          MediaQuery.of(context).size.height * 0.01,
+                                        ),
+                                        margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.001),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              width: MediaQuery.of(context).size.width * 0.225,
+                                              height: MediaQuery.of(context).size.height * 0.11,
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(15),
+                                                color: outline,
+                                              ),
+                                              clipBehavior: Clip.antiAlias,
+                                              child: FittedBox(
+                                                child: Image.asset(record.imageUrl),
+                                                fit: BoxFit.fitHeight,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: MediaQuery.of(context).size.width * 0.025,
+                                            ),
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                DateFormat('yyyy-MM-dd').format(record.date.toDate()),
+                                                  style: const TextStyle(
+                                                    color: outline,
+                                                    fontFamily: 'Poppins',
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                ),
+                                                SizedBox(height: MediaQuery.of(context).size.height * 0.0025),
+                                                Container(
+                                                  alignment: Alignment.centerLeft,
+                                                  width: MediaQuery.of(context).size.width * 0.5,
+                                                  child: Text(
+                                                    record.title,
+                                                    maxLines: 2,
+                                                    overflow: TextOverflow.ellipsis,
+                                                    style: const TextStyle(
+                                                      color: Colors.black,
+                                                      fontFamily: 'Poppins',
+                                                      fontSize: 22,
+                                                      fontWeight: FontWeight.w600,
+                                                      letterSpacing: 0.1,
+                                                      height: 1.25
+                                                    ),
+                                                  ),
+                                                ),
+                                                SizedBox(height: MediaQuery.of(context).size.height * 0.0075),
+                                                Row(
+                                                  children: [
+                                                    for (int i = 0;
+                                                    i < record.topics.length;
+                                                    i++) ...[
+                                                      if (i == record.topics.length - 1)
+                                                        Text(
+                                                          "#${record.topics[i]}",
+                                                          style: const TextStyle(
+                                                            color: Color(0xFF5674A7),
+                                                            fontSize: 11,
+                                                            fontFamily: 'Poppins',
+                                                            fontWeight:
+                                                            FontWeight.w500,
+                                                            height: 1,
+                                                            letterSpacing: 0.50,
+                                                          ),
+                                                        ),
+                                                      if (i != record.topics.length - 1)
+                                                        Text(
+                                                          "#${record.topics[i]} ",
+                                                          style: const TextStyle(
+                                                            color: Color(0xFF5674A7),
+                                                            fontSize: 11,
+                                                            fontFamily: 'Poppins',
+                                                            fontWeight:
+                                                            FontWeight.w500,
+                                                            height: 1,
+                                                            letterSpacing: 0.50,
+                                                          ),
+                                                        ),
+                                                    ]
+                                                  ],
+                                                )
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                )
+                            );
+                          },
+                      ).toList()
+                    );
+                  };
+                  },
               ),
-            );
-          },
-        )
-      ),
+            ),
+            Expanded(
+              child: FutureBuilder<List<Article>>(
+                future: getListOfArticlesData(searchController.text),
+                builder: (context, snapshot){
+                  if (snapshot.connectionState == ConnectionState.waiting){
+                    return const CircularProgressIndicator();
+                  } else if (snapshot.hasError){
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    List<Article> articleRecords = snapshot.data!;
+                    return ListView(
+                        children: articleRecords.map(
+                              (record) {
+                            return Container(
+                                padding: EdgeInsets.only(
+                                  left: MediaQuery.of(context).size.width*0.08,
+                                  right: MediaQuery.of(context).size.width*0.08,
+                                ),
+                                margin: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.025),
+                                child: InkWell(
+                                  onTap: (){
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => const ArticleView())
+                                    );
+                                  },
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width * 0.77,
+                                    decoration: BoxDecoration(
+                                      color: surfaceBright,
+                                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.4),
+                                          offset: const Offset(2, 4),
+                                          blurRadius: 5,
+                                          spreadRadius: 1,
+                                        ),
+                                      ],
+                                    ),
+                                    padding: EdgeInsets.fromLTRB(
+                                      MediaQuery.of(context).size.width * 0.05,
+                                      MediaQuery.of(context).size.height * 0.01,
+                                      MediaQuery.of(context).size.width * 0.02,
+                                      MediaQuery.of(context).size.height * 0.01,
+                                    ),
+                                    margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.001),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          width: MediaQuery.of(context).size.width * 0.225,
+                                          height: MediaQuery.of(context).size.height * 0.11,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(15),
+                                            color: outline,
+                                          ),
+                                          clipBehavior: Clip.antiAlias,
+                                          child: FittedBox(
+                                            child: Image.asset(record.imageUrl),
+                                            fit: BoxFit.fitHeight,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: MediaQuery.of(context).size.width * 0.025,
+                                        ),
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              DateFormat('yyyy-MM-dd').format(record.date.toDate()),
+                                              style: const TextStyle(
+                                                color: outline,
+                                                fontFamily: 'Poppins',
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                            SizedBox(height: MediaQuery.of(context).size.height * 0.0025),
+                                            Container(
+                                              alignment: Alignment.centerLeft,
+                                              width: MediaQuery.of(context).size.width * 0.5,
+                                              child: Text(
+                                                record.title,
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(
+                                                  color: Colors.black,
+                                                  fontFamily: 'Poppins',
+                                                  fontSize: 22,
+                                                  fontWeight: FontWeight.w600,
+                                                  letterSpacing: 0.1,
+                                                  height: 1.25,
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(height: MediaQuery.of(context).size.height * 0.0075),
+                                            Row(
+                                              children: [
+                                                for (int i = 0;
+                                                i < record.topics.length;
+                                                i++) ...[
+                                                  if (i == record.topics.length - 1)
+                                                    Text(
+                                                      "#${record.topics[i]}",
+                                                      style: const TextStyle(
+                                                        color: Color(0xFF5674A7),
+                                                        fontSize: 11,
+                                                        fontFamily: 'Poppins',
+                                                        fontWeight:
+                                                        FontWeight.w500,
+                                                        height: 1,
+                                                        letterSpacing: 0.50,
+                                                      ),
+                                                    ),
+                                                  if (i != record.topics.length - 1)
+                                                    Text(
+                                                      "#${record.topics[i]} ",
+                                                      style: const TextStyle(
+                                                        color: Color(0xFF5674A7),
+                                                        fontSize: 11,
+                                                        fontFamily: 'Poppins',
+                                                        fontWeight:
+                                                        FontWeight.w500,
+                                                        height: 1,
+                                                        letterSpacing: 0.50,
+                                                      ),
+                                                    ),
+                                                ]
+                                              ],
+                                            )
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                )
+                            );
+                          },
+                        ).toList()
+                    );
+                  };
+                },
+              ),
+            ),
+            Expanded(
+              child: FutureBuilder<List<Article>>(
+                future: getListOfArticlesData(searchController.text),
+                builder: (context, snapshot){
+                  if (snapshot.connectionState == ConnectionState.waiting){
+                    return const CircularProgressIndicator();
+                  } else if (snapshot.hasError){
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    List<Article> articleRecords = snapshot.data!;
+                    return ListView(
+                        children: articleRecords.map(
+                              (record) {
+                            return Container(
+                                padding: EdgeInsets.only(
+                                  left: MediaQuery.of(context).size.width*0.08,
+                                  right: MediaQuery.of(context).size.width*0.08,
+                                ),
+                                margin: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.025),
+                                child: InkWell(
+                                  onTap: (){
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => const ArticleView())
+                                    );
+                                  },
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width * 0.77,
+                                    decoration: BoxDecoration(
+                                      color: surfaceBright,
+                                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.4),
+                                          offset: const Offset(2, 4),
+                                          blurRadius: 5,
+                                          spreadRadius: 1,
+                                        ),
+                                      ],
+                                    ),
+                                    padding: EdgeInsets.fromLTRB(
+                                      MediaQuery.of(context).size.width * 0.05,
+                                      MediaQuery.of(context).size.height * 0.01,
+                                      MediaQuery.of(context).size.width * 0.02,
+                                      MediaQuery.of(context).size.height * 0.01,
+                                    ),
+                                    margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.001),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          width: MediaQuery.of(context).size.width * 0.225,
+                                          height: MediaQuery.of(context).size.height * 0.11,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(15),
+                                            color: outline,
+                                          ),
+                                          clipBehavior: Clip.antiAlias,
+                                          child: FittedBox(
+                                            child: Image.asset(record.imageUrl),
+                                            fit: BoxFit.fitHeight,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: MediaQuery.of(context).size.width * 0.025,
+                                        ),
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              DateFormat('yyyy-MM-dd').format(record.date.toDate()),
+                                              style: const TextStyle(
+                                                color: outline,
+                                                fontFamily: 'Poppins',
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                            SizedBox(height: MediaQuery.of(context).size.height * 0.0025),
+                                            Container(
+                                              alignment: Alignment.centerLeft,
+                                              width: MediaQuery.of(context).size.width * 0.5,
+                                              child: Text(
+                                                record.title,
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(
+                                                  color: Colors.black,
+                                                  fontFamily: 'Poppins',
+                                                  fontSize: 22,
+                                                  fontWeight: FontWeight.w600,
+                                                  letterSpacing: 0.1,
+                                                  height: 1.25,
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(height: MediaQuery.of(context).size.height * 0.0075),
+                                            Row(
+                                              children: [
+                                                for (int i = 0;
+                                                i < record.topics.length;
+                                                i++) ...[
+                                                  if (i == record.topics.length - 1)
+                                                    Text(
+                                                      "#${record.topics[i]}",
+                                                      style: const TextStyle(
+                                                        color: Color(0xFF5674A7),
+                                                        fontSize: 11,
+                                                        fontFamily: 'Poppins',
+                                                        fontWeight:
+                                                        FontWeight.w500,
+                                                        height: 1,
+                                                        letterSpacing: 0.50,
+                                                      ),
+                                                    ),
+                                                  if (i != record.topics.length - 1)
+                                                    Text(
+                                                      "#${record.topics[i]} ",
+                                                      style: const TextStyle(
+                                                        color: Color(0xFF5674A7),
+                                                        fontSize: 11,
+                                                        fontFamily: 'Poppins',
+                                                        fontWeight:
+                                                        FontWeight.w500,
+                                                        height: 1,
+                                                        letterSpacing: 0.50,
+                                                      ),
+                                                    ),
+                                                ]
+                                              ],
+                                            )
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                )
+                            );
+                          },
+                        ).toList()
+                    );
+                  };
+                },
+              ),
+            ),
+          ],)
     );
   }
 }
