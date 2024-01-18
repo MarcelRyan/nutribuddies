@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:nutribuddies/models/article.dart';
 import 'package:nutribuddies/models/meals.dart';
@@ -45,7 +47,7 @@ class DatabaseService {
       FirebaseFirestore.instance.collection('article');
 
   // users
-  Future<void> updateUserData({
+  Future<bool> updateUserData({
     required String uid,
     required String displayName,
     required String email,
@@ -64,7 +66,12 @@ class DatabaseService {
       'topicInterest': topicInterest,
     };
 
-    await usersCollection.doc(uid).set(data);
+    try {
+      await usersCollection.doc(uid).set(data);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   // get photo url
@@ -111,22 +118,23 @@ class DatabaseService {
     }
   }
 
-  Future updateDisplayNameData(String displayName) async {
-    return await usersCollection.doc(uid).update({
-      'displayName': displayName,
-    });
-  }
+  Future<String> uploadFile(PlatformFile? pickedFile) async {
+    final path = '$uid/${pickedFile!.name}';
+    final file = File(pickedFile.path!);
 
-  Future updateEmailData(String email) async {
-    return await usersCollection.doc(uid).update({
-      'email': email,
-    });
-  }
+    final ref = FirebaseStorage.instance.ref().child(path);
 
-  Future updateProfilePictureUrlData(String profilePictureUrl) async {
-    return await usersCollection.doc(uid).update({
-      'profilePicturUrl': profilePictureUrl,
-    });
+    try {
+      UploadTask uploadTask = ref.putFile(file);
+
+      final snapshot = await uploadTask.whenComplete(() {});
+
+      final photoUrl = await snapshot.ref.getDownloadURL();
+
+      return photoUrl;
+    } catch (e) {
+      return '';
+    }
   }
 
   // kids

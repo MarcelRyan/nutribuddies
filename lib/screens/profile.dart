@@ -52,7 +52,9 @@ class _ProfileState extends State<Profile> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => SettingsPage()));
+                                    builder: (context) => SettingsPage(
+                                          user: userData,
+                                        )));
                           },
                           icon: const Icon(
                             Icons.settings,

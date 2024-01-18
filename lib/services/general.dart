@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -33,5 +34,10 @@ class GeneralService {
     } else {
       return DateFormat('d MMMM', 'en_US').format(dateTime);
     }
+  }
+
+  Future<PlatformFile> selectFIle() async {
+    final result = await FilePicker.platform.pickFiles();
+    return result!.files.first;
   }
 }

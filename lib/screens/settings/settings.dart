@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nutribuddies/constant/colors.dart';
+import 'package:nutribuddies/models/user.dart';
 import 'package:nutribuddies/screens/coming_soon.dart';
+import 'package:nutribuddies/screens/settings/edit_profile.dart';
 import 'package:nutribuddies/services/auth.dart';
 import 'package:nutribuddies/widgets/wrapper.dart';
 import 'package:nutribuddies/services/settings.dart';
 import 'package:nutribuddies/screens/settings/about_us.dart';
 
 class SettingsPage extends StatelessWidget {
-  SettingsPage({super.key});
+  final Users user;
+  SettingsPage({super.key, required this.user});
   final AuthService _auth = AuthService();
   final SettingsService _settings = SettingsService();
 
@@ -64,7 +67,7 @@ class SettingsPage extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const ComingSoon()));
+                          builder: (context) => EditProfile(user: user)));
                 },
                 icon: const Icon(
                   Icons.account_circle,
@@ -77,7 +80,7 @@ class SettingsPage extends StatelessWidget {
                   child: const FittedBox(
                     fit: BoxFit.scaleDown,
                     child: Text(
-                      "Account Settings",
+                      "Edit Profile",
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         color: primary,
