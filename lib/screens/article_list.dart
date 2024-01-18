@@ -5,7 +5,6 @@ import 'package:nutribuddies/constant/colors.dart';
 import 'package:nutribuddies/models/article.dart';
 import 'package:nutribuddies/models/user.dart';
 import 'package:nutribuddies/screens/article_interest.dart';
-import 'package:nutribuddies/screens/article_view.dart';
 import 'package:nutribuddies/services/auth.dart';
 import 'package:nutribuddies/services/debouncer.dart';
 import 'package:provider/provider.dart';
@@ -263,10 +262,7 @@ class _ArticleListState extends State<ArticleList> with TickerProviderStateMixin
                                 margin: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.025),
                                 child: InkWell(
                                       onTap: (){
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(builder: (context) => const ArticleView())
-                                        );
+                                        _articleViewPage(context, record);
                                       },
                                       child: Container(
                                         width: MediaQuery.of(context).size.width * 0.77,
@@ -408,10 +404,7 @@ class _ArticleListState extends State<ArticleList> with TickerProviderStateMixin
                                 margin: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.025),
                                 child: InkWell(
                                   onTap: (){
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(builder: (context) => const ArticleView())
-                                    );
+                                    _articleViewPage(context, record);
                                   },
                                   child: Container(
                                     width: MediaQuery.of(context).size.width * 0.77,
@@ -553,10 +546,7 @@ class _ArticleListState extends State<ArticleList> with TickerProviderStateMixin
                                 margin: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.025),
                                 child: InkWell(
                                   onTap: (){
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(builder: (context) => const ArticleView())
-                                    );
+                                    _articleViewPage(context, record);
                                   },
                                   child: Container(
                                     width: MediaQuery.of(context).size.width * 0.77,
@@ -678,6 +668,112 @@ class _ArticleListState extends State<ArticleList> with TickerProviderStateMixin
               ),
             ),
           ],)
+    );
+  }
+
+
+  void _articleViewPage(BuildContext context, Article record){
+    Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ArticleView(record: record))
+    );
+  }
+}
+
+class ArticleView extends StatefulWidget {
+  final Article record;
+
+  const ArticleView({Key? key, required this.record}) : super(key: key);
+
+  @override
+  _ArticleViewState createState() => _ArticleViewState();
+}
+
+class _ArticleViewState extends State<ArticleView> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: background,
+      appBar: AppBar(
+        toolbarHeight: 110,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        centerTitle: true,
+        title: const Text(
+          'Article',
+          style: TextStyle(
+            color: black,
+            fontSize: 16,
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+        elevation: 0.0,
+        backgroundColor: background,
+        foregroundColor: black,
+      ),
+      body: Container(
+          padding: EdgeInsets.only(
+              left: MediaQuery.of(context).size.width*0.08,
+              right: MediaQuery.of(context).size.width*0.08,
+              bottom: MediaQuery.of(context).size.width*0.07
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  margin: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.width*0.015,
+                      bottom: MediaQuery.of(context).size.width*0.025,
+                  ),
+                  child: Text(
+                    widget.record.title,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontFamily: 'Poppins',
+                      fontSize: 32,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.025),
+                  child: Text(
+                    DateFormat.yMMMMd('en_US').format(widget.record.date.toDate()),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: outline,
+                      fontFamily: 'Poppins',
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.025),
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  ),
+                  child: Image.asset(widget.record.imageUrl),
+                ),
+                Container(
+                  child: Text(
+                    widget.record.content.replaceAll("\\n", "\n"),
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontFamily: 'Poppins',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )
+      ),
     );
   }
 }
