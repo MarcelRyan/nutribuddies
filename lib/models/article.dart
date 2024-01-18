@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Article {
   final String uid;
   String title;
-  DateTime date;
+  Timestamp date;
   List<String> topics;
   String imageUrl;
   String content;

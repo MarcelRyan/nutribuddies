@@ -1027,7 +1027,7 @@ class DatabaseService {
       return Article(
         uid: '',
         title: '',
-        date: DateTime.now(),
+        date: Timestamp.now(),
         topics: [],
         imageUrl: '',
         content: '',
