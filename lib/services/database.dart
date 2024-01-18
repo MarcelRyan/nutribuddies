@@ -111,6 +111,24 @@ class DatabaseService {
     }
   }
 
+  Future updateDisplayNameData(String displayName) async {
+    return await usersCollection.doc(uid).update({
+      'displayName': displayName,
+    });
+  }
+
+  Future updateEmailData(String email) async {
+    return await usersCollection.doc(uid).update({
+      'email': email,
+    });
+  }
+
+  Future updateProfilePictureUrlData(String profilePictureUrl) async {
+    return await usersCollection.doc(uid).update({
+      'profilePicturUrl': profilePictureUrl,
+    });
+  }
+
   // kids
   Future<bool> updateKidData({
     required String kidsUid,
@@ -978,15 +996,14 @@ class DatabaseService {
   // article
   Future<Article> getArticleData() async {
     QuerySnapshot querySnapshot =
-    await articleCollection.where('uid', isEqualTo: uid).limit(1).get();
+        await articleCollection.where('uid', isEqualTo: uid).limit(1).get();
 
     if (querySnapshot.docs.isNotEmpty) {
       Map<String, dynamic> data =
-      querySnapshot.docs.first.data() as Map<String, dynamic>;
+          querySnapshot.docs.first.data() as Map<String, dynamic>;
       List<dynamic>? rawTopics = data['topics'];
 
-      List<String> topics =
-      (rawTopics != null && rawTopics.isNotEmpty)
+      List<String> topics = (rawTopics != null && rawTopics.isNotEmpty)
           ? List<String>.from(rawTopics.cast<String>())
           : [];
 
@@ -1017,7 +1034,7 @@ class DatabaseService {
 
     for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
       Map<String, dynamic> data =
-      documentSnapshot.data() as Map<String, dynamic>;
+          documentSnapshot.data() as Map<String, dynamic>;
       Article article = Article(
         uid: data['uid'] ?? '',
         title: data['title'],
@@ -1039,7 +1056,7 @@ class DatabaseService {
 
     for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
       Map<String, dynamic> data =
-      documentSnapshot.data() as Map<String, dynamic>;
+          documentSnapshot.data() as Map<String, dynamic>;
       Article article = Article(
         uid: data['uid'] ?? '',
         title: data['title'],
