@@ -106,7 +106,7 @@ class _ArticleListState extends State<ArticleList> with TickerProviderStateMixin
     }
 
     Future<void> loadData(String searchQuery) async {
-      List<Article> data = await getListOfArticlesData(searchQuery);
+      List<Article> data = await getListOfArticlesFiltered(searchController.text, (users!.topicsInterest.isEmpty) ? topics : users.topicsInterest);
       setState(() {
         articles = data;
       });
@@ -283,7 +283,7 @@ class _ArticleListState extends State<ArticleList> with TickerProviderStateMixin
           children: [
             Expanded(
               child: FutureBuilder<List<Article>>(
-                future: getListOfArticlesFiltered(searchController.text, (users!.topicsInterest.isEmpty) ? topics : users.topicsInterest),
+                future: getListOfArticlesFiltered(searchController.text, selectedTopic),
                 builder: (context, snapshot){
                   if (snapshot.connectionState == ConnectionState.waiting){
                     return const CircularProgressIndicator();

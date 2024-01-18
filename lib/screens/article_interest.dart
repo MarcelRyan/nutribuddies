@@ -25,30 +25,32 @@ class _ArticleInterestState extends State<ArticleInterest> {
                 MediaQuery.of(context).size.width * 0.07),
             child: Column(
               children: [
-                // Container(
-                //     // padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.02),
-                //     width: MediaQuery.of(context).size.width * 0.14,
-                //   child: FittedBox(
-                //     fit: BoxFit.scaleDown,
-                //     child: Text(
-                //       "Articles",
-                //       textAlign: TextAlign.left,
-                //         style: TextStyle(
-                //           color: Colors.black,
-                //           fontSize: 32,
-                //           fontFamily: 'Poppins',
-                //           fontWeight: FontWeight.w500,
-                //           letterSpacing: 0.10,
-                //         )
-                //     )
-                //   )
-                // ),
+                Container(
+                    padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.02),
+                    width: MediaQuery.of(context).size.width * 0.8,
+                  alignment: Alignment.topLeft,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      "Articles",
+                      textAlign: TextAlign.left,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 32,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 0.10,
+                        )
+                    )
+                  )
+                ),
                 Container(
                     padding: EdgeInsets.only(
-                      top: MediaQuery.of(context).size.height * 0.02,
-                      bottom: MediaQuery.of(context).size.height * 0.02,
+                      top: MediaQuery.of(context).size.height * 0.005,
+                      bottom: MediaQuery.of(context).size.height * 0.005,
                     ),
-                    // width: MediaQuery.of(context).size.width * 0.14,
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    alignment: Alignment.topLeft,
                     child: const FittedBox(
                         fit: BoxFit.scaleDown,
                         child: Text("What topics are you interested in?",
