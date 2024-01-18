@@ -65,7 +65,7 @@ class _ProfileState extends State<Profile> {
                     Positioned(
                       top: MediaQuery.of(context).size.height * 0.04,
                       left: MediaQuery.of(context).size.width * 0.33,
-                      height: MediaQuery.of(context).size.height * 0.17,
+                      height: MediaQuery.of(context).size.height * 0.2,
                       width: MediaQuery.of(context).size.width * 0.38,
                       child: Column(
                         children: [
@@ -75,13 +75,21 @@ class _ProfileState extends State<Profile> {
                               userData.profilePictureUrl ?? '',
                             ),
                           ),
-                          const Spacer(),
-                          Text(
-                            userData.displayName ?? '',
-                            style: const TextStyle(
-                                color: onPrimary,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.01,
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.05,
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                userData.displayName ?? '',
+                                style: const TextStyle(
+                                    color: onPrimary,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ),
                           ),
                         ],
                       ),
