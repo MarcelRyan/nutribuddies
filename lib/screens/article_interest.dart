@@ -1,10 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nutribuddies/constant/colors.dart';
-import 'package:nutribuddies/models/user.dart';
 import 'package:nutribuddies/screens/article_list.dart';
 import 'package:nutribuddies/models/article_interest.dart';
-import 'package:provider/provider.dart';
 
 class ArticleInterest extends StatefulWidget {
   const ArticleInterest({Key? key}) : super(key: key);
@@ -26,24 +23,21 @@ class _ArticleInterestState extends State<ArticleInterest> {
             child: Column(
               children: [
                 Container(
-                    padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.02),
+                    padding: EdgeInsets.only(
+                        top: MediaQuery.of(context).size.height * 0.02),
                     width: MediaQuery.of(context).size.width * 0.8,
-                  alignment: Alignment.topLeft,
-                  child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Text(
-                      "Articles",
-                      textAlign: TextAlign.left,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 32,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w500,
-                          letterSpacing: 0.10,
-                        )
-                    )
-                  )
-                ),
+                    alignment: Alignment.topLeft,
+                    child: const FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text("Articles",
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 32,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w500,
+                              letterSpacing: 0.10,
+                            )))),
                 Container(
                     padding: EdgeInsets.only(
                       top: MediaQuery.of(context).size.height * 0.005,
@@ -62,7 +56,7 @@ class _ArticleInterestState extends State<ArticleInterest> {
                               fontWeight: FontWeight.w400,
                               letterSpacing: 0.10,
                             )))),
-                Expanded(child: InterestContent()),
+                const Expanded(child: InterestContent()),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(
@@ -137,8 +131,6 @@ class _InterestContentState extends State<InterestContent> {
   ];
   @override
   Widget build(BuildContext context) {
-    final Users? users = Provider.of<Users?>(context);
-
     return Scaffold(
       backgroundColor: background,
       body: GridView.count(
@@ -158,7 +150,7 @@ class _InterestContentState extends State<InterestContent> {
                   },
                   child: Stack(
                     children: [
-                      Container(
+                      SizedBox(
                         width: MediaQuery.of(context).size.height * 0.4,
                         height: MediaQuery.of(context).size.height * 0.4,
                         child: Image.asset(topic.topicImage),
@@ -168,7 +160,7 @@ class _InterestContentState extends State<InterestContent> {
                         left: 13,
                         right: 13,
                         child: Container(
-                          padding: EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(8.0),
                           // color: Colors.black.withOpacity(0.6),
                           child: Text(
                             topic.topic,
@@ -179,11 +171,11 @@ class _InterestContentState extends State<InterestContent> {
                               fontWeight: FontWeight.w400,
                               shadows: <Shadow>[
                                 Shadow(
-                                    offset: Offset(0, 4),
+                                    offset: const Offset(0, 4),
                                     blurRadius: 8.0,
                                     color: Colors.black.withOpacity(0.15)),
                                 Shadow(
-                                  offset: Offset(0, 1),
+                                  offset: const Offset(0, 1),
                                   blurRadius: 3.0,
                                   color: Colors.black.withOpacity(0.3),
                                 ),
@@ -198,14 +190,14 @@ class _InterestContentState extends State<InterestContent> {
                           child: Container(
                             decoration: BoxDecoration(
                               gradient: RadialGradient(
-                                center: Alignment(0, 0),
+                                center: const Alignment(0, 0),
                                 colors: [
                                   Colors.white.withOpacity(0.55),
                                   Colors.white.withOpacity(0),
                                 ],
                                 radius: 0.5,
                               ),
-                              borderRadius: BorderRadius.only(
+                              borderRadius: const BorderRadius.only(
                                 topLeft: Radius.circular(50),
                                 topRight: Radius.circular(50),
                                 bottomLeft: Radius.circular(50),
@@ -216,7 +208,7 @@ class _InterestContentState extends State<InterestContent> {
                                   color: Colors.white.withOpacity(0.25),
                                   spreadRadius: 0.5,
                                   blurRadius: 25,
-                                  offset: Offset(0, 0),
+                                  offset: const Offset(0, 0),
                                 ),
                               ],
                             ),

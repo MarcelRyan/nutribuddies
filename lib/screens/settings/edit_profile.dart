@@ -8,7 +8,6 @@ import 'package:nutribuddies/services/database.dart';
 import 'package:nutribuddies/services/general.dart';
 import 'package:nutribuddies/widgets/wrapper.dart';
 import 'package:nutribuddies/widgets/loading.dart';
-import 'package:provider/provider.dart';
 
 class EditProfile extends StatefulWidget {
   final Users user;
@@ -35,7 +34,6 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
-    final Users? users = Provider.of<Users?>(context);
     return loading
         ? const Loading()
         : Scaffold(
